@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const app = require('../server');
-const logger = require('../logging/app-logger');
+const app = require('../lib/server');
+const logger = require('../lib/logging/app-logger');
 const http = require('http');
 const port = normalizePort(process.env.PORT || '8000');
 app.set('port', port);

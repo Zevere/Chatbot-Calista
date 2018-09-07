@@ -1,9 +1,9 @@
-const logger = require('morgan');
-const rfs = require('rotating-file-stream');
-const fs = require('fs');
-const path = require('path');
+import morgan from 'morgan';
+import rfs from 'rotating-file-stream';
+import fs from 'fs';
+import path from 'path';
 
-const logDirectory = path.join(__dirname, '../logs', 'morgan');
+const logDirectory = path.join(__dirname, '..', '..', 'logs', 'morgan');
 
 if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory);
@@ -14,7 +14,7 @@ const requestLogStream = rfs('req.log', {
     path: logDirectory
 });
 
-module.exports = logger(
+module.exports = morgan(
     process.env.NODE_ENV === 'development' ?
         'dev' : 'combined', {
         stream: requestLogStream

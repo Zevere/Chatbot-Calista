@@ -1,9 +1,7 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-
-const requestLogger = require('./logging/req-logger');
+import createError from 'http-errors';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import requestLogger from './logging/req-logger';
 
 const app = express();
 

@@ -1,7 +1,7 @@
-const winston = require("winston");
-const path = require('path');
+import winston from 'winston';
+import path from 'path';
 
-require('winston-daily-rotate-file');
+import 'winston-daily-rotate-file';
 
 const consoleLog = new winston.transports.Console({
     level: 'info',
@@ -13,7 +13,7 @@ const consoleLog = new winston.transports.Console({
 
 const rotatingInfoLog = new winston.transports.DailyRotateFile({
     filename: 'info-%DATE%.log',
-    dirname: path.join(__dirname, '..', 'logs', 'winston', 'info'),
+    dirname: path.join(__dirname, '..', '..', 'logs', 'winston', 'info'),
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: false,
     maxSize: '1440m',
@@ -24,7 +24,7 @@ const rotatingInfoLog = new winston.transports.DailyRotateFile({
 
 const rotatingErrorLog = new winston.transports.DailyRotateFile({
     filename: 'error-%DATE%.log',
-    dirname: path.join(__dirname, '..', 'logs', 'winston', 'error'),
+    dirname: path.join(__dirname, '..', '..', 'logs', 'winston', 'error'),
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: false,
     maxSize: '1440m',
