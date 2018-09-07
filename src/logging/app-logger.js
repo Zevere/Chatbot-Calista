@@ -13,7 +13,7 @@ const consoleLog = new winston.transports.Console({
 
 const rotatingInfoLog = new winston.transports.DailyRotateFile({
     filename: 'info-%DATE%.log',
-    dirname: path.join(__dirname, '..', '..', 'logs', 'winston', 'info'),
+    dirname: path.join(__dirname, '..', '..', 'logs', 'app', 'info'),
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: false,
     maxSize: '1440m',
@@ -24,7 +24,7 @@ const rotatingInfoLog = new winston.transports.DailyRotateFile({
 
 const rotatingErrorLog = new winston.transports.DailyRotateFile({
     filename: 'error-%DATE%.log',
-    dirname: path.join(__dirname, '..', '..', 'logs', 'winston', 'error'),
+    dirname: path.join(__dirname, '..', '..', 'logs', 'app', 'error'),
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: false,
     maxSize: '1440m',

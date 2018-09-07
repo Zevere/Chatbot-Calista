@@ -3,7 +3,7 @@ import rfs from 'rotating-file-stream';
 import fs from 'fs';
 import path from 'path';
 
-const logDirectory = path.join(__dirname, '..', '..', 'logs', 'morgan');
+const logDirectory = path.join(__dirname, '..', '..', 'logs', 'requests');
 
 if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory);
