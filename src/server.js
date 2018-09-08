@@ -14,4 +14,4 @@ app.use(requestLogger)
         next(createError(404));
     });
 
-module.exports = app;
+export default app;
