@@ -1,9 +1,8 @@
 import express from 'express';
-import { foo } from './task-list.controller';
-const router = express.Router();
+import { foo, bar } from './task-list.controller';
+const taskListRouter = express.Router();
 
+''  |> (route => taskListRouter.get(route, foo))
+    |> (route => taskListRouter.post(route, bar));
 
-
-'/' |> (path => router.get(path, foo));
-
-export default router;
+module.exports = taskListRouter;
