@@ -4,7 +4,7 @@
   "description": "Add some zeverity to your Slack.",
   "main": "bin/www",
   "scripts": {
-    "start": "babel src --out-dir lib && node bin/www",
+    "start": "babel src --out-dir lib && node lib",
     "build": "babel src --out-dir lib",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/Zevere/SlackBot-Calista#readme",
   "dependencies": {
+    "@slack/client": "^4.6.0",
     "cookie-parser": "^1.4.3",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "http-errors": "^1.7.0",
     "morgan": "^1.9.0",
@@ -36,10 +38,11 @@
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
     "@babel/plugin-transform-flow-strip-types": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@types/express": "^4.16.0",
     "babel-eslint": "^8.2.6",
     "eslint": "^4.19.1",
     "eslint-plugin-babel": "^5.2.0"
