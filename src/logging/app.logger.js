@@ -37,8 +37,7 @@ rotatingInfoLog.on('rotate', function (oldFileName, newFileName) {
     // TODO: Possibly send to DB
 });
 
-
-module.exports = winston.createLogger({
+const logger: winston.Logger = winston.createLogger({
     level: 'info',
     transports: [
         consoleLog,
@@ -46,3 +45,4 @@ module.exports = winston.createLogger({
         rotatingErrorLog
     ]
 });
+module.exports = logger;

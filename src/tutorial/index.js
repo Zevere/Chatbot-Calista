@@ -1,6 +1,7 @@
 import { WebClient } from '@slack/client';
 import Winston from '../logging/app.logger';
 
+
 async function messageGeneralChat(web: WebClient) {
     try {
         const channelsResponse = await web.channels.list();
@@ -63,15 +64,14 @@ async function messageAppHome(web: WebClient) {
 // The current date
 async function tutorial() {
     const currentTime = new Date().toTimeString();
-    const token = process.env.ZEVERE_SLACK_TOKEN ?.trim();
+    const token = process.env.ZEVERE_SLACK_TOKEN;
     const web = new WebClient(token, {
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET
     });
-
-    // await messageGeneralChat(web);
+    await messageGeneralChat(web);
     await messageRandomUser(web);
-    // await messageAppHome(web);
+    await messageAppHome(web);
 
 }
 

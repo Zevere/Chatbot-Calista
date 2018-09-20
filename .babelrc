@@ -25,6 +25,9 @@
         ],
         [
             "@babel/plugin-proposal-optional-chaining"
+        ],
+        [
+            "flow-runtime"
         ]
     ]
 }
