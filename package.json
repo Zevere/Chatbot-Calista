@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Zevere/SlackBot-Calista#readme",
   "dependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
     "@slack/client": "^4.6.0",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
