@@ -10,5 +10,6 @@ RUN        npm run build:release
 FROM       base as final
 WORKDIR    /app
 COPY       --from=build /build/dist/release .
+RUN        touch .env
 COPY       ./.env .
 ENTRYPOINT ["node", "index.js"]
