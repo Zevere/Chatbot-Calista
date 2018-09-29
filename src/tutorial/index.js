@@ -75,4 +75,4 @@ async function tutorial() {
 
 }
 
-module.exports = tutorial;
+export default tutorial;

@@ -49,4 +49,4 @@ const logger: winston.Logger = winston.createLogger({
         rotatingErrorLog
     ]
 });
-module.exports = logger;
+export default logger;
