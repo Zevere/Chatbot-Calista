@@ -5,7 +5,8 @@ install:
 	npm run install
 
 clean:
-	rm -rf lib
+	echo 'Cleaning dist...'
+	rm -rf dist
 
 build:
 	docker build -t zevere/calista .

@@ -4,9 +4,10 @@
   "description": "Add some zeverity to your Slack.",
   "main": "bin/www",
   "scripts": {
-    "start": "babel src --out-dir lib && node lib",
-    "build": "babel src --out-dir lib",
-    "build:prod": "webpack -p --config webpack.config.ts",
+    "start": "npm run build:prod && node dist/release",
+    "start:debug": "npm run build:debug && node dist/debug",
+    "build:debug": "babel src --out-dir dist/debug",
+    "build:release": "webpack -p --config webpack.config.ts",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
