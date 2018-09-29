@@ -2,7 +2,7 @@
 
 install:
 	echo 'Installing dependencies...'
-	npm run install
+	npm i
 
 clean:
 	echo 'Cleaning dist...'
