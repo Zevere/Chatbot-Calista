@@ -1,6 +1,10 @@
 # Calista
 ## Manage your tasks on Zevere using Slack.
 
+| Branch | Status |
+| --- | --- |
+| Master | [![Build Status](https://travis-ci.org/Zevere/Chatbot-Calista.svg?branch=master)](https://travis-ci.org/Zevere/Chatbot-Calista) |
+
 ### Table of Contents
 1. [Development](#development)
 
