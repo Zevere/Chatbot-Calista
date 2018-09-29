@@ -1,5 +1,4 @@
 node_modules
-logs/**/*.log
-logs/**/.audit.json
+logs
 lib
 .env

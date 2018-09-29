@@ -12,7 +12,7 @@ async function messageGeneralChat(web: WebClient) {
         Winston.info(`General chat found? ${general ? "yes" : "no"}`);
         return await web.chat.postMessage({
             channel: general.id,
-            text: 'Hello from dev world'
+            text: "I'm a little teapot short and stout"
         });
     }
     catch (exception) {
@@ -70,8 +70,8 @@ async function tutorial() {
         clientSecret: process.env.CLIENT_SECRET
     });
     await messageGeneralChat(web);
-    await messageRandomUser(web);
-    await messageAppHome(web);
+    // await messageRandomUser(web);
+    // await messageAppHome(web);
 
 }
 

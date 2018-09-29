@@ -1,4 +1,4 @@
-import tutorial from './tutorial';
+import tutorial from './tutorial/index';
 import dotenv from 'dotenv';
 
 (async function main() {

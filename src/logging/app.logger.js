@@ -3,6 +3,10 @@ import path from 'path';
 
 import 'winston-daily-rotate-file';
 
+const logDir = process.env.APP_LOGS ? 
+    path.join(process.env.APP_LOGS, 'app')
+    : path.join(__dirname, '..', '..', 'logs', 'app');
+
 const consoleLog = new winston.transports.Console({
     level: 'info',
     format: winston.format.combine(
@@ -13,7 +17,7 @@ const consoleLog = new winston.transports.Console({
 
 const rotatingInfoLog = new winston.transports.DailyRotateFile({
     filename: 'info-%DATE%.log',
-    dirname: path.join(__dirname, '..', '..', 'logs', 'app', 'info'),
+    dirname: path.join(logDir, 'info'),
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: false,
     maxSize: '1440m',
@@ -24,7 +28,7 @@ const rotatingInfoLog = new winston.transports.DailyRotateFile({
 
 const rotatingErrorLog = new winston.transports.DailyRotateFile({
     filename: 'error-%DATE%.log',
-    dirname: path.join(__dirname, '..', '..', 'logs', 'app', 'error'),
+    dirname: path.join(logDir, 'error'),
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: false,
     maxSize: '1440m',

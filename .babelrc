@@ -6,7 +6,8 @@
                 "useBuiltIns": "entry",
                 "targets": {
                     "node": "current"
-                }
+                },
+                "modules": "commonjs"
             }
         ]
     ],
