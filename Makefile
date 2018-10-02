@@ -14,4 +14,5 @@ build:
 
 deploy:
 	echo 'Deploying to Heroku...'
-	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin
+	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin registry.heroku.com
+	
