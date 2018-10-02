@@ -22,9 +22,16 @@ services:
 
 before_install:
   - sudo apt-get install build-essential
+  - sudo apt-get install snapd
 
 install:
   - make install
 
 script:
   - make build
+
+deploy:
+  provider: script
+  script: make deploy
+  on:
+    branch: master

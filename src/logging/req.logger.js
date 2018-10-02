@@ -2,8 +2,9 @@ import morgan from 'morgan';
 import rfs from 'rotating-file-stream';
 import fs from 'fs';
 import path from 'path';
+import { RequestHandler } from 'express';
 
-const logDirectory = process.env.APP_LOGS ? 
+const logDirectory = process.env.APP_LOGS ?
     path.join(process.env.APP_LOGS, 'requests')
     : path.join(__dirname, '..', '..', 'logs', 'requests');
 
@@ -16,9 +17,10 @@ const requestLogStream = rfs('req.log', {
     path: logDirectory
 });
 
-module.exports = morgan(
+const reqLogger: RequestHandler = morgan(
     process.env.NODE_ENV === 'development' ?
         'dev' : 'combined', {
         stream: requestLogStream
     });
 
+export default reqLogger;

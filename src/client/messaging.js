@@ -2,7 +2,7 @@ import { WebClient } from '@slack/client';
 import Winston from '../logging/app.logger';
 
 
-async function messageGeneralChat(web: WebClient) {
+export async function messageGeneralChat(web: WebClient) {
     try {
         const channelsResponse = await web.channels.list();
         Winston.info('Channels:');
@@ -20,7 +20,7 @@ async function messageGeneralChat(web: WebClient) {
     }
 }
 
-async function messageRandomUser(web: WebClient) {
+export async function messageRandomUser(web: WebClient) {
     try {
         const channelsResponse = await web.channels.list();
         const general = channelsResponse.channels.find(c => c.name === 'general');
@@ -37,7 +37,7 @@ async function messageRandomUser(web: WebClient) {
     }
 }
 
-async function messageAppHome(web: WebClient) {
+export async function messageAppHome(web: WebClient) {
     // Use the `apps.permissions.resources.list` method to find the conversation ID for an app home
     try {
         web.apps |> JSON.stringify |> Winston.info;
@@ -61,18 +61,3 @@ async function messageAppHome(web: WebClient) {
     }
 }
 
-// The current date
-async function tutorial() {
-    const currentTime = new Date().toTimeString();
-    const token = process.env.ZEVERE_SLACK_TOKEN;
-    const web = new WebClient(token, {
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET
-    });
-    await messageGeneralChat(web);
-    // await messageRandomUser(web);
-    // await messageAppHome(web);
-
-}
-
-export default tutorial;
