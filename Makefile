@@ -15,4 +15,6 @@ build:
 deploy:
 	echo 'Deploying to Heroku...'
 	echo "$$HEROKU_KEY" | docker login -u "$$HEROKU_USER" --password-stdin registry.heroku.com
-	docker push registry.heroku.com/calista-release/web
+	heroku container:login
+	heroku container:push web -a calista-release
+	heroku container:release web -a calista-release

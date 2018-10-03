@@ -1,16 +1,21 @@
 {
     "version":"0.2.0",
     "configurations": [
+
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch via NPM",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run-script",
-                "start:debug"
-            ],
-            "port": 9229
+            "name": "Debug",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "npm: build:debug",
+            "program": "${workspaceRoot}/dist/debug/index.js",
+            "sourceMaps": true,
+            "port": 8060,
+            "stopOnEntry": false,
+            "localRoot": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/dist/debug/**"
+            ]
         }
     ]
 }

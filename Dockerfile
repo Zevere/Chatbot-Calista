@@ -11,4 +11,5 @@ FROM       base as final
 WORKDIR    /app
 COPY       --from=build /build/dist/release .
 COPY       ./.env .
-ENTRYPOINT ["node", "index.js"]
+EXPOSE     8080
+CMD        ["node", "index.js"]
