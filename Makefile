@@ -14,8 +14,8 @@ build:
 
 deploy:
 	echo 'Deploying to Heroku...'
-	echo "$$HEROKU_KEY" | docker login -u "$$HEROKU_USER" --password-stdin registry.heroku.com
 	echo 'Deploy script not configured. Passing.'
+	# echo "$$HEROKU_KEY" | docker login -u "$$HEROKU_USER" --password-stdin registry.heroku.com
 	# NEEDS FIX: Heroku CLI might not be a good option for CI
 	# heroku login
 	# heroku container:login
