@@ -2,7 +2,7 @@ import { WebClient } from '@slack/client';
 import Winston from '../logging/app.logger';
 
 
-export async function messageGeneralChat(web: WebClient) {
+export async function messageGeneralChat(web: WebClient, message: string) {
     try {
         const channelsResponse = await web.channels.list();
         Winston.info('Channels:');
@@ -12,7 +12,7 @@ export async function messageGeneralChat(web: WebClient) {
         Winston.info(`General chat found? ${general ? "yes" : "no"}`);
         return await web.chat.postMessage({
             channel: general.id,
-            text: "I'm a little teapot short and stout"
+            text: message || "Hello World!"
         });
     }
     catch (exception) {
