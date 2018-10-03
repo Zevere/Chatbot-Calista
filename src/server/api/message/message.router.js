@@ -7,7 +7,7 @@ import Winston from '../../../logging/app.logger';
 function messageRouter() {
     const router = Router({ caseSensitive: false, mergeParams: true });
     router.route('')
-        .get(messageHome);
+        .all(messageHome);
     return router;
 }
 

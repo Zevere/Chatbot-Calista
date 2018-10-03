@@ -1,10 +1,11 @@
-import client from '../../../client';
+import { slackClient } from '../../../client';
 import * as Messaging from '../../../client/messaging';
 import { Request, Response, NextFunction } from 'express';
 import Winston from '../../../logging/app.logger';
+import { WebClient } from '@slack/client';
 
 export async function messageHome(req: Request, res: Response, next: NextFunction) {
-    Winston.info('Request received for: ' + req.url);
-    req.body |> JSON.stringify |> Winston.info;
-    Messaging.messageGeneralChat(client);
+    res.sendStatus(200); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
+    req.body |> JSON.stringify |> Winston.debug;
+    await Messaging.messageGeneralChat(slackClient());
 }
