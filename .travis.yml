@@ -31,8 +31,7 @@ script:
   - make build
 
 after_success:
-  - npm i -g codecov
-  - codecov
+  - docker -exec -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" -e TRAVIS_BRANCH="$TRAVIS_BRANCH" -d zevere/calista npm i -g codecov && codecov
 
 deploy:
   provider: script
