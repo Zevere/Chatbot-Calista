@@ -2,3 +2,6 @@
 lib
 logs
 node_modules
+
+# CI/CD scripts
+/scripts/
