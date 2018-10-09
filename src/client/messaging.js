@@ -45,7 +45,7 @@ export async function messageGeneralChat(web: WebClient, message: string) {
 export async function messageUser(web: WebClient, userId: string, message: string) {
     try{
         return await web.chat.postMessage({
-           username: userId,
+           channel: userId,
            text: message 
         });
     }
