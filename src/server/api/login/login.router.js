@@ -1,13 +1,14 @@
 import { Router } from 'express';
-import { messageHome } from './message.controller';
+import { login } from './login.controller';
 
 import Winston from '../../../logging/app.logger';
 
-function messageRouter() {
+
+function loginRouter() {
     const router = Router({ caseSensitive: false, mergeParams: true });
     router.route('')
-        .all(messageHome);
+        .all(login);
     return router;
 }
 
-export default messageRouter();
+export default loginRouter();

@@ -28,6 +28,7 @@
   "homepage": "https://github.com/Zevere/SlackBot-Calista#readme",
   "dependencies": {
     "@slack/client": "^4.6.0",
+    "axios": "^0.18.0",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
