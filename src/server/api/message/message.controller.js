@@ -5,8 +5,8 @@ import Winston from '../../../logging/app.logger';
 import { WebClient } from '@slack/client';
 import { prettyJson } from '../../../logging/format';
 
-export async function messageHome(req: Request, res: Response, next: NextFunction) {
+export async function messageGeneralChat(req: Request, res: Response, next: NextFunction) {
     res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
-    req.body |> prettyJson |> Winston.debug;
+    req.body |> prettyJson |> Winston.info;
     await Messaging.messageGeneralChat(slackClient(), req.body.text);
 }

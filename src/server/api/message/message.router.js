@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { messageHome } from './message.controller';
+import { messageGeneralChat } from './message.controller';
 
 import Winston from '../../../logging/app.logger';
 
 function messageRouter() {
     const router = Router({ caseSensitive: false, mergeParams: true });
-    router.route('')
-        .all(messageHome);
+    router.route('/general')
+        .all(messageGeneralChat);
     return router;
 }
 
