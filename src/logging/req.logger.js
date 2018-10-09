@@ -17,10 +17,15 @@ const requestLogStream = rfs('req.log', {
     path: logDirectory
 });
 
-const reqLogger: RequestHandler = morgan(
+export const fsReqLogger: RequestHandler = morgan(
     process.env.NODE_ENV === 'development' ?
         'dev' : 'combined', {
         stream: requestLogStream
     });
 
-export default reqLogger;
+export const consoleReqLogger: RequestHandler = morgan(
+    process.env.NODE_ENV === 'development' ?
+        'dev' : 'combined'
+);
+
+export default fsReqLogger;
