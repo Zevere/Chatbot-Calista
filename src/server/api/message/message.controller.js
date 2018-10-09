@@ -10,3 +10,13 @@ export async function messageGeneralChat(req: Request, res: Response, next: Next
     req.body |> prettyJson |> Winston.info;
     await Messaging.messageGeneralChat(slackClient(), req.body.text);
 }
+
+export async function messageSelf(req: Request, res: Response, next: NextFunction) {
+    res.status(200).send();
+    req.body |> prettyJson |> Winston.info;
+    const {
+        user_id,
+        text
+    } = req.body;
+    await Messaging.messageUser(slackClient(), user_id, text);
+}

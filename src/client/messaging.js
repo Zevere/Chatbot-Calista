@@ -1,6 +1,6 @@
 import { WebClient, WebAPICallResult } from '@slack/client';
 import Winston from '../logging/app.logger';
-
+import { prettyJson } from '../logging/format';
 
 export async function loginPrompt(web: WebClient, userId: string): WebAPICallResult {
     let url = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
@@ -28,7 +28,7 @@ export async function messageGeneralChat(web: WebClient, message: string) {
     try {
         const channelsResponse = await web.channels.list();
         Winston.debug('Channels:');
-        channelsResponse.channels |> JSON.stringify |> Winston.debug;
+        channelsResponse.channels |> prettyJson |> Winston.debug;
 
         const general = channelsResponse.channels.find(c => c.name === "general");
         Winston.debug(`General chat found? ${general ? "yes" : "no"}`);
@@ -38,9 +38,22 @@ export async function messageGeneralChat(web: WebClient, message: string) {
         });
     }
     catch (exception) {
-        exception |> JSON.stringify |> Winston.error;
+        exception |> prettyJson |> Winston.error;
     }
 }
+
+export async function messageUser(web: WebClient, userId: string, message: string) {
+    try{
+        return await web.chat.postMessage({
+           username: userId,
+           text: message 
+        });
+    }
+    catch (exception) {
+        exception |> prettyJson |> Winston.error;
+    }
+}
+
 
 export async function messageRandomUser(web: WebClient, message: string) {
     try {
@@ -55,31 +68,31 @@ export async function messageRandomUser(web: WebClient, message: string) {
         });
     }
     catch (exception) {
-        exception |> JSON.stringify |> Winston.error;
+        exception |> prettyJson |> Winston.error;
     }
 }
 
 export async function messageAppHome(web: WebClient, message: string) {
     // Use the `apps.permissions.resources.list` method to find the conversation ID for an app home
     try {
-        web.apps |> JSON.stringify |> Winston.debug;
+        web.apps |> prettyJson |> Winston.debug;
         const response = await web.apps.permissions.resources.list();
 
         // Find the app home to use as the conversation to post a message
         // At this point, there should only be one app home in the whole response since only one user has installed the app
-        response.resources |> JSON.stringify |> Winston.debug;
+        response.resources |> prettyJson |> Winston.debug;
         const appHome = response.resources.find(r => r.type === 'app_home');
         // Use the `chat.postMessage` method to send a message from this app
-        appHome |> JSON.stringify |> Winston.debug;
+        appHome |> prettyJson |> Winston.debug;
         const result = await web.chat.postMessage({
             channel: appHome.id,
             text: message || 'Hello World'
         });
         'Message posted!' |> Winston.debug;
-        result |> JSON.stringify |> Winston.debug;
+        result |> prettyJson |> Winston.debug;
     }
     catch (exception) {
-        exception |> JSON.stringify |> Winston.error;
+        exception |> prettyJson |> Winston.error;
     }
 }
 

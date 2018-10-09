@@ -8,6 +8,8 @@ import { prettyJson } from '../../../logging/format';
 export async function login(req: Request, res: Response, next: NextFunction) {
     res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
     req.body |> prettyJson |> Winston.debug;
-    
-    await Messaging.loginPrompt(slackClient());
+    const {
+        user_id
+    } = JSON.parse(req.body);
+    await Messaging.loginPrompt(slackClient(), user_id);
 }
