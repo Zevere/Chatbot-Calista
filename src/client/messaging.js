@@ -6,7 +6,7 @@ export async function loginPrompt(web: WebClient, userId: string): WebAPICallRes
     let url = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
     url = url |> encodeURIComponent;
     return await web.chat.postMessage({
-        username: userId,
+        channel: userId,
         text: 'Please login to Zevere.',
         attachments: [
             {
