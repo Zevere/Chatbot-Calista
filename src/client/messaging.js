@@ -10,6 +10,8 @@ export async function loginPrompt(web: WebClient, userId: string): WebAPICallRes
         text: 'Please login to Zevere.',
         attachments: [
             {
+                text:'Click here to login:',
+                fallback: `Click here to login: ${url}`,
                 actions: [
                     {
                         name: 'Login',
