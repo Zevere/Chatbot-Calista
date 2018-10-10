@@ -4,7 +4,7 @@ import { prettyJson } from '../logging/format';
 
 export async function loginPrompt(web: WebClient, userId: string): WebAPICallResult {
     let url = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
-    url = url |> encodeURIComponent;
+    //url = url |> encodeURIComponent;
     return await web.chat.postMessage({
         channel: userId,
         text: 'Please login to Zevere.',
