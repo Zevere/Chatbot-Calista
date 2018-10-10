@@ -10,6 +10,6 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     req.body |> prettyJson |> Winston.debug;
     const {
         user_id
-    } = JSON.parse(req.body);
+    } = req.body;
     await Messaging.loginPrompt(slackClient(), user_id);
 }
