@@ -14,11 +14,9 @@ export async function loginPrompt(web: WebClient, userId: string): WebAPICallRes
                 fallback: `Click here to login: ${url}`,
                 actions: [
                     {
-                        name: 'Login',
                         type: 'button',
-                        value: 'Login',
+                        text: 'Login',
                         url: url,
-                        style: 'primary'
                     }
                 ]
             }
