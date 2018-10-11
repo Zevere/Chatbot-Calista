@@ -12,10 +12,11 @@ export async function messageGeneralChat(req: Request, res: Response, next: Next
     req.body |> prettyJson |> Winston.info;
 
     let conn = await dbconnection();
-    const schema = new mongoose.Schema({ any: mongoose.Schema.Types.Mixed });
-    const M = conn.model('message', schema);
-    const requestBodyModel = new M();
-    requestBodyModel.mixed = req.body;
+    const s = new mongoose.Schema({ any: mongoose.Schema.Types.Mixed });
+    const a = conn.model<Schema>("message", s);
+    const M = conn.model('message', s);
+    const requestBodyModel = new M(req.body);
+    //requestBodyModel.mixed = req.body;
     requestBodyModel.save((err, _) => {
         Winston.error('Could not save the message!');
         err |> prettyJson |> Winston.error;
