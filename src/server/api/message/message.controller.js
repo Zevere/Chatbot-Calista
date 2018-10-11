@@ -4,12 +4,11 @@ import { Request, Response, NextFunction } from 'express';
 import Winston from '../../../logging/app.logger';
 import { WebClient } from '@slack/client';
 import { prettyJson } from '../../../logging/format';
-import dbconnection from '../../data/mongoose';
 import mongoose from 'mongoose';
 
-const MessageRequest = mongoose.model('MessageRequest');
 
 export async function messageGeneralChat(req: Request, res: Response, next: NextFunction) {
+    const MessageRequest = mongoose.model('MessageRequest');
     res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
     req.body |> prettyJson |> Winston.info;
     
