@@ -7,20 +7,16 @@ import { prettyJson } from '../../../logging/format';
 import dbconnection from '../../data/mongoose';
 import mongoose from 'mongoose';
 
+const MessageRequest = mongoose.model('MessageRequest');
+
 export async function messageGeneralChat(req: Request, res: Response, next: NextFunction) {
     res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
     req.body |> prettyJson |> Winston.info;
-
-    let conn = await dbconnection();
-    const s = new mongoose.Schema({ any: mongoose.Schema.Types.Mixed });
-    const M = conn.model('message', s);
-    const requestBodyModel = new M(req.body);
-    //requestBodyModel.mixed = req.body;
-    requestBodyModel.save((err, _) => {
-        Winston.error('Could not save the message!');
-        err |> prettyJson |> Winston.error;
-    });
+    
     try {
+        const result = await MessageRequest.create(req.body);
+        Winston.info("Message Saved");
+        result |> prettyJson |> Winston.info;
         await Messaging.messageGeneralChat(slackClient(), req.body.text);
     }
     catch (exception) {
