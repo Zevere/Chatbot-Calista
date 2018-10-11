@@ -6,6 +6,7 @@ import MessageRequestSchema from './schema/message-request';
 async function dbconnection(): mongoose.Connection {
     try {
         await mongoose.connect(process.env.DB_CONNECTION_STRING);
+        Winston.info("Connected to mongo.");
         mongoose.model('MessageRequest', MessageRequestSchema);
     } catch (exception) {
         exception |> prettyJson |> Winston.error;
