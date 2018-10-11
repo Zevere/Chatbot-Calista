@@ -11,5 +11,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     const {
         user_id
     } = req.body;
-    await Messaging.loginPrompt(slackClient(), user_id);
+    try {
+        await Messaging.loginPrompt(slackClient(), user_id);
+    }
+    catch (exception) {
+        exception |> prettyJson |> Winston.error;
+    }
 }

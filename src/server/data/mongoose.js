@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import Winston from '../../logging/app.logger';
+import { prettyJson } from '../../logging/format';
 
 async function dbconnection(): mongoose.Connection {
     let db;
@@ -11,7 +12,7 @@ async function dbconnection(): mongoose.Connection {
         });
         return db.connection;
     } catch (exception) {
-        
+        exception |> prettyJson |> Winston.error;
     }
 }
 

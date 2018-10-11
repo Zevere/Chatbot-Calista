@@ -12,11 +12,17 @@ export async function messageGeneralChat(req: Request, res: Response, next: Next
     req.body |> prettyJson |> Winston.info;
     const schema = new Schema({ any: Schema.Types.Mixed });
     const M = model('message', schema);
-    const requestBodyModel = new M(req.body);
+    const requestBodyModel = new M;
+    requestBodyModel.mixed = req.body;
     requestBodyModel.save((err, _) => {
         err |> prettyJson |> Winston.error;
     });
-    await Messaging.messageGeneralChat(slackClient(), req.body.text);
+    try {
+        await Messaging.messageGeneralChat(slackClient(), req.body.text);
+    }
+    catch (exception) {
+        exception |> prettyJson |> Winston.error;
+    }
 }
 
 export async function messageSelf(req: Request, res: Response, next: NextFunction) {
@@ -26,5 +32,11 @@ export async function messageSelf(req: Request, res: Response, next: NextFunctio
         user_id,
         text
     } = req.body;
-    await Messaging.messageUser(slackClient(), user_id, text);
+
+    try {
+        await Messaging.messageUser(slackClient(), user_id, text);
+    }
+    catch (exception) {
+        exception |> prettyJson |> Winston.error;
+    }
 }

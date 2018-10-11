@@ -21,7 +21,7 @@ export async function loginPrompt(web: WebClient, userId: string): WebAPICallRes
                 ]
             }
         ]
-    })
+    });
 }
 
 export async function messageGeneralChat(web: WebClient, message: string) {
