@@ -13,7 +13,6 @@ export async function messageGeneralChat(req: Request, res: Response, next: Next
 
     let conn = await dbconnection();
     const s = new mongoose.Schema({ any: mongoose.Schema.Types.Mixed });
-    const a = conn.model<Schema>("message", s);
     const M = conn.model('message', s);
     const requestBodyModel = new M(req.body);
     //requestBodyModel.mixed = req.body;
