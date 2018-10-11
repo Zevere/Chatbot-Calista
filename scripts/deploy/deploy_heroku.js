@@ -14,7 +14,7 @@ function push_image_to_heroku(app, source, dyno, user, token) {
     console.info('pushing docker image to heroku')
 
     console.debug('connecting to heroku docker registry')
-    $.exec(`${token} | docker login --username ${user} --password-stdin registry.heroku.com`)
+    $.exec(`echo ${token} | docker login --username ${user} --password-stdin registry.heroku.com`)
 
     console.debug('tagging the image')
     $.exec(`docker tag ${source} registry.heroku.com/${app}/${dyno}`)
