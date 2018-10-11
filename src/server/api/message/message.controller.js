@@ -12,7 +12,7 @@ export async function messageGeneralChat(req: Request, res: Response, next: Next
     req.body |> prettyJson |> Winston.info;
 
     let conn = dbconnection();
-    const schema = new mongoose.Schema({ any: Schema.Types.Mixed });
+    const schema = new mongoose.Schema({ any: mongoose.Schema.Types.Mixed });
     const M = conn.model('message', schema);
     const requestBodyModel = new M();
     requestBodyModel.mixed = req.body;
