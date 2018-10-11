@@ -6,7 +6,7 @@ export async function loginPrompt(web: WebClient, userId: string): WebAPICallRes
     let url = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
     let redirect_url = 'https://slack.com/app_redirect?app=ACXLG4LKY';
 
-    url = `${url}?redirect_url${encodeURIComponent(redirect_url)}`;
+    url = `${url}?redirect_url=${encodeURIComponent(redirect_url)}`;
     //url = url |> encodeURIComponent;
     return await web.chat.postMessage({
         channel: userId,
