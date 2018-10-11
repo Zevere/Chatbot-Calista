@@ -6,12 +6,10 @@ import { WebClient } from '@slack/client';
 import { prettyJson } from '../../../logging/format';
 import mongoose from 'mongoose';
 
-
 export async function messageGeneralChat(req: Request, res: Response, next: NextFunction) {
     const MessageRequest = mongoose.model('MessageRequest');
     res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
     req.body |> prettyJson |> Winston.info;
-    
     try {
         const result = await MessageRequest.create(req.body);
         Winston.info("Message Saved");

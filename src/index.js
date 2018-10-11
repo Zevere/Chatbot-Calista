@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import http from 'http';
 import Winston from './logging/app.logger';
 import { prettyJson } from './logging/format';
+import dbconnection from './server/data/mongoose';
 
 /**
  * Application Entry Point
@@ -12,7 +13,8 @@ import { prettyJson } from './logging/format';
 (async function main() {
     try {
         dotenv.load();
-        const server = http.createServer(await buildServer());
+        await dbconnection();
+        const server = http.createServer(buildServer());
         server.on('listening', () => {
             Winston.info("Server started.");
             server.address() |> JSON.stringify |> Winston.info;
