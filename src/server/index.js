@@ -16,7 +16,7 @@ function buildServer(): express.Express {
     app.use(fsReqLogger);
     app.use(json());
     app.use(urlencoded());
-    app.get('/', (req, res) => { res.send('OK.') });
+    app.get('/', (req, res) => { res.render('redirect'); });
     app.use(`/slack/api/v${process.env.API_VERSION_NUMBER || 1}`, apiRouter);
     app.use(errorHandler);
 
