@@ -1,10 +1,12 @@
-import { slackClient } from '../../../client';
 import * as Messaging from '../../../client/messaging';
-import { Request, Response, NextFunction } from 'express';
+
+import { NextFunction, Request, Response } from 'express';
+
 import Winston from '../../../logging/app.logger';
-import { WebClient } from '@slack/client';
-import { prettyJson } from '../../../logging/format';
 import mongoose from 'mongoose';
+
+import { prettyJson } from '../../../logging/format';
+import { slackClient } from '../../../client';
 
 export async function messageGeneralChat(req: Request, res: Response, next: NextFunction) {
     const MessageRequest = mongoose.model('MessageRequest');
@@ -18,6 +20,7 @@ export async function messageGeneralChat(req: Request, res: Response, next: Next
     }
     catch (exception) {
         exception |> prettyJson |> Winston.error;
+        next(exception);
     }
 }
 
@@ -34,5 +37,6 @@ export async function messageSelf(req: Request, res: Response, next: NextFunctio
     }
     catch (exception) {
         exception |> prettyJson |> Winston.error;
+        next(exception);
     }
 }

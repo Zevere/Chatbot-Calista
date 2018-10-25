@@ -9,6 +9,7 @@
     "build:debug": "babel src --out-dir dist/debug --source-maps",
     "build:release": "webpack -p --config webpack.config.ts",
     "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --config webpack.dev.config.ts --watch"
   },

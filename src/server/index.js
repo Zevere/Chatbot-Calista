@@ -1,12 +1,14 @@
 import * as path from 'path';
 
-import express from 'express';
+import { consoleReqLogger, fsReqLogger } from '../logging/req.logger';
 import { json, urlencoded } from 'express';
 
-import { prettyJson } from '../logging/format';
-import { consoleReqLogger, fsReqLogger } from '../logging/req.logger';
-import apiRouter from './api';
 import Winston from '../logging/app.logger';
+import apiRouter from './api';
+import express from 'express';
+
+import { prettyJson } from '../logging/format';
+
 
 
 function buildServer(): express.Express {

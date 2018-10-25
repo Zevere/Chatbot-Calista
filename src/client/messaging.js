@@ -1,29 +1,29 @@
-import { WebClient, WebAPICallResult } from '@slack/client';
+import { WebAPICallResult, WebClient } from '@slack/client';
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
 
 export async function loginPrompt(web: WebClient, userId: string): WebAPICallResult {
     let url = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
-    let redirect_url = 'https://slack.com/app_redirect?channel=general';
+    let redirectUrl = 'https://slack.com/app_redirect?channel=general';
 
-    url = `${url}?redirect_uri=${encodeURIComponent(redirect_url)}`;
+    url = `${url}?redirect_uri=${encodeURIComponent(redirectUrl)}`;
     //url = url |> encodeURIComponent;
     return await web.chat.postMessage({
-        channel: userId,
-        text: 'Please login to Zevere.',
         attachments: [
             {
-                text:'Click here to login:',
-                fallback: `Click here to login: ${url}`,
                 actions: [
                     {
-                        type: 'button',
                         text: 'Login',
+                        type: 'button',
                         url: url,
                     }
-                ]
+                ],
+                fallback: `Click here to login: ${url}`,
+                text:'Click here to login:',
             }
-        ]
+        ],
+        channel: userId,
+        text: 'Please login to Zevere.',
     });
 }
 
@@ -48,8 +48,8 @@ export async function messageGeneralChat(web: WebClient, message: string) {
 export async function messageUser(web: WebClient, userId: string, message: string) {
     try{
         return await web.chat.postMessage({
-           channel: userId,
-           text: message 
+            channel: userId,
+            text: message 
         });
     }
     catch (exception) {

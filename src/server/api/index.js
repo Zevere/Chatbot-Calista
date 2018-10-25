@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-import messageRouter from './message/message.router';
 import loginRouter from './login/login.router';
+import messageRouter from './message/message.router';
 
 function apiRouter() {
     const router = Router({caseSensitive: false});

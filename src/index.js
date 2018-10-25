@@ -1,9 +1,9 @@
-import dotenv from 'dotenv';
-import buildServer from './server';
-import http from 'http';
 import Winston from './logging/app.logger';
-import { prettyJson } from './logging/format';
+import buildServer from './server';
 import dbconnection from './server/data/mongoose';
+import dotenv from 'dotenv';
+import http from 'http';
+import { prettyJson } from './logging/format';
 
 /**
  * Application Entry Point

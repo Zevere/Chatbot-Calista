@@ -1,8 +1,9 @@
-import morgan from 'morgan';
-import rfs from 'rotating-file-stream';
-import fs from 'fs';
-import path from 'path';
 import { RequestHandler } from 'express';
+
+import fs from 'fs';
+import morgan from 'morgan';
+import path from 'path';
+import rfs from 'rotating-file-stream';
 
 const logDirectory = process.env.APP_LOGS ?
     path.join(process.env.APP_LOGS, 'requests')
