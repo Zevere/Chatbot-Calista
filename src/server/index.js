@@ -24,7 +24,7 @@ function buildServer(): express.Express {
 };
 
 function redirectPageHandler(req, res, next) {
-    const root = path.join(__dirname, "views");
+    const root = path.join(__dirname, 'views');
     root |> Winston.info;
     res.status(200)
         .sendFile('redirect.html', {

@@ -9,7 +9,8 @@
     "build:debug": "babel src --out-dir dist/debug --source-maps",
     "build:release": "webpack -p --config webpack.config.ts",
     "lint": "eslint src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --config webpack.dev.config.ts --watch"
   },
   "repository": {
     "type": "git",
@@ -57,6 +58,8 @@
     "babel-plugin-flow-runtime": "^0.17.0",
     "eslint": "^4.19.1",
     "eslint-plugin-babel": "^5.2.0",
+    "nodemon": "^1.18.4",
+    "nodemon-webpack-plugin": "^4.0.3",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.1",
     "webpack": "^4.20.2",

@@ -7,9 +7,18 @@
     <title>Redirecting to Slack...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        body {
+            background-color: aliceblue;
+        }
         h4 {
+            font-size: 2em;
             font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
+        }
+        .card {
+            padding: 10em;
+            background-color: #FCFCFC;
+            border: 1em gainsboro;
         }
         .loader {
             display: block;
@@ -49,13 +58,16 @@
 </head>
 
 <body>
-    <div class="loader"></div>
-    <h4>If you are not redirected back to Slack, <a href="Slack://user">click here.</a></h4>
+    <div class="card">
+        <div class="loader"></div>
+        <h4>If you are not redirected back to Slack, <a href="https://slack.com/app_redirect?channel=general">click here.</a></h4>
+        <h4>Haven't downloaded the desktop app? <a href="https://slack.com/">You may find it here.</a> </h4>
+    </div>
 </body>
 
 <script>
 window.onload = () => {
-    window.location.replace("Slack://user");
+    window.location.replace("Slack://open");
 };
 </script>
 

@@ -2,7 +2,6 @@ import * as webpack from 'webpack';
 import * as path from 'path';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
-
 const outDir: string = path.resolve(__dirname, 'dist', 'release');
 
 const config: webpack.Configuration = {
