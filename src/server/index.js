@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 import express from 'express';
 import { json, urlencoded } from 'express';
 
@@ -8,6 +10,8 @@ import Winston from '../logging/app.logger';
 
 function buildServer(): express.Express {
     const app = express();
+    app.set('views', path.join(__dirname, 'views'));
+    app.set('view engine', 'ejs');
     app.use(consoleReqLogger);
     app.use(fsReqLogger);
     app.use(json());
