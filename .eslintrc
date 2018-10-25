@@ -13,8 +13,10 @@
         "browser": false,
         "node": true
     },
+    "extends": "eslint:recommended",
     "rules": {
-        "strict": "off",
-        "quotes": [2, "single", { "avoidEscape": true }]
+        "strict": "error",
+        "quotes": [2, "single", { "avoidEscape": true }],
+        "arrow-spacing": ["error", { "before" : true, "after": true }]
     }
 }

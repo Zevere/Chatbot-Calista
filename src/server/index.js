@@ -21,7 +21,7 @@ function buildServer(): express.Express {
     app.use(errorHandler);
 
     return app;
-};
+}
 
 function redirectPageHandler(req, res, next) {
     const root = path.join(__dirname, 'views');
@@ -36,7 +36,7 @@ function redirectPageHandler(req, res, next) {
         });
 }
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res) {
     err |> prettyJson |> Winston.error;
     return res.status(404).send({
         error: process.env.NODE_ENV !== 'development' ? err.message : 'There was an error processing your request.'
