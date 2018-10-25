@@ -33,11 +33,11 @@ export async function messageGeneralChat(web: WebClient, message: string) {
         Winston.debug('Channels:');
         channelsResponse.channels |> prettyJson |> Winston.debug;
 
-        const general = channelsResponse.channels.find(c => c.name === "general");
-        Winston.debug(`General chat found? ${general ? "yes" : "no"}`);
+        const general = channelsResponse.channels.find(c => c.name === 'general');
+        Winston.debug(`General chat found? ${general ? 'yes' : 'no'}`);
         return await web.chat.postMessage({
             channel: general.id,
-            text: message || "Hello World!"
+            text: message || 'Hello World!"'
         });
     }
     catch (exception) {

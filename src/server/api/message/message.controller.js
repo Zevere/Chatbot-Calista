@@ -12,7 +12,7 @@ export async function messageGeneralChat(req: Request, res: Response, next: Next
     req.body |> prettyJson |> Winston.info;
     try {
         const result = await MessageRequest.create(req.body);
-        Winston.info("Message Saved");
+        Winston.info('Message Saved');
         result |> prettyJson |> Winston.info;
         await Messaging.messageGeneralChat(slackClient(), req.body.text);
     }

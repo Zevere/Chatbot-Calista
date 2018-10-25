@@ -16,10 +16,10 @@ import dbconnection from './server/data/mongoose';
         await dbconnection();
         const server = http.createServer(buildServer());
         server.on('listening', () => {
-            Winston.info("Server started.");
+            Winston.info('Server started.');
             server.address() |> JSON.stringify |> Winston.info;
         });
-        server.on("error", (err) => {
+        server.on('error', (err) => {
             err |> JSON.stringify |> Winston.error;
         });
         server.listen(process.env.PORT || 8080);
