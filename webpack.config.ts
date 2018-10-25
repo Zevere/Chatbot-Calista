@@ -8,6 +8,9 @@ const outDir: string = path.resolve(__dirname, 'dist', 'release');
 const config: webpack.Configuration = {
     entry: path.resolve(__dirname, 'src/index.js'),
     target: 'node',
+    node: {
+        __dirname: false,
+    },
     output: {
         filename: 'index.js',
         path: outDir
