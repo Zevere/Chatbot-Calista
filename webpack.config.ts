@@ -6,7 +6,6 @@ const outDir: string = path.resolve(__dirname, 'dist', 'release');
 
 const config: webpack.Configuration = {
     entry: path.resolve(__dirname, 'src/index.js'),
-    externals: [ 'ws' ],
     target: 'node',
     node: {
         __dirname: false,
@@ -17,7 +16,6 @@ const config: webpack.Configuration = {
     },
     module: {
         exprContextCritical: false,
-        noParse: [ /'(ws)'/ ],
         rules: [
             {
                 test: /\.js$/, exclude: /node_modules/, use: [
