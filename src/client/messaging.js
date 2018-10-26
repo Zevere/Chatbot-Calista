@@ -2,32 +2,36 @@ import { WebAPICallResult, WebClient } from '@slack/client';
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
 
-export async function loginPrompt(web: WebClient, userId: string): WebAPICallResult {
-    let url = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
-    let redirectUrl = 'https://slack.com/app_redirect?channel=general';
-
-    url = `${url}?redirect_uri=${encodeURIComponent(redirectUrl)}`;
-    //url = url |> encodeURIComponent;
-    return await web.chat.postMessage({
-        attachments: [
-            {
-                actions: [
-                    {
-                        text: 'Login',
-                        type: 'button',
-                        url: url,
-                    }
-                ],
-                fallback: `Click here to login: ${url}`,
-                text:'Click here to login:',
-            }
-        ],
-        channel: userId,
-        text: 'Please login to Zevere.',
-    });
+export async function loginPrompt(web: WebClient, userId: string, url: string): Promise<WebAPICallResult> {
+    try {
+        let webAppUrl = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
+        let redirectUrl = `${url}?id=${userId}`;
+        webAppUrl = `${webAppUrl}?redirect_uri=${encodeURIComponent(redirectUrl)}`;
+        //url = url |> encodeURIComponent;
+        return await web.chat.postMessage({
+            attachments: [
+                {
+                    actions: [
+                        {
+                            text: 'Login',
+                            type: 'button',
+                            url: webAppUrl,
+                        }
+                    ],
+                    fallback: `Click here to login: ${webAppUrl}`,
+                    text:'Click here to login:',
+                }
+            ],
+            channel: userId,
+            text: 'Please login to Zevere.',
+        });
+    } catch (exception) {
+        Winston.error('Exception caught in messaging#loginPrompt.');
+        throw exception;
+    }
 }
 
-export async function messageGeneralChat(web: WebClient, message: string) {
+export async function messageGeneralChat(web: WebClient, message: string): Promise<WebAPICallResult> {
     try {
         const channelsResponse = await web.channels.list();
         Winston.debug('Channels:');
@@ -41,11 +45,12 @@ export async function messageGeneralChat(web: WebClient, message: string) {
         });
     }
     catch (exception) {
-        exception |> prettyJson |> Winston.error;
+        Winston.error('Exception caught in messaging#messageGeneralChat.');
+        throw exception;
     }
 }
 
-export async function messageUser(web: WebClient, userId: string, message: string) {
+export async function messageUser(web: WebClient, userId: string, message: string): Promise<WebAPICallResult> {
     try{
         return await web.chat.postMessage({
             channel: userId,
@@ -53,29 +58,30 @@ export async function messageUser(web: WebClient, userId: string, message: strin
         });
     }
     catch (exception) {
-        exception |> prettyJson |> Winston.error;
+        Winston.error('Exception caught in messaging#messageUser.');
+        throw exception;
     }
 }
 
-
-export async function messageRandomUser(web: WebClient, message: string) {
+export async function messageRandomUser(web: WebClient, message: string): Promise<WebAPICallResult> {
     try {
         const channelsResponse = await web.channels.list();
         const general = channelsResponse.channels.find(c => c.name === 'general');
         general.members |> Winston.debug;
         const randomUser = general.members[(Math.random() * general.members.length) |> Math.floor];
         'Random User ID: ' + randomUser |> Winston.info;
-        await web.chat.postMessage({
+        return await web.chat.postMessage({
             channel: randomUser,
             text: message || 'Hello random user'
         });
     }
     catch (exception) {
-        exception |> prettyJson |> Winston.error;
+        Winston.error('Exception caught in messaging#messageRandomUser.');
+        throw exception;
     }
 }
 
-export async function messageAppHome(web: WebClient, message: string) {
+export async function messageAppHome(web: WebClient, message: string): Promise<WebAPICallResult> {
     // Use the `apps.permissions.resources.list` method to find the conversation ID for an app home
     try {
         web.apps |> prettyJson |> Winston.debug;
@@ -93,9 +99,12 @@ export async function messageAppHome(web: WebClient, message: string) {
         });
         'Message posted!' |> Winston.debug;
         result |> prettyJson |> Winston.debug;
+
+        return result;
     }
     catch (exception) {
-        exception |> prettyJson |> Winston.error;
+        Winston.error('Exception caught in messaging#messageAppHome.');
+        throw exception;
     }
 }
 

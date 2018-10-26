@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { login } from './login.controller';
+import { promptLogin } from './login.controller';
 
 function loginRouter() {
     const router = Router({ caseSensitive: false, mergeParams: true });
     router.route('')
-        .all(login);
+        .all(promptLogin);
     return router;
 }
 

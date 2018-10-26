@@ -1,17 +1,15 @@
-import * as path from 'path';
 
+import { Express, Request, Response, json, urlencoded } from 'express';
 import { consoleReqLogger, fsReqLogger } from '../logging/req.logger';
-import { json, urlencoded } from 'express';
 
 import Winston from '../logging/app.logger';
 import apiRouter from './api';
 import express from 'express';
 
 import { prettyJson } from '../logging/format';
+import { redirectPageHandler } from './redirect/redirect.controller';
 
-
-
-function buildServer(): express.Express {
+function buildServer(): Express {
     const app = express();
     app.use(consoleReqLogger);
     app.use(fsReqLogger);
@@ -25,20 +23,7 @@ function buildServer(): express.Express {
     return app;
 }
 
-function redirectPageHandler(req, res, next) {
-    const root = path.join(__dirname, 'views');
-    root |> Winston.info;
-    res.status(200)
-        .sendFile('redirect.html', {
-            root: root
-        }, function (err) {
-            if (err) {
-                next(err);
-            }
-        });
-}
-
-function errorHandler(err, req, res) {
+function errorHandler(err, req: Request, res: Response) {
     err |> prettyJson |> Winston.error;
     return res.status(404).send({
         error: process.env.NODE_ENV !== 'development' ? err.message : 'There was an error processing your request.'
