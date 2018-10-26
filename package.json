@@ -11,7 +11,8 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --config webpack.dev.config.ts --watch"
+    "watch": "webpack -d --progress --colors --config webpack.dev.config.ts --watch",
+    "dev": "webpack-dev-server -d"
   },
   "repository": {
     "type": "git",

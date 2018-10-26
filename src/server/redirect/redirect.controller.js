@@ -14,35 +14,37 @@ export async function redirectPageHandler(req: Request, res: Response, next: Nex
     const root = path.join(__dirname, 'views');
 
     req.body |> prettyJson |> Winston.info;
-    
     res.status(200)
         .sendFile('redirect.html', {
             root: root
         }, function (err) {
             if (err) {
-                next(err);
+                return next(err);
             }
+            
+            
+            // Should come from the web app
+            const zid = req.query['zv-user'];
+            
+            // Set from client/messaging/loginPrompt, sent to web app, and back here again
+            const sid = req.query['id'];
+            
+            if (!zid || !sid) {
+                return;
+            }
+            
+            Winston.info('Linking accounts:');
+            Winston.info(`\tZevere ID: ${zid}`);
+            Winston.info(`\tSlack ID: ${sid}`);
+            const user = new User();
+            user.zevereId = zid;
+            user.slackId = sid;
+
+            UserModel.create(user).then(() => {
+                Winston.info(`Successfully connected Slack Account: "${user.slackId}" with Zevere Account: "${user.zevereId}"`);
+            }).catch (exception => {
+                exception |> prettyJson |> Winston.error;
+                next(exception);
+            });
         });
-
-    // Should come from the web app
-    let zevereId: string = req.query['zv-user'];
-
-    // Set from client/messaging/loginPrompt, sent to web app, and back here again
-    let slackId: string = req.query['id'];
-
-    if (!zevereId || !slackId) {
-        return;    
-    }
-
-    const user = new User();
-    user.zevereId = zevereId;
-    user.userId = slackId;
-
-    try {
-        await UserModel.create(user);
-        Winston.info(`Successfully connected Slack Account: "${slackId}" with Zevere Account: "${zevereId}"`);
-    } catch (exception) {
-        exception |> prettyJson |> Winston.error;
-    }
-
 }

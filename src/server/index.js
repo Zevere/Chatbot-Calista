@@ -1,12 +1,11 @@
 
-import { Express, Request, Response, json, urlencoded } from 'express';
+import { Express, json, urlencoded } from 'express';
 import { consoleReqLogger, fsReqLogger } from '../logging/req.logger';
 
 import Winston from '../logging/app.logger';
 import apiRouter from './api';
 import express from 'express';
 
-import { prettyJson } from '../logging/format';
 import { redirectPageHandler } from './redirect/redirect.controller';
 
 function buildServer(): Express {
@@ -23,8 +22,15 @@ function buildServer(): Express {
     return app;
 }
 
-function errorHandler(err, req: Request, res: Response) {
-    err |> prettyJson |> Winston.error;
+function errorHandler(err, req, res) {
+    if (!(err instanceof Error) && typeof(err) !== 'string') {
+        res = req;
+        req = err;
+        err = 'Invalid endpoint';
+    }
+    Winston.error('Error caught in final error handler.');
+    Winston.error(err);
+    //err |> prettyJson |> Winston.error;
     return res.status(404).send({
         error: process.env.NODE_ENV !== 'development' ? err.message : 'There was an error processing your request.'
     });
