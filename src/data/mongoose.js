@@ -1,8 +1,8 @@
 import MessageRequestSchema from './schema/message-request';
-import Winston from '../../logging/app.logger';
+import Winston from '../logging/app.logger';
 import mongoose from 'mongoose';
 
-import { prettyJson } from '../../logging/format';
+import { prettyJson } from '../logging/format';
 import UserSchema from './schema/user';
 
 async function dbconnection(): mongoose.Connection {

@@ -1,6 +1,6 @@
 import Winston from './logging/app.logger';
 import buildServer from './server';
-import dbconnection from './server/data/mongoose';
+import dbconnection from './data/mongoose';
 import dotenv from 'dotenv';
 import http from 'http';
 import { prettyJson } from './logging/format';
