@@ -29,17 +29,19 @@ export async function linkAccounts(zevereId: string, slackId: string) {
 }
 
 
+export async function findUserBySlackId(id: string) {
+    const UserModel = mongoose.model('User');
+    return await UserModel.findOne({slackId: id});
+}
+
 async function findFirstUser(user: User) {  // eslint-disable-line no-unused-vars
     const UserModel = mongoose.model('User');
-    let users = await UserModel.find(user);
-    if (users.length <= 0) {
-        return null;
-    }
-    return users[0];
+    return await UserModel.findOne(user);
 }
+
 
 async function userExists(user: User) {
     const UserModel = mongoose.model('User');
-    const users = await UserModel.find().or([{ slackId: user.slackId }, { zevereId: user.zevereId }]);
-    return users.length > 0;
+    const u = await UserModel.findOne().or([{ slackId: user.slackId }, { zevereId: user.zevereId }]);
+    return !!u;
 }
