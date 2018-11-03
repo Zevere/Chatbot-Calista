@@ -23,6 +23,7 @@
     - [Development](#development)
         - [Install Dependencies](#install-dependencies)
         - [Running in Development](#running-in-development)
+        - [Exposing the Application](#exposing-the-application)
     - [Secrets](#secrets)
         - [Mandatory Secrets](#mandatory-secrets)
         - [Optional Secrets](#optional-secrets)
@@ -49,6 +50,21 @@ make install
 ### Running in Development
 To run this app in development, it is best to use the Webpack Dev Server with the nodemon plugin. You may
 use it by running `npm run watch`.
+
+### Exposing the Application
+To expose the server hosted locally, it is best if you use [LocalTunnel](https://github.com/localtunnel/localtunnel). Opening ports on your computer, router, and port forwarding
+is not worth the effort. 
+
+Install LocalTunnel with npm:
+```
+npm i -g localtunnel
+```
+
+
+Run localtunnel like this:
+```
+lt --port 8080 --subdomain delicious-velociraptor-88
+```
 
 ## Secrets
 This app contains a swathe of secrets that must be used. They may be loaded through a .env file, or added 
