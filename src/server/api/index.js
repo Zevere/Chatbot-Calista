@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import loginRouter from './login/login.router';
 import messageRouter from './message/message.router';
+import { validateUser } from '../authorization/authorization.middleware';
 
 /**
  * __Router to handle API routes. Has nested routers for
@@ -10,8 +11,9 @@ import messageRouter from './message/message.router';
  */
 function apiRouter(): Router {
     const router = Router({caseSensitive: false});
-    router.use('/message', messageRouter);
     router.use('/login', loginRouter);
+    router.use(validateUser);
+    router.use('/message', messageRouter);
     return router;
 }
 

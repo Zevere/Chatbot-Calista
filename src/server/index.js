@@ -7,6 +7,7 @@ import apiRouter from './api';
 import express from 'express';
 
 import { redirectPageHandler } from './redirect/redirect.controller';
+import { validateSlack } from './authorization/authorization.middleware';
 
 /**
  * Assigns middleware to an express server and returns it.
@@ -19,7 +20,7 @@ function buildServer(): Express {
     app.use(json());
     app.use(urlencoded());
     app.get('/', redirectPageHandler);
-    app.use(`/slack/api/v${process.env.API_VERSION_NUMBER || 1}`, apiRouter);
+    app.use(`/slack/api/v${process.env.API_VERSION_NUMBER || 1}`, validateSlack, apiRouter);
     app.use(errorHandler);
 
     return app;

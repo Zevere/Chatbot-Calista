@@ -40,6 +40,7 @@
     "http-errors": "^1.7.1",
     "mongoose": "^5.3.6",
     "morgan": "^1.9.1",
+    "qs": "^6.5.2",
     "rotating-file-stream": "^1.3.9",
     "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.3.5"

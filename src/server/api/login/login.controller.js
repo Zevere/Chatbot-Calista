@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import Winston from '../../../logging/app.logger';
 import { prettyJson } from '../../../logging/format';
 import slackClient from '../../../client';
-import { findUserBySlackId } from '../../services/authorization.service';
+import { findUserBySlackId } from '../../authorization/authorization.service';
 
 
 export async function promptLogin(req: Request, res: Response, next: NextFunction) {

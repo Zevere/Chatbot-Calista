@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 import Winston from '../../logging/app.logger';
 
 import { prettyJson } from '../../logging/format';
-import { linkAccounts } from '../services/authorization.service';
+import { linkAccounts } from '../authorization/authorization.service';
 
 export async function redirectPageHandler(req: Request, res: Response, next: NextFunction) {
     const root = path.join(__dirname, 'views');
