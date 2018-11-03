@@ -2,7 +2,13 @@ import Winston from '../../logging/app.logger';
 import mongoose from 'mongoose';
 import { User } from '../../data/schema/user';
 
-
+/**
+ * __Attempts to link a Zevere account to a Slack account.__
+ * @param {string} zevereId The ID of a Zevere account.
+ * @param {string} slackId The ID of a Slack account.
+ * @throws Error when there is an issue creating the document in the database.
+ * @returns {Promise<boolean>} A promise containing true if the account is linked, or false if it already exists.
+ */
 export async function linkAccounts(zevereId: string, slackId: string) {
     const user = new User();
     user.zevereId = zevereId;

@@ -4,15 +4,15 @@
   "description": "Add some zeverity to your Slack.",
   "main": "bin/www",
   "scripts": {
-    "start": "npm run build:release && node dist/release",
-    "start:debug": "npm run build:debug && node dist/debug",
-    "build:debug": "babel src --out-dir dist/debug --source-maps",
-    "build:release": "webpack -p --config webpack.config.ts",
+    "start": "cross-env NODE_ENV=production npm run build:release && node dist/release",
+    "start:debug": "cross-env NODE_ENV=development npm run build:debug && node dist/debug",
+    "build:debug": "cross-env NODE_ENV=development babel src --out-dir dist/debug --source-maps",
+    "build:release": "cross-env NODE_ENV=production webpack -p --config webpack.config.ts",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack -d --progress --colors --config webpack.dev.config.ts --watch",
-    "dev": "webpack-dev-server -d"
+    "watch": "cross-env NODE_ENV=development webpack -d --progress --colors --config webpack.dev.config.ts --watch",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server -d"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "@slack/client": "^4.8.0",
     "cookie-parser": "^1.4.3",
     "copy-webpack-plugin": "^4.5.4",
+    "cross-env": "^5.2.0",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "flow-runtime": "^0.17.0",

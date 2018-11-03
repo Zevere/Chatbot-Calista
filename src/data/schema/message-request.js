@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 
+
 const MessageRequestSchema = new Schema({
     channel_id: String,
     channel_name: String,
@@ -16,4 +17,9 @@ const MessageRequestSchema = new Schema({
     collection: 'messageRequests'
 });
 
+
+/** 
+ * __This schema represents the data you receive from Slack when a User uses
+ * a slash command.__
+*/
 export default MessageRequestSchema;

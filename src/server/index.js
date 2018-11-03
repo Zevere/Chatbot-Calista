@@ -8,6 +8,10 @@ import express from 'express';
 
 import { redirectPageHandler } from './redirect/redirect.controller';
 
+/**
+ * Assigns middleware to an express server and returns it.
+ * @returns {Express}
+ */
 function buildServer(): Express {
     const app = express();
     app.use(consoleReqLogger);
@@ -15,7 +19,6 @@ function buildServer(): Express {
     app.use(json());
     app.use(urlencoded());
     app.get('/', redirectPageHandler);
-    app.post('/', redirectPageHandler);
     app.use(`/slack/api/v${process.env.API_VERSION_NUMBER || 1}`, apiRouter);
     app.use(errorHandler);
 
@@ -24,6 +27,9 @@ function buildServer(): Express {
 
 function errorHandler(err, req, res) {
     if (!(err instanceof Error) && typeof(err) !== 'string') {
+        Winston.debug(err);
+        Winston.debug(req);
+        Winston.debug(res);
         res = req;
         req = err;
         err = 'Invalid endpoint';

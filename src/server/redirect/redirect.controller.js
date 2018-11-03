@@ -9,36 +9,32 @@ import { linkAccounts } from '../services/authorization.service';
 
 export async function redirectPageHandler(req: Request, res: Response, next: NextFunction) {
     const root = path.join(__dirname, 'views');
+    try {
+        res.status(200)
+            .sendFile('redirect.html', {
+                root: root
+            }, async function (err) {
+                if (err) {
+                    next(err);
+                    return;
+                }
+                // Should come from the web app
+                const zid = req.query['zv-user'];
 
-    req.body |> prettyJson |> Winston.info;
-    res.status(200)
-        .sendFile('redirect.html', {
-            root: root
-        }, function (err) {
-            if (err) {
-                return next(err);
-            }
+                // Set from client/messaging/loginPrompt, sent to web app, and back here again
+                const sid = req.query['id'];
 
-
-            // Should come from the web app
-            const zid = req.query['zv-user'];
-
-            // Set from client/messaging/loginPrompt, sent to web app, and back here again
-            const sid = req.query['id'];
-
-            if (!zid || !sid) {
-                return;
-            }
-
-            linkAccounts(zid, sid).then((res) => {
-                if(res) {
+                if (!zid || !sid) {
+                    return;
+                }
+                const res = await linkAccounts(zid, sid);
+                if (res) {
                     Winston.info(`Successfully connected Slack Account: "${sid}" with Zevere Account: "${zid}"`);
                 } else {
                     Winston.info('Account was already linked.');
                 }
-            }).catch(exception => {
-                exception |> prettyJson |> Winston.error;
-                next(exception);
             });
-        });
+    } catch (exception) {
+        exception |> prettyJson |> Winston.error;
+    }
 }

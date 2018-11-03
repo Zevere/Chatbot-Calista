@@ -2,6 +2,13 @@ import { WebAPICallResult, WebClient } from '@slack/client';
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
 
+/**
+ * __Provides a Login button to the user.__
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} userId The Slack ID or Slack username of whom to send the message to.
+ * @param {string} url The URL that you wish to redirect a user to after logging in.
+ * @returns {Promise<WebAPICallResult>}
+ */
 export async function loginPrompt(web: WebClient, userId: string, url: string): Promise<WebAPICallResult> {
     try {
         let webAppUrl = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
@@ -31,6 +38,12 @@ export async function loginPrompt(web: WebClient, userId: string, url: string): 
     }
 }
 
+/**
+ * __Sends the supplied message to the #General channel.__
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} message The message you wish to send to #General.
+ * @returns {Promise<WebAPICallResult>}
+ */
 export async function messageGeneralChat(web: WebClient, message: string): Promise<WebAPICallResult> {
     try {
         const channelsResponse = await web.channels.list();
@@ -50,6 +63,13 @@ export async function messageGeneralChat(web: WebClient, message: string): Promi
     }
 }
 
+/**
+ * __Sends a direct message to a user.__ 
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} userId The Slack ID or Slack username of whom the message should be sent to.
+ * @param {string} message The message you wish to send to the aforementioned user.
+ * @returns {Promise<WebAPICallResult>}
+ */
 export async function messageUser(web: WebClient, userId: string, message: string): Promise<WebAPICallResult> {
     try{
         return await web.chat.postMessage({
@@ -63,6 +83,12 @@ export async function messageUser(web: WebClient, userId: string, message: strin
     }
 }
 
+/**
+ * __Tries to message a random user based off of who it can find in the #General channel.__
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} message The message you wish to send.
+ * @returns {Promise<WebAPICallResult>}
+ */
 export async function messageRandomUser(web: WebClient, message: string): Promise<WebAPICallResult> {
     try {
         const channelsResponse = await web.channels.list();
@@ -81,6 +107,14 @@ export async function messageRandomUser(web: WebClient, message: string): Promis
     }
 }
 
+
+/**
+ * __EXPERIMENTAL FEATURE: Messages App Home.__
+ * @see https://api.slack.com/changelog/2018-05-app-home-events-for-workspace-apps
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} message The message you wish to send.
+ * @returns {Promise<WebAPICallResult>}
+ */
 export async function messageAppHome(web: WebClient, message: string): Promise<WebAPICallResult> {
     // Use the `apps.permissions.resources.list` method to find the conversation ID for an app home
     try {

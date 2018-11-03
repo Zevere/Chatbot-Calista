@@ -2,18 +2,27 @@ import 'winston-daily-rotate-file';
 
 import path from 'path';
 import winston from 'winston';
+import resolveLogDirectory from './path-resolver';
 
 
-const logDir = process.env.APP_LOGS ? 
-    path.join(process.env.APP_LOGS, 'app')
-    : path.join(__dirname, '..', '..', 'logs', 'app');
+const logDir = resolveLogDirectory('app');
+
+function resolveLogLevel(): string {
+    if (process.env.NODE_ENV === 'development') {
+        return 'silly';
+    }
+
+    return 'info';
+}
+
+const consoleLogLevel = resolveLogLevel();
 
 const consoleLog = new winston.transports.Console({
     format: winston.format.combine(
         winston.format.simple(),
         winston.format.colorize()
     ),
-    level: 'info',
+    level: consoleLogLevel,
 });
 
 const rotatingInfoLog = new winston.transports.DailyRotateFile({
@@ -38,8 +47,7 @@ const rotatingErrorLog = new winston.transports.DailyRotateFile({
     zippedArchive: false,
 });
 
-const logger: winston.Logger = winston.createLogger({
-    level: 'info',
+const logger = winston.createLogger({
     transports: [
         consoleLog,
         rotatingInfoLog,
@@ -47,4 +55,12 @@ const logger: winston.Logger = winston.createLogger({
     ]
 });
 
+/** 
+ * __A Winston logger which logs to multiple transports based off of the
+ * log level. File logs are separated into info and error and logged in a JSON format,
+ * whereas console logs depend on the NODE_ENV and provide a simplified view of each log.__
+ * 
+ * @see https://github.com/winstonjs/winston/blob/master/docs/transports.md
+ * @returns {winston.Logger} A Winston logger.
+*/
 export default logger;
