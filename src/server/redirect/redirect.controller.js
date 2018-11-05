@@ -21,7 +21,7 @@ export async function redirectPageHandler(req: Request, res: Response, next: Nex
                 // Should come from the web app
                 const zid = req.query['zv-user'];
 
-                // Set from client/messaging/loginPrompt, sent to web app, and back here again
+                // Set from slack/messaging/loginPrompt, sent to web app, and back here again
                 const sid = req.query['id'];
 
                 if (!zid || !sid) {

@@ -1,8 +1,8 @@
-import { messageUser } from '../../client/messaging';
+import { messageUser } from '../../slack/messaging';
 import { NextFunction, Request, Response } from 'express';
 import Winston from '../../logging/app.logger';
 import { prettyJson } from '../../logging/format';
-import slackClient from '../../client';
+import slackClient from '../../slack';
 import { findUserBySlackId } from './authorization.service';
 import * as crypto from 'crypto';
 import * as qs from 'qs';
