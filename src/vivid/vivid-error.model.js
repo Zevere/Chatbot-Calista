@@ -1,7 +1,8 @@
+// @flow
 /** 
 ```
 Error: {
-  description: Represents an operation error
+  description:   Represents an operation error
   code:
     type:        string
     description: Machine-readable error code
@@ -14,7 +15,6 @@ Error: {
 }
 ```
 */
-// @flow
 export class VividError {
     code: string;
     message: string;

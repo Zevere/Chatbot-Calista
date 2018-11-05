@@ -1,3 +1,4 @@
+// @flow
 /**
 ``` 
   UserProfile: {
@@ -17,7 +18,6 @@
   }
 ```
  */
-// @flow
 export class UserProfile {
     id: string;
     firstName: string;

@@ -1,3 +1,4 @@
+// @flow
 /**
 ```
   UserRegistration: {
@@ -14,7 +15,6 @@
 }
 ```
 */
-// @flow
 export class UserRegistration {
     platform: string;
     botId: string;

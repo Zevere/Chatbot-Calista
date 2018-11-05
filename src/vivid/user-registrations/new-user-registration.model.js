@@ -1,3 +1,4 @@
+// @flow
 /**
 ``` 
 NewUserRegistration: {
@@ -18,6 +19,8 @@ Example:
 ```
 */
 export class NewUserRegistration {
+    username: string;
+    chatUserId: string;
     constructor() {
         this.username = '';
         this.chatUserId = '';

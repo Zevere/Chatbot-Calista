@@ -80,6 +80,7 @@ CLIENT_ID='abunchofrandom.numbers'
 CLIENT_SECRET='abunchofrandomlettersandnumbers'
 SIGNING_SECRET='evenMoreRandomLetters'
 DB_CONNECTION_STRING='mongodb://johncena:Cant533th1spa55w0rd@www.yourhost.com:12345/db-name'
+VIVID_URL='https://www.somehost.com'
 ```
 
 ### Optional Secrets

@@ -1,3 +1,4 @@
+// @flow
 import { UserRegistration } from './user-registration.model';
 
 /**
@@ -16,7 +17,6 @@ UserRegistrationsResponse: {
 }
 ```
 */
-// @flow
 export class UserRegistrationsResponse {
     username: string;
     registrations: UserRegistration[];
