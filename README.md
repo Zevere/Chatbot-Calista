@@ -25,6 +25,7 @@
         - [Running in Development](#running-in-development)
         - [Exposing the Application](#exposing-the-application)
     - [Secrets](#secrets)
+        - [Secret Descriptions](#secret-descriptions)
         - [Mandatory Secrets](#mandatory-secrets)
         - [Optional Secrets](#optional-secrets)
     - [Build Docker Image](#build-docker-image)
@@ -71,8 +72,35 @@ This app contains a swathe of secrets that must be used. They may be loaded thro
 directly to an OS's environment, as well has hosted environments such as Heroku or Travis. Wherever they are
 placed, make sure they are accessible at runtime.
 
+### Secret Descriptions
+
+ZEVERE_SLACK_TOKEN: This is your OAuth Access token. To get your OAuth Access token for your slack app,
+check https://api.slack.com/apps/APP_NAME/oauth? where APP_NAME is the name of your app.
+
+_The following three secrets can all be found on: https://api.slack.com/apps/APP_NAME/general (once again replace APP_NAME with the actual app name)._
+
+CLIENT_ID: An identifier for your Slack API client.
+
+CLIENT_SECRET: A secret used for OAuth.
+
+SIGNING_SECRET: An HMAC-256 signed secret for verifying that a message came from Slack.
+
+DB_CONNECTION_STRING: A MongoDB connection string to store data for this app.
+
+VIVID_URL: The URL to the [BotOps-Vivid](https://github.com/Zevere/BotOps-Vivid) server.
+
+VIVID_USERNAME: The username used for the Basic Auth on Vivid.
+
+VIVID_PASSWORD: The password used for the Basic Auth on Vivid.
+
+ZEVERE_WEB_APP_URL: The URL for which the [Web App](https://github.com/Zevere/WebApp-Coherent) resides.
+
+APP_LOGS: A directory where [Winston](https://github.com/winstonjs/winston) and [Morgan](https://github.com/expressjs/morgan) will place their logs.
+
+NODE_ENV: The environment for Node. It is mainly used to remove verbose output when it is not set to `'development'`.
+
 ### Mandatory Secrets
-Below are the mandatory secrets.
+Below are the mandatory secrets and how they should look in your env.
 
 ```
 ZEVERE_SLACK_TOKEN='xoxa-some-really-long-token'
@@ -80,11 +108,12 @@ CLIENT_ID='abunchofrandom.numbers'
 CLIENT_SECRET='abunchofrandomlettersandnumbers'
 SIGNING_SECRET='evenMoreRandomLetters'
 DB_CONNECTION_STRING='mongodb://johncena:Cant533th1spa55w0rd@www.yourhost.com:12345/db-name'
-VIVID_URL='https://www.somehost.com'
+VIVID_URL='https://zv-s-botops-vivid.herokuapp.com'
 VIVID_USERNAME='foobar'
 VIVID_PASSWORD='str0ngpa55w0rd'
+ZEVERE_WEB_APP_URL='https://zv-s-webapp-coherent.herokuapp.com'
 ```
-
+ 
 ### Optional Secrets
 You may optionally include these other environment variables:
 

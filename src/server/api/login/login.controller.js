@@ -20,7 +20,7 @@ export async function promptLogin(req: Request, res: Response, next: NextFunctio
         }
 
 
-        const url = `${req.protocol}://${req.get('host')}`;
+        const url = `https://${req.get('host')}`;
         await loginPrompt(client, user_id, url);
     }
     catch (exception) {

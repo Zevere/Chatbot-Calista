@@ -11,7 +11,7 @@ import { prettyJson } from '../logging/format';
  */
 export async function loginPrompt(web: WebClient, userId: string, url: string): Promise<WebAPICallResult> {
     try {
-        let webAppUrl = process.env.ZEVERE_APP_URL || 'https://zv-s-webapp-coherent.herokuapp.com/login';
+        let webAppUrl = process.env.ZEVERE_WEB_APP_URL + '/login';
         let redirectUrl = `${url}?id=${userId}`;
         webAppUrl = `${webAppUrl}?redirect_uri=${encodeURIComponent(redirectUrl)}`;
         //url = url |> encodeURIComponent;
