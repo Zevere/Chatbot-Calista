@@ -11,12 +11,13 @@ import { UserRegistration } from './user-registration.model';
 const basePath = '/api/v1/user-registrations';
 
 /** 
- * __Get registrations for a user__
+ * __Get registrations for a Zevere user.__
  * 
  * [GET]
  * /api/v1/user-registrations/{username}
  * 
  * @param username The username of the Zevere User
+ * @throws When there are no registrations found or if the ID is invalid.
 */
 export async function getUserRegistrationsByUsername(username: string): Promise<UserRegistrationsResponse> {
     const axios = axiosForVivid();
@@ -61,19 +62,23 @@ export async function unregisterUserByUsername(username: string): Promise<void> 
 */
 
 export async function registerUser(zevereUsername: string, slackId: string): Promise<UserRegistration> {
+    Winston.info(`Attempting to register user on Vivid. Slack ID: '${slackId}', Zevere ID: '${zevereUsername}'`);
     const axios = axiosForVivid();
     const newUserRegistration = new NewUserRegistration();
     newUserRegistration.username = zevereUsername;
     newUserRegistration.chatUserId = slackId;
-
-    const response: AxiosResponse<UserRegistration | VividError> = await axios.post(basePath);
-
-    if (response.status !== 201) {
-        const err = response.data;
-        Winston.error(`Could not register User. Slack ID: '${slackId}', Zevere Username: '${zevereUsername}'`);
-        err |> prettyJson |> Winston.error;
-        throw Error(err);
+    try {
+        const response = await axios.post(basePath, newUserRegistration);
+    
+        if (response.status !== 201) {
+            const err = response.data;
+            Winston.error(`Could not register user on Vivid. Slack ID: '${slackId}', Zevere ID: '${zevereUsername}'`);
+            err |> prettyJson |> Winston.error;
+            throw Error(err);
+        }
+        Winston.info(`Successfully registered user on Vivid. Slack ID: '${slackId}', Zevere ID: '${zevereUsername}'`);
+        return response.data;
+    } catch (err) {
+        throw err;
     }
-
-    return response.data;
 }

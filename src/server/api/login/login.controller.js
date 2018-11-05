@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import Winston from '../../../logging/app.logger';
 import { prettyJson } from '../../../logging/format';
 import slackClient from '../../../slack';
-import { findUserBySlackId } from '../../authorization/authorization.service';
+import { userIsRegistered } from '../../authorization/authorization.service';
 
 
 export async function promptLogin(req: Request, res: Response, next: NextFunction) {
@@ -15,7 +15,7 @@ export async function promptLogin(req: Request, res: Response, next: NextFunctio
             user_id
         } = req.body;
 
-        if(await findUserBySlackId(user_id)) {
+        if(await userIsRegistered(user_id)) {
             return await messageUser(client, user_id, 'You are already logged in.');
         }
 

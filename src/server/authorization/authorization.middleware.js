@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import Winston from '../../logging/app.logger';
 import { prettyJson } from '../../logging/format';
 import slackClient from '../../slack';
-import { findUserBySlackId } from './authorization.service';
+import { userIsRegistered } from './authorization.service';
 import * as crypto from 'crypto';
 import * as qs from 'qs';
 
@@ -16,7 +16,7 @@ export async function validateUser(req: Request, res: Response, next: NextFuncti
             user_id
         } = req.body;
 
-        if (await findUserBySlackId(user_id)) {
+        if (await userIsRegistered(user_id)) {
             next();
         } else {
             next(Error('User not authenticated.'));

@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 import Winston from '../../logging/app.logger';
 
 import { prettyJson } from '../../logging/format';
-import { linkAccounts } from '../authorization/authorization.service';
+import { registerUser } from '../authorization/authorization.service';
 
 export async function redirectPageHandler(req: Request, res: Response, next: NextFunction) {
     const root = path.join(__dirname, 'views');
@@ -20,18 +20,23 @@ export async function redirectPageHandler(req: Request, res: Response, next: Nex
                 }
                 // Should come from the web app
                 const zid = req.query['zv-user'];
-
+                
                 // Set from slack/messaging/loginPrompt, sent to web app, and back here again
                 const sid = req.query['id'];
 
                 if (!zid || !sid) {
                     return;
                 }
-                const res = await linkAccounts(zid, sid);
-                if (res) {
-                    Winston.info(`Successfully connected Slack Account: "${sid}" with Zevere Account: "${zid}"`);
-                } else {
-                    Winston.info('Account was already linked.');
+                try {
+                    const res = await registerUser(zid, sid);
+                    if (res) {
+                        Winston.info(`Successfully connected Slack Account: "${sid}" with Zevere Account: "${zid}"`);
+                    } else {
+                        Winston.info('Account was already linked.');
+                    }
+                } catch (err) {
+                    Winston.error('Could not Register User on Vivid.')
+                    err |> prettyJson |> Winston.error;
                 }
             });
     } catch (exception) {
