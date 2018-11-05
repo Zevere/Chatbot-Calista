@@ -81,6 +81,8 @@ CLIENT_SECRET='abunchofrandomlettersandnumbers'
 SIGNING_SECRET='evenMoreRandomLetters'
 DB_CONNECTION_STRING='mongodb://johncena:Cant533th1spa55w0rd@www.yourhost.com:12345/db-name'
 VIVID_URL='https://www.somehost.com'
+VIVID_USERNAME='foobar'
+VIVID_PASSWORD='str0ngpa55w0rd'
 ```
 
 ### Optional Secrets
