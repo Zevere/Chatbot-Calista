@@ -115,7 +115,7 @@ async function removeAccount(slackId: string): Promise<void> {
     await UserModel.deleteOne({ slackId });    
 }
 
-async function getUserBySlackId(slackId: string): Promise<User> {
+export async function getUserBySlackId(slackId: string): Promise<User> {
     const UserModel = mongoose.model('User');
     const userModel = await UserModel.findOne({ slackId });
     return userModel;

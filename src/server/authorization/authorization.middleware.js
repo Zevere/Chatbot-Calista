@@ -10,7 +10,7 @@ import * as qs from 'qs';
 export async function validateUser(req: Request, res: Response, next: NextFunction) {
     const client = slackClient();
     try {
-        res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
+        //res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
         req.body |> prettyJson |> Winston.info;
         const {
             user_id
