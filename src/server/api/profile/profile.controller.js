@@ -26,8 +26,9 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
 
 function formatProfile(userProfile: UserProfile) {
     let profile = '';
-    for(const prop in userProfile) {
-        profile += `${prop}: ${userProfile[prop]}\n`;
-    }
+    profile += `Zevere ID: ${userProfile.id}\n`;
+    profile += `First Name: ${userProfile.firstName}\n`;
+    profile += `Last Name: ${userProfile.lastName}\n`;
+    profile += `Joined At: ${userProfile.joinedAt}\n`;
     return profile;
 }
