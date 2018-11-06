@@ -29,6 +29,6 @@ function formatProfile(userProfile: UserProfile) {
     profile += `Zevere ID: ${userProfile.id}\n`;
     profile += `First Name: ${userProfile.firstName}\n`;
     profile += `Last Name: ${userProfile.lastName}\n`;
-    profile += `Joined At: ${userProfile.joinedAt}\n`;
+    profile += `Joined On: ${userProfile.joinedAt.substr(0, 10)}\n`;
     return profile;
 }
