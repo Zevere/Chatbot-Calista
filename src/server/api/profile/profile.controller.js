@@ -26,7 +26,7 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
 
 function formatProfile(userProfile: UserProfile) {
     let profile = '';
-    profile += `Zevere ID: ${userProfile.id}\n`;
+    profile += `Zevere ID: \`${userProfile.id}\`\n`;
     profile += `First Name: ${userProfile.firstName}\n`;
     profile += `Last Name: ${userProfile.lastName}\n`;
     profile += `Joined On: ${userProfile.joinedAt.substr(0, 10)}\n`;
