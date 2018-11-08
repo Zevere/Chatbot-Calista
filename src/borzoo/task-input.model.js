@@ -30,7 +30,7 @@ export class TaskInput {
     description: string;
 
     /**
-     * Date date of the new task.
+     * Due date of the new task.
      * 
      * __Must be an ISO 8601 date string.__
      * 
