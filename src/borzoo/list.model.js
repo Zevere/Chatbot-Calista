@@ -27,6 +27,7 @@ export class List {
 
     /**
      * The Task items in the list.
+     * @optional
      * @type {Task[]}
      * @memberof List
      */
@@ -38,7 +39,7 @@ export class List {
      * @memberof List
      */
     title: string;
-    
+
     constructor() {
         this.createdAt = '';
         this.id = '';
