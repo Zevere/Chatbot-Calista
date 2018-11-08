@@ -95,6 +95,8 @@ _The following three secrets can all be found on: https://api.slack.com/apps/APP
 
 **ZEVERE_WEB_APP_URL:** *The URL for which the [Web App](https://github.com/Zevere/WebApp-Coherent) resides.*
 
+**BORZOO_URL:** *The URL for which the[Borzoo GraphQL API](https://github.com/Zevere/WebAPI-Borzoo) resides.*
+
 **APP_LOGS:** *A directory where [Winston](https://github.com/winstonjs/winston) and [Morgan](https://github.com/expressjs/morgan) will place their logs.*
 
 **NODE_ENV:** *The environment for Node. It is mainly used to remove verbose output when it is not set to `'development'`.*
@@ -112,6 +114,7 @@ VIVID_URL='https://zv-s-botops-vivid.herokuapp.com'
 VIVID_USERNAME='foobar'
 VIVID_PASSWORD='str0ngpa55w0rd'
 ZEVERE_WEB_APP_URL='https://zv-s-webapp-coherent.herokuapp.com'
+BORZOO_URL='https://zv-s-webapi-borzoo.herokuapp.com'
 ```
  
 ### Optional Secrets
