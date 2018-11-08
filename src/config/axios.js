@@ -12,12 +12,3 @@ export function axiosForVivid() {
     axios.defaults.headers['Content-Type'] = 'application/json';
     return axios;
 }
-
-export function axiosForBorzoo() {
-    const axios = Axios.create({
-        baseURL: process.env.BORZOO_URL,
-    });
-
-    axios.defaults.headers['Content-Type'] = 'application/json';
-    return axios;
-}

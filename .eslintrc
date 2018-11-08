@@ -19,8 +19,6 @@
         "camelcase":"off",
         "eol-last": ["error", "always"],
         "indent": ["error", 4],
-        "sort-keys": "error",
-        "sort-vars": "error",
         "strict": "error",
         "quotes": [2, "single", { "avoidEscape": true }],
         "arrow-spacing": ["error", { "before" : true, "after": true }]
