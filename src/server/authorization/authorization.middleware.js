@@ -2,13 +2,13 @@ import { messageUser } from '../../slack/messaging';
 import { NextFunction, Request, Response } from 'express';
 import Winston from '../../logging/app.logger';
 import { prettyJson } from '../../logging/format';
-import slackClient from '../../slack';
+import { SlackClient } from '../../slack';
 import { userIsRegistered } from './authorization.service';
 import * as crypto from 'crypto';
 import * as qs from 'qs';
 
 export async function validateUser(req: Request, res: Response, next: NextFunction) {
-    const client = slackClient();
+    const client = new SlackClient();
     try {
         //res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
         req.body |> prettyJson |> Winston.info;

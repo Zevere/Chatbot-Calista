@@ -1,25 +1,29 @@
 import { WebClient } from '@slack/client';
 
-// ES6 export default buildSlackClient doesn't work...
 /**
  * __Creates an instance of the Slack Web Client using the
  * ZEVERE_SLACK_TOKEN, CLIENT_ID, and CLIENT_SECRET environment
  * variables.__
  * @returns {WebClient}
  */
-export function slackClient(): Promise<WebClient> {
-    const token = process.env.ZEVERE_SLACK_TOKEN?.trim();
-    const id = process.env.CLIENT_ID?.trim();
-    const secret = process.env.CLIENT_SECRET?.trim();
+export class SlackClient extends WebClient {
 
-    const web = new WebClient(token, {
-        clientId: id,
-        clientSecret: secret
-    });
-
-    return web;
+    constructor() {
+        super(
+            process.env.ZEVERE_SLACK_TOKEN?.trim(),
+            {
+                clientId: process.env.CLIENT_ID?.trim(),
+                clientSecret: process.env.CLIENT_SECRET?.trim()
+            }
+        );
+    }
 }
 
+/**
+ * Tests if you are able to access the API.
+ *
+ * @param {WebClient} client
+ */
 export async function testClient(client: WebClient) {
     try {
         const res = await client.auth.test();
@@ -33,4 +37,4 @@ export async function testClient(client: WebClient) {
     }
 }
 
-export default slackClient;
+export default SlackClient;

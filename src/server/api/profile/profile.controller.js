@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import Winston from '../../../logging/app.logger';
-import slackClient from '../../../slack';
+import { SlackClient } from '../../../slack';
 import { prettyJson } from '../../../logging/format';
 import { getUserProfileByUsername } from '../../../vivid/profile/profile.client';
 import { getUserBySlackId } from '../../authorization/authorization.service';
@@ -8,7 +8,7 @@ import { messageUser } from '../../../slack/messaging';
 import { UserProfile } from '../../../vivid/profile/user-profile.model';
 
 export async function getProfile(req: Request, res: Response, next: NextFunction) {
-    const client = slackClient();
+    const client = new SlackClient();
     try {
         res.status(200).send('Fetching your profile...');
         req.body |> prettyJson |> Winston.info;
