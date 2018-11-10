@@ -2,9 +2,7 @@
 
 import { TaskInput } from './task-input.model';
 import { ListInput } from './list-input.model';
-import { UserInput } from './user-input.model';
 import { LoginInput } from './login-input.model';
-
 
 import ApolloClient, { gql } from 'apollo-boost';
 import { Task } from './task.model';
@@ -20,34 +18,38 @@ export class Client {
         });
     }
 
-    
-    async addTask(owner: string, list: string, task: TaskInput): Promise<Task> {
-        return await this.client.mutate({
-            mutation: gql`
-                mutation {
-                    addTask(
-                        $owner,
-                        $list,
-                        $task
-                    ) {
 
-                    }
-                }
-            `,
-            variables: {
-                owner,
-                list,
-                task
+    async addTask(owner: string, list: string, task: TaskInput): Promise<Task> {
+        const mutation = gql`
+        mutation ZevereMutation($userId: String!, $listId: String!, $task: TaskInput!) { 
+            addTask(owner: $userId, list: $listId, task: $task) { 
+                id title description due tags createdAt
             }
+        }`;
+        const variables = {
+            owner, list, task
+        };
+        return await this.client.mutate({
+            mutation, variables
         });
     }
 
-    createList(owner: string, list: ListInput) { // eslint-disable-line no-unused-vars
-        throw Error('Unimplemented');
-    }
+    async createList(owner: string, list: ListInput) {
+        const mutation = gql`
+            mutation ZevereMutation($userId: String!, $list: ListInput!) { 
+                createList(owner: $userId, list: $list) { 
+                    id title createdAt
+                    tasks { id }
+                }
+            }`;
+        const variables = {
+            userId: owner,
+            list: list
+        };
 
-    createUser(user: UserInput) { // eslint-disable-line no-unused-vars
-        throw Error('Unimplemented');
+        return await this.client.mutate({
+            mutation, variables
+        })
     }
 
     login(loginInput: LoginInput) { // eslint-disable-line no-unused-vars
