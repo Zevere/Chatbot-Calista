@@ -74,12 +74,12 @@ placed, make sure they are accessible at runtime.
 
 ### Secret Descriptions
 
-ZEVERE_SLACK_TOKEN: This is your OAuth Access token. To get your OAuth Access token for your slack app,
-check https://api.slack.com/apps/APP_NAME/oauth? where APP_NAME is the name of your app.
+Note: _ The CLIENT_ID, CLIENT_SECRET, and SIGNING_SECRET can all be found on: https://api.slack.com/apps/APP_NAME/general (once again replace APP_NAME with the actual app name)._
 
-_The following three secrets can all be found on: https://api.slack.com/apps/APP_NAME/general (once again replace APP_NAME with the actual app name)._
+
 | Name | Description |
-| ---- | ----------- |
+| --- | --- |
+| **ZEVERE_SLACK_TOKEN** | *This is your OAuth Access token. To get your OAuth Access token for your slack app, check https://api.slack.com/apps/APP_NAME/oauth? where APP_NAME is the name of your app.* |
 | **CLIENT_ID** | *An identifier for your Slack API client.* |
 | **CLIENT_SECRET** | *A secret used for OAuth.* |
 | **SIGNING_SECRET** | *An HMAC-256 signed secret for verifying that a message came from Slack.* |
