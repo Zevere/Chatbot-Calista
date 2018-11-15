@@ -70,7 +70,8 @@ export async function createList(web: WebClient, text: string, triggerId: string
                         label: 'Tags',
                         name: 'tags',
                         type: 'textarea',
-                        hint: 'Optionally add tags to help you search for this later.'
+                        hint: 'Optionally add tags to help you search for this later. Seperate tags by commas.',
+                        optional: true
                     }
                 ]
             }
