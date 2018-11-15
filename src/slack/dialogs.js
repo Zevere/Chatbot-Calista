@@ -48,7 +48,7 @@ export async function createList(web: WebClient, text: string, triggerId: string
                         name: 'title',
                         type: 'text',
                         hint: 'The title of your new list.',
-                        value: text || 'New List',
+                        value: text || '',
                         optional: false
                     },
                     {
