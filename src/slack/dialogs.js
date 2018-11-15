@@ -60,6 +60,7 @@ export async function createList(web: WebClient, text: string, triggerId: string
                     },
                     {
                         label: 'Collaborators',
+                        name: 'collaborators',
                         type: 'select',
                         data_source: 'users',
                         hint: 'If you wish, add a collaborator.',
@@ -67,6 +68,7 @@ export async function createList(web: WebClient, text: string, triggerId: string
                     },
                     {
                         label: 'Tags',
+                        name: 'tags',
                         type: 'textarea',
                         hint: 'Optionally add tags to help you search for this later.'
                     }
