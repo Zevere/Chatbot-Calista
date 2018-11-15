@@ -74,7 +74,7 @@ placed, make sure they are accessible at runtime.
 
 ### Secret Descriptions
 
-Note: *The CLIENT_ID, CLIENT_SECRET, and SIGNING_SECRET can all be found on:* https://api.slack.com/apps/APP_NAME/general *(once again replace APP_NAME with the actual app name).*
+Note: *The CLIENT_ID, CLIENT_SECRET, and SIGNING_SECRET can all be found on: https://api.slack.com/apps/APP_NAME/general (once again replace APP_NAME with the actual app name).*
 
 
 | Name | Description |
