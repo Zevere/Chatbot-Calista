@@ -9,8 +9,9 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
     // 1. check the callback_ids
     // 2. assign to correct borzoo func
     try {
-        const client = new SlackClient();
         res.status(200).send();
+        const client = new SlackClient();
+        req.body |> prettyJson |> Winston.debug;
     } catch (exception) {
         exception |> prettyJson |> Winston.error;
         next(exception);

@@ -1,26 +1,44 @@
 // @flow
-/**
- * @class ListInput
- */
-export class ListInput {
-
+export type ListInput = {
     /**
-     * The desired task list name. Names are case insensitive and valid characters are 
+     * The desired task list identifier. ID is case insensitive and valid characters are 
      * ASCII alphanumeric characters, '_', '.', and '-'.
      * @type {string}
      * @memberof ListInput
      */
-    id: string;
+    id: string,
     
     /**
      * Short title of task list.
      * @type {string}
      * @memberof ListInput
      */
-    title: string;
+    title: string,
+    
+    /**
+     * A description of the list.
+     *
+     * @type {string}
+     * @memberof ListInput
+     */
+    description: ?string,
+    
+    /**
+     * Collaborators of the list.
+     * 
+     * @optional
+     * @type {string[]}
+     * @memberof ListInput
+     */
+    collaborators: ?string[],
 
-    constructor() {
-        this.id = '';
-        this.title = '';
-    }
-}
+    /**
+     * The List's tags.
+     * 
+     * @optional
+     * @type {string[]}
+     * @memberof ListInput
+     */
+
+    tags: ?string[]
+};

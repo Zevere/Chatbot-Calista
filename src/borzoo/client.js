@@ -4,23 +4,21 @@ import { TaskInput } from './task-input.model';
 import { ListInput } from './list-input.model';
 import { LoginInput } from './login-input.model';
 
-import ApolloClient, { gql } from 'apollo-boost';
-import { Task } from './task.model';
+import { AxiosInstance, AxiosResponse } from 'axios';
+import { axiosForBorzoo } from '../config/axios';
 
 
 
 export class Client {
-    client: ApolloClient;
+    client: AxiosInstance;
 
     constructor() {
-        this.client = new ApolloClient({
-            uri: process.env.BORZOO_URL
-        });
+        this.client = axiosForBorzoo();
     }
 
 
-    async addTask(owner: string, list: string, task: TaskInput): Promise<Task> {
-        const mutation = gql`
+    async addTask(owner: string, list: string, task: TaskInput): Promise {
+        const mutation = `
         mutation ZevereMutation($userId: String!, $listId: String!, $task: TaskInput!) { 
             addTask(owner: $userId, list: $listId, task: $task) { 
                 id title description due tags createdAt
@@ -29,26 +27,28 @@ export class Client {
         const variables = {
             owner, list, task
         };
-        return await this.client.mutate({
-            mutation, variables
+        return await this.client.post({
+            query: mutation, 
+            variables
         });
     }
 
-    async createList(owner: string, list: ListInput) {
-        const mutation = gql`
+    async createList(owner: string, list: ListInput): Promise<AxiosResponse<any>> {
+        const mutation = `
             mutation ZevereMutation($userId: String!, $list: ListInput!) { 
                 createList(owner: $userId, list: $list) { 
                     id title createdAt
-                    tasks { id }
                 }
             }`;
+
         const variables = {
             userId: owner,
             list: list
         };
 
-        return await this.client.mutate({
-            mutation, variables
+        return await this.client.post({
+            query: mutation,
+            variables
         })
     }
 
