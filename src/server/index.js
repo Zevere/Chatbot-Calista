@@ -26,7 +26,7 @@ function buildServer(): Express {
     return app;
 }
 
-function errorHandler(err, req, res) {
+function errorHandler(err, req, res, next) { //eslint-disable-line no-unused-vars
     // if (!(err instanceof Error) && typeof(err) !== 'string') {
     //     Winston.debug(err);
     //     Winston.debug(req);
