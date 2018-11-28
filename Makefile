@@ -2,16 +2,12 @@
 
 install:
 	echo 'Installing dependencies...'
-	npm i
+	npm ci
 
 clean:
 	echo 'Cleaning dist...'
-	rm -rf dist
+	rm -rfv dist
 
 build:
 	touch .env
-	docker build -t zevere/calista .
-
-deploy:
-	echo 'Deploying to Heroku...'
-	echo 'Deploy script not configured. Passing.'
+	docker build --tag zevere/calista .
