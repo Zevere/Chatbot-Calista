@@ -13,4 +13,4 @@ build:
 	docker build --tag zevere/calista .
 
 test:
-	npm test
+	npm run coverage
