@@ -22,6 +22,7 @@ services:
 
 before_install:
   - sudo apt-get install --assume-yes --quiet build-essential
+  - npm i -g codecov
 
 install:
   - cd scripts && npm ci && cd ..
@@ -29,7 +30,7 @@ install:
 
 script:
   - make build
-  - make test
+  - make test && codecov
 
 deploy:
   - provider: script
