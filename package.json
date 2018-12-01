@@ -10,7 +10,7 @@
     "build:release": "cross-env NODE_ENV=production webpack -p --config webpack.config.ts",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
-    "test": "mocha --compilers js:babel/register",
+    "test": "mocha --recursive --require @babel/register",
     "coverage": "babel-node ./node_modules/.bin/isparta.cmd cover _mocha",
     "watch": "cross-env NODE_ENV=development webpack -d --progress --colors --config webpack.dev.config.ts --watch",
     "dev": "cross-env NODE_ENV=development webpack-dev-server -d"
@@ -65,6 +65,7 @@
     "@types/mongoose": "^5.3.1",
     "@types/node": "^10.12.10",
     "@types/webpack": "^4.4.19",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
     "babel-plugin-flow-runtime": "^0.17.0",
