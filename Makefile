@@ -1,4 +1,4 @@
-.PHONY: install clean build deploy
+.PHONY: install clean build test
 
 install:
 	echo 'Installing dependencies...'
@@ -11,3 +11,6 @@ clean:
 build:
 	touch .env
 	docker build --tag zevere/calista .
+
+test:
+	npm test

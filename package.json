@@ -11,7 +11,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "test": "mocha --recursive --require @babel/register",
-    "coverage": "babel-node ./node_modules/.bin/isparta.cmd cover _mocha",
+    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text npm test",
     "watch": "cross-env NODE_ENV=development webpack -d --progress --colors --config webpack.dev.config.ts --watch",
     "dev": "cross-env NODE_ENV=development webpack-dev-server -d"
   },
@@ -69,17 +69,25 @@
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
     "babel-plugin-flow-runtime": "^0.17.0",
+    "babel-plugin-istanbul": "^5.1.0",
     "chai": "^4.2.0",
     "eslint": "^5.9.0",
     "eslint-plugin-babel": "^5.3.0",
-    "isparta": "git+https://github.com/jharrilim/isparta.git#master",
-    "istanbul": "git+https://github.com/jharrilim/istanbul.git#master",
+    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.7",
     "nodemon-webpack-plugin": "^4.0.6",
+    "nyc": "^13.1.0",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.6",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2"
+  },
+  "nyc": {
+    "require": [
+      "@babel/register"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }

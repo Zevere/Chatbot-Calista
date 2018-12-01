@@ -3,3 +3,5 @@ logs
 dist
 *.env
 .travis.env.json
+.nyc_output
+coverage
