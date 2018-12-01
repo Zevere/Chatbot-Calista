@@ -3,7 +3,7 @@
  * Input model for creating a new task.
  * @class TaskInput
  */
-export class TaskInput {
+export type TaskInput = {
     
     /**
      * The desired task list name.
@@ -12,14 +12,14 @@ export class TaskInput {
      * @type {string}
      * @memberof TaskInput
      */
-    id: string;
+    id: string,
     
     /**
      * Short title of the new task.
      * @type {string}
      * @memberof TaskInput
      */
-    title: string;
+    title: string,
     
     /**
      * Description of the new task.
@@ -27,7 +27,7 @@ export class TaskInput {
      * @type {string}
      * @memberof TaskInput
      */
-    description: string;
+    description: ?string,
 
     /**
      * Due date of the new task.
@@ -41,7 +41,7 @@ export class TaskInput {
      * @type {string}
      * @memberof TaskInput
      */
-    due: string
+    due: ?string,
     
     /**
      * List of tags on the new task item.
@@ -49,13 +49,5 @@ export class TaskInput {
      * @type {string[]}
      * @memberof TaskInput
      */
-    tags: string[];
-
-    constructor() {
-        this.id = '';
-        this.title = '';
-        this.description = '';
-        this.due = '';
-        this.tags = [];
-    }
-}
+    tags: ?string[]
+};

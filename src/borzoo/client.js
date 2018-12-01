@@ -27,7 +27,7 @@ export class Client {
         const variables = {
             owner, list, task
         };
-        return await this.client.post({
+        return await this.client.post('', {
             query: mutation, 
             variables
         });
@@ -46,7 +46,7 @@ export class Client {
             list: list
         };
 
-        return await this.client.post({
+        return await this.client.post('', {
             query: mutation,
             variables
         })
