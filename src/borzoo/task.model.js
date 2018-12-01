@@ -1,9 +1,9 @@
 // @flow
 /**
  * A task item.
- * @class Task
+ * @type Task
  */
-export class Task {
+export type Task = {
 
     /**
      * The date the task was created on represented by a DateTimeOffset.
@@ -15,14 +15,14 @@ export class Task {
      * @type {string}
      * @memberof Task
      */
-    createdAt: string;
+    createdAt: string,
 
     /**
      * Description of this task.
      * @type {string}
      * @memberof Task
      */
-    description: string;
+    description: string,
 
     /**
      * Due date of this task.
@@ -36,35 +36,27 @@ export class Task {
      * @type {string}
      * @memberof Task
      */
-    due: string;
+    due: ?string,
 
     /**
      * The task's ID.
      * @type {string}
      * @memberof Task
      */
-    id: string;
+    id: string,
 
     /**
      * List of tags associated with this task.
+     * @optional
      * @type {string[]}
      * @memberof Task
      */
-    tags: string[];
+    tags: ?string[],
 
     /**
      * Short title of this task.
      * @type {string}
      * @memberof Task
      */
-    title: string;
-
-    constructor() {
-        this.createdAt = '';
-        this.description = '';
-        this.due = '';
-        this.id = '';
-        this.tags = [];
-        this.title = '';
-    }
-}
+    title: string
+};

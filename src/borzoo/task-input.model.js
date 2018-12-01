@@ -1,7 +1,7 @@
 // @flow
 /**
  * Input model for creating a new task.
- * @class TaskInput
+ * @type TaskInput
  */
 export type TaskInput = {
     

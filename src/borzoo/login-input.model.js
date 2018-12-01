@@ -1,26 +1,21 @@
 // @flow
 /**
  * Input for user login.
- * @class LoginInput
+ * @type LoginInput
  */
-export class LoginInput {
+export type LoginInput = {
 
     /**
      * User ID.
      * @type {string}
      * @memberof LoginInput
      */
-    username: string;
+    username: string,
 
     /**
      * Passphrase in clear text.
      * @type {string}
      * @memberof LoginInput
      */
-    passphrase: string;
-
-    constructor() {
-        this.username = '';
-        this.passphrase = '';
-    }
-}
+    passphrase: string,
+};

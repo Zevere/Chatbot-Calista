@@ -3,29 +3,29 @@ import { List } from './list.model';
 // @flow
 /**
  * A Zevere user account.
- * @class User
+ * @type User
  */
-export class User {
+export type User = {
     /**
      * Number of days since this user has joined.
      * @type {number}
      * @memberof User
      */
-    daysJoined: number;
+    daysJoined: number,
 
     /**
      * First Name of this user.
      * @type {string}
      * @memberof User
      */
-    firstName: string;
+    firstName: string,
 
     /**
      * The user's username.
      * @type {string}
      * @memberof User
      */
-    id: string;
+    id: string,
 
     /**
      * The date account was created in UTC format.
@@ -37,7 +37,7 @@ export class User {
      * @type {string}
      * @memberof User
      */
-    joinedAt: string;
+    joinedAt: string,
 
     /**
      * The user's last name.
@@ -45,7 +45,7 @@ export class User {
      * @type {string}
      * @memberof User
      */
-    lastName: string;
+    lastName: ?string,
 
     /**
      * The task lists that this user has access to.
@@ -53,7 +53,7 @@ export class User {
      * @type {List[]}
      * @memberof User
      */
-    lists: List[];
+    lists: ?List[],
     
     /**
      * Authentication token.
@@ -61,15 +61,5 @@ export class User {
      * @type {string}
      * @memberof User
      */
-    token: string;
-
-    constructor() {
-        this.daysJoined = 0;
-        this.firstName = '';
-        this.id = '';
-        this.joinedAt = '';
-        this.lastName = '';
-        this.lists = [];
-        this.token = '';
-    }
-}
+    token: ?string
+};

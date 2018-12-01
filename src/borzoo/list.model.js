@@ -3,9 +3,9 @@ import { Task } from './task.model';
 
 /**
  * A list of Tasks.
- * @class List
+ * @type List
  */
-export class List {
+export type List = {
     /**
      * The date the list was created on represented by a DateTimeOffset.
      *
@@ -16,14 +16,14 @@ export class List {
      * @type {string}
      * @memberof List
      */
-    createdAt: string;
+    createdAt: string,
 
     /**
      * The ID of the list.
      * @type {string}
      * @memberof List
      */
-    id: string;
+    id: string,
 
     /**
      * The Task items in the list.
@@ -31,19 +31,12 @@ export class List {
      * @type {Task[]}
      * @memberof List
      */
-    tasks: Task[];
+    tasks: ?Task[],
 
     /**
      * The short title of the list.
      * @type {string}
      * @memberof List
      */
-    title: string;
-
-    constructor() {
-        this.createdAt = '';
-        this.id = '';
-        this.tasks = [];
-        this.title = '';
-    }
-}
+    title: string
+};
