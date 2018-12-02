@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: vivid/user-registrations/user-registrations.client.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: vivid/user-registrations/user-registrations.client.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @flow
+import { AxiosResponse } from 'axios';
+import { axiosForVivid } from '../../config/axios';
+import Winston from '../../logging/app.logger';
+import { prettyJson } from '../../logging/format';
+import { UserRegistrationsResponse } from './user-registrations-response.model';
+import { VividError } from '../vivid-error.model';
+import { NewUserRegistration } from './new-user-registration.model';
+import { UserRegistration } from './user-registration.model';
+
+const basePath = '/api/v1/user-registrations';
+
+/** 
+ * __Get registrations for a Zevere user.__
+ * 
+ * [GET]
+ * /api/v1/user-registrations/{username}
+ * 
+ * @param username The username of the Zevere User
+ * @throws When there are no registrations found or if the ID is invalid.
+*/
+export async function getUserRegistrationsByUsername(username: string): Promise&lt;UserRegistrationsResponse> {
+    const axios = axiosForVivid();
+    const url = `${basePath}/${username}`;
+    const response: AxiosResponse&lt;UserRegistrationsResponse | VividError> = await axios.get(url);
+    if (response.status !== 200) {
+        Winston.error('Could not get user registrations for: ' + username);
+        response.data |> prettyJson |> Winston.error;
+        throw Error(response.data);
+    }
+    return response.data;
+}
+
+/** 
+ * __Unregister a Zevere user from Slack.__
+ * 
+ * [DELETE]
+ * /api/v1/user-registrations/{username}
+ * 
+ * @param username The username of the Zevere User
+*/
+export async function unregisterUserByUsername(username: string): Promise&lt;void> {
+    const axios = axiosForVivid();
+    const url = `${basePath}/${username}`;
+    const response: AxiosResponse&lt;?VividError> = await axios.delete(url);
+    if (response.status !== 204) {
+        const err = response.data;
+        Winston.error('Could not unregister user: ' + username);
+        err |> prettyJson |> Winston.error;
+        throw Error(err);
+    }
+}
+
+/** 
+ * __Register a Slack user with their Zevere account.__
+ * 
+ * [POST]
+ * /api/v1/user-registrations
+ * 
+ * @param zevereUsername The Username of the user's Zevere account
+ * @param slackId The ID of the user in Slack
+*/
+
+export async function registerUser(zevereUsername: string, slackId: string): Promise&lt;UserRegistration> {
+    Winston.info(`Attempting to register user on Vivid. Slack ID: '${slackId}', Zevere ID: '${zevereUsername}'`);
+    const axios = axiosForVivid();
+    const newUserRegistration = new NewUserRegistration();
+    newUserRegistration.username = zevereUsername;
+    newUserRegistration.chatUserId = slackId;
+    try {
+        const response = await axios.post(basePath, newUserRegistration);
+    
+        if (response.status !== 201) {
+            const err = response.data;
+            Winston.error(`Could not register user on Vivid. Slack ID: '${slackId}', Zevere ID: '${zevereUsername}'`);
+            err |> prettyJson |> Winston.error;
+            throw Error(err);
+        }
+        Winston.info(`Successfully registered user on Vivid. Slack ID: '${slackId}', Zevere ID: '${zevereUsername}'`);
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Dec 02 2018 01:08:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

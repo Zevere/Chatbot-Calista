@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: slack/messaging.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: slack/messaging.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { WebAPICallResult, WebClient } from '@slack/client';
+import Winston from '../logging/app.logger';
+import { prettyJson } from '../logging/format';
+
+/**
+ * __Provides a Login button to the user.__
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} userId The Slack ID or Slack username of whom to send the message to.
+ * @param {string} url The URL that you wish to redirect a user to after logging in.
+ * @returns {Promise&lt;WebAPICallResult>}
+ */
+export async function loginPrompt(web: WebClient, userId: string, url: string): Promise&lt;WebAPICallResult> {
+    try {
+        let webAppUrl = process.env.ZEVERE_WEB_APP_URL + '/login';
+        let redirectUrl = `${url}?id=${userId}`;
+        webAppUrl = `${webAppUrl}?redirect_uri=${encodeURIComponent(redirectUrl)}`;
+        //url = url |> encodeURIComponent;
+        return await web.chat.postMessage({
+            attachments: [
+                {
+                    actions: [
+                        {
+                            text: 'Login',
+                            type: 'button',
+                            url: webAppUrl,
+                        }
+                    ],
+                    fallback: `Click here to login: ${webAppUrl}`,
+                    text:'Click here to login:',
+                }
+            ],
+            channel: userId,
+            text: 'Please login to Zevere.',
+        });
+    } catch (exception) {
+        Winston.error('Exception caught in messaging#loginPrompt.');
+        throw exception;
+    }
+}
+
+/**
+ * __Sends the supplied message to the #General channel.__
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} message The message you wish to send to #General.
+ * @returns {Promise&lt;WebAPICallResult>}
+ */
+export async function messageGeneralChat(web: WebClient, message: string): Promise&lt;WebAPICallResult> {
+    try {
+        const channelsResponse = await web.channels.list();
+        Winston.debug('Channels:');
+        channelsResponse.channels |> prettyJson |> Winston.debug;
+
+        const general = channelsResponse.channels.find(c => c.name === 'general');
+        Winston.debug(`General chat found? ${general ? 'yes' : 'no'}`);
+        return await web.chat.postMessage({
+            channel: general.id,
+            text: message || 'Hello World!"'
+        });
+    }
+    catch (exception) {
+        Winston.error('Exception caught in messaging#messageGeneralChat.');
+        throw exception;
+    }
+}
+
+/**
+ * __Sends a direct message to a user.__ 
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} userId The Slack ID or Slack username of whom the message should be sent to.
+ * @param {string} message The message you wish to send to the aforementioned user.
+ * @returns {Promise&lt;WebAPICallResult>}
+ */
+export async function messageUser(web: WebClient, userId: string, message: string): Promise&lt;WebAPICallResult> {
+    try{
+        return await web.chat.postMessage({
+            channel: userId,
+            text: message 
+        });
+    }
+    catch (exception) {
+        Winston.error('Exception caught in messaging#messageUser.');
+        throw exception;
+    }
+}
+
+/**
+ * __Tries to message a random user based off of who it can find in the #General channel.__
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} message The message you wish to send.
+ * @returns {Promise&lt;WebAPICallResult>}
+ */
+export async function messageRandomUser(web: WebClient, message: string): Promise&lt;WebAPICallResult> {
+    try {
+        const channelsResponse = await web.channels.list();
+        const general = channelsResponse.channels.find(c => c.name === 'general');
+        general.members |> Winston.debug;
+        const randomUser = general.members[(Math.random() * general.members.length) |> Math.floor];
+        'Random User ID: ' + randomUser |> Winston.info;
+        return await web.chat.postMessage({
+            channel: randomUser,
+            text: message || 'Hello random user'
+        });
+    }
+    catch (exception) {
+        Winston.error('Exception caught in messaging#messageRandomUser.');
+        throw exception;
+    }
+}
+
+
+/**
+ * __EXPERIMENTAL FEATURE: Messages App Home.__
+ * @see https://api.slack.com/changelog/2018-05-app-home-events-for-workspace-apps
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} message The message you wish to send.
+ * @returns {Promise&lt;WebAPICallResult>}
+ */
+export async function messageAppHome(web: WebClient, message: string): Promise&lt;WebAPICallResult> {
+    // Use the `apps.permissions.resources.list` method to find the conversation ID for an app home
+    try {
+        web.apps |> prettyJson |> Winston.debug;
+        const response = await web.apps.permissions.resources.list();
+
+        // Find the app home to use as the conversation to post a message
+        // At this point, there should only be one app home in the whole response since only one user has installed the app
+        response.resources |> prettyJson |> Winston.debug;
+        const appHome = response.resources.find(r => r.type === 'app_home');
+        // Use the `chat.postMessage` method to send a message from this app
+        appHome |> prettyJson |> Winston.debug;
+        const result = await web.chat.postMessage({
+            channel: appHome.id,
+            text: message || 'Hello World'
+        });
+        'Message posted!' |> Winston.debug;
+        result |> prettyJson |> Winston.debug;
+
+        return result;
+    }
+    catch (exception) {
+        Winston.error('Exception caught in messaging#messageAppHome.');
+        throw exception;
+    }
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Dec 02 2018 01:08:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

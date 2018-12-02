@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: server/authorization/authorization.service.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: server/authorization/authorization.service.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Winston from '../../logging/app.logger';
+import mongoose from 'mongoose';
+import { User } from '../../data/schema/user';
+import * as UserRegistration from '../../vivid/user-registrations/user-registrations.client';
+import { prettyJson } from '../../logging/format';
+
+/**
+ * __Attempts to register a Zevere account with a Slack account.__
+ * @param {string} zevereId The ID of a Zevere account.
+ * @param {string} slackId The ID of a Slack account.
+ * @returns {Promise&lt;boolean>} A promise containing true if the user is registered successfully, or false if they were already registered before.
+ */
+export async function registerUser(zevereId: string, slackId: string): Promise&lt;boolean> {
+    try {
+        const isRegistered = await userIsRegistered(slackId);
+        if (isRegistered) {
+            Winston.info(`Cannot register user. Account is already registered with Zevere. Zevere ID: '${zevereId}', Slack ID: '${slackId}'`);
+            return false;
+        }
+        const registration = await UserRegistration.registerUser(zevereId, slackId);
+        if (registration) {
+            Winston.info('User was added to Vivid successfully. Attempting to save User in database.');
+            await createAccount(zevereId, slackId);
+            Winston.info(`Successfully registered User in both Vivid and Database. Zevere ID: '${zevereId}', Slack ID: '${slackId}'`);
+        }
+        return true;
+    } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * __Attempts to unregister a Zevere account from a Slack account.__
+ * @param {string} slackId The ID of the user's Slack account.
+ * @returns {Promise&lt;boolean>} A promise containing true if the user was successfully unregistered, or false if they were already unregistered.
+ */
+export async function unregisterUser(slackId: string): Promise&lt;boolean> {
+    const isRegistered = await userIsRegistered(slackId);
+    if (!isRegistered) {
+        Winston.info(`Cannot unregister user. Account is not registered with Zevere. Slack ID: '${slackId}'`);
+        return isRegistered;
+    }
+
+    const zevereId = await getUserBySlackId(slackId).zevereId;
+    await UserRegistration.unregisterUserByUsername(zevereId);
+    await removeAccount(slackId);
+    return true;
+}
+
+
+/**
+ * __Checks if user is registered on Vivid by scouring for a registration with Slack as well as checking the database.__
+ *
+ * @param {string} slackId The ID of a Slack account.
+ * @returns {Promise&lt;boolean>} A promise containing true if the user is registered with Slack, false if not.
+ */
+export async function userIsRegistered(slackId: string): Promise&lt;boolean> {
+    let zevereId; 
+    try {
+        const user = await getUserBySlackId(slackId);
+        zevereId = user.zevereId;
+    } catch (err) {
+        Winston.error('Could not get user by Slack ID. Slack ID: ' + slackId);
+        Winston.error(JSON.stringify(err));
+    }
+    
+    if (!zevereId) {
+        Winston.info(`User not found in database. Slack ID: '${slackId}'`);
+        return false;
+    }
+
+    try {
+        const acc = await UserRegistration.getUserRegistrationsByUsername(zevereId);
+        Winston.info('Got registrations for: ' + acc.username);
+        acc.registrations |> prettyJson |> Winston.info;
+
+        for(const reg of acc.registrations) {
+            if (reg.platform.toLowerCase() === 'slack') {
+                return true;
+            }
+        }
+    } catch (err) {
+        err |> prettyJson |> Winston.error;
+    }
+
+    Winston.info(`No registrations found for '${slackId}' in Vivid.`);
+    return false;
+}
+
+
+/**
+ * __Attempts to save a link a Zevere account to a Slack account.__
+ * @param {string} zevereId The ID of a Zevere account.
+ * @param {string} slackId The ID of a Slack account.
+ * @throws Error when there is an issue creating the document in the database.
+ */
+async function createAccount(zevereId: string, slackId: string): Promise&lt;void> {
+    const UserModel = mongoose.model('User');
+    const user = new User();
+    user.zevereId = zevereId;
+    user.slackId = slackId;
+
+    Winston.info('Linking accounts:');
+    Winston.info(`\tZevere ID: ${zevereId}`);
+    Winston.info(`\tSlack ID: ${slackId}`);
+
+    await UserModel.create(user);
+}
+
+async function removeAccount(slackId: string): Promise&lt;void> {
+    const UserModel = mongoose.model('User');
+    Winston.info('Removing account:');
+    Winston.info(`\tSlack ID: ${slackId}`);
+
+    await UserModel.deleteOne({ slackId });    
+}
+
+export async function getUserBySlackId(slackId: string): Promise&lt;User> {
+    const UserModel = mongoose.model('User');
+    const userModel = await UserModel.findOne({ slackId });
+    return userModel;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Dec 02 2018 01:08:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

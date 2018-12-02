@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: server/authorization/authorization.middleware.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: server/authorization/authorization.middleware.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { messageUser } from '../../slack/messaging';
+import { NextFunction, Request, Response } from 'express';
+import Winston from '../../logging/app.logger';
+import { prettyJson } from '../../logging/format';
+import { SlackClient } from '../../slack';
+import { userIsRegistered } from './authorization.service';
+import * as crypto from 'crypto';
+import * as qs from 'qs';
+
+export async function validateUser(req: Request, res: Response, next: NextFunction) {
+    const client = new SlackClient();
+    try {
+        //res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
+        req.body |> prettyJson |> Winston.info;
+        const {
+            user_id
+        } = req.body;
+
+        if (await userIsRegistered(user_id)) {
+            next();
+        } else {
+            next(Error('User not authenticated.'));
+            messageUser(client, user_id, 'Oops! Seems like you are not logged in yet. Try using /login first!');
+        }
+
+
+    }
+    catch (exception) {
+        Winston.error('Exception in validateUser');
+        exception |> prettyJson |> Winston.error;
+        next(exception);
+    }
+}
+
+/**
+ * Validate that requests are coming from Slack using the Slack Signing Secret.
+ */
+export async function validateSlack(req: Request, res: Response, next: NextFunction) {
+    // Code Credits: https://medium.com/@rajat_sriv/verifying-requests-from-slack-using-node-js-69a8b771b704   
+    const timestamp = req.header('X-Slack-Request-Timestamp');
+    const slackSignature = req.header('X-Slack-Signature');
+    const body = qs.stringify(req.body, { format: 'RFC1738' });
+
+    if (!timestamp) {
+        Winston.error('Received a request without the X-Slack-Request-Timestamp header.');
+        throw Error('Received Slack request without a timestamp.');
+    }
+
+    // convert current time from milliseconds to seconds
+    const time = Math.floor(new Date().getTime() / 1000);
+    if (Math.abs(time - timestamp) > 300) {
+        Winston.error('Received a request with a timestamp older than 300 seconds. Possible replay attack.');
+        return res.status(400).send('Verification failed');
+    }
+
+    const sigBasestring = `v0:${timestamp}:${body}`;
+
+    const mySignature = 'v0=' + crypto
+        .createHmac('sha256', process.env.SIGNING_SECRET)
+        .update(sigBasestring, 'utf8')
+        .digest('hex');
+
+    if (crypto.timingSafeEqual(
+        Buffer.from(mySignature, 'utf8'),
+        Buffer.from(slackSignature, 'utf8'))) {
+        Winston.debug('Message confirmed as coming from Slack.');
+        next();
+    } else {
+        Winston.error('Received a request with an invalid signature.');
+        return res.status(400).send('Verification failed');
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Dec 02 2018 01:08:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
