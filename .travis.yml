@@ -33,6 +33,7 @@ script:
   - make test && codecov
 
 after_success:
+  - npm i -g jsdoc
   - make docs
 
 deploy:
