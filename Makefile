@@ -1,4 +1,4 @@
-.PHONY: install clean build test
+.PHONY: install clean build test docs
 
 install:
 	echo 'Installing dependencies...'
@@ -14,3 +14,7 @@ build:
 
 test:
 	npm run coverage
+
+docs:
+	npm run docs
+	if [ -d "./coverage" ]; then mv coverage docs/coverage; fi

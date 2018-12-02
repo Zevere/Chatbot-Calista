@@ -32,13 +32,22 @@ script:
   - make build
   - make test && codecov
 
+after_success:
+  - make docs
+
 deploy:
   - provider: script
     skip_cleanup: true
     script: node scripts/deploy Production
     on:
       branch: master
-
+  - provider: pages
+    skip-cleanup: true
+    github-token: $GITHUB_TOKEN
+    keep-history: true
+    local-dir: docs
+    on:
+      branch: master
 env:
   # DEPLOY_SETTINGS_JSON='{"Production":[
   #   {"type":"docker","options":{"source":"zevere/calista","target":"zevere/chatbot-calista","user":"","pass":""}},
