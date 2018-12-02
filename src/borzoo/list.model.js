@@ -6,6 +6,14 @@ import { Task } from './task.model';
  * @type List
  */
 export type List = {
+
+    /**
+     * User IDs of the list collaborators.
+     *
+     * @type {?Array<string>}
+     */
+    collaborators: ?Array<string>,
+
     /**
      * The date the list was created on represented by a DateTimeOffset.
      *
@@ -19,11 +27,32 @@ export type List = {
     createdAt: string,
 
     /**
+     * The description for the list.
+     * @type {string}
+     * @memberof List
+     */
+    description: ?string,
+
+    /**
      * The ID of the list.
      * @type {string}
      * @memberof List
      */
     id: string,
+
+    /**
+     * User ID of the owner of this list.
+     *
+     * @type {string}
+     */
+    owner: string,
+
+    /**
+     * Tags that are used to describe the list.
+     *
+     * @type {?Array<string>}
+     */
+    tags: ?Array<string>,
 
     /**
      * The Task items in the list.
@@ -38,5 +67,13 @@ export type List = {
      * @type {string}
      * @memberof List
      */
-    title: string
+    title: string,
+
+    /**
+     * Last time this list has been updated.
+     *
+     * @type {Date}
+     */
+    updatedAt: Date
+    
 };
