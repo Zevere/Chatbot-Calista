@@ -8,7 +8,7 @@
     "start:debug": "cross-env NODE_ENV=development npm run build:debug && node dist/debug",
     "build:debug": "cross-env NODE_ENV=development babel src --out-dir dist/debug --source-maps",
     "build:release": "cross-env NODE_ENV=production webpack -p --config webpack.config.ts",
-    "docs": "jsdoc -c ./jsdoc.conf.json -d docs",
+    "docs": "jsdoc -c ./jsdoc.conf.json -d docs -R README.md",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "test": "mocha --recursive --require @babel/register",
