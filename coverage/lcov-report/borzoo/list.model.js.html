@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for borzoo/task-input.model.js</title>
+    <title>Code coverage report for borzoo/list.model.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -16,7 +16,7 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../index.html">All files</a> / <a href="index.html">borzoo</a> task-input.model.js
+      <a href="../index.html">All files</a> / <a href="index.html">borzoo</a> list.model.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
@@ -99,7 +99,59 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,57 +205,83 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import { Task } from './task.model';
+&nbsp;
 /**
- * Input model for creating a new task.
- * @type TaskInput
+ * A list of Tasks.
+ * @type List
  */
-export type TaskInput = {
-    
+export type List = {
+&nbsp;
     /**
-     * The desired task list name.
-     * Names are case insensitive and valid characters are ASCII 
-     * alphanumeric characters, '_', '.', and '-'.
-     * @type {string}
-     * @memberof TaskInput
+     * User IDs of the list collaborators.
+     *
+     * @type {?Array&lt;string&gt;}
      */
-    id: string,
-    
+    collaborators: ?Array&lt;string&gt;,
+&nbsp;
     /**
-     * Short title of the new task.
+     * The date the list was created on represented by a DateTimeOffset.
+     *
+     * __Must be an ISO 8601 datetime offset string.__
+     * 
+     * Example: 2018-11-07T22:59:50+00:00
+     * @see https://en.wikipedia.org/wiki/ISO_8601
      * @type {string}
-     * @memberof TaskInput
+     * @memberof List
      */
-    title: string,
-    
+    createdAt: string,
+&nbsp;
     /**
-     * Description of the new task.
-     * @optional
+     * The description for the list.
      * @type {string}
-     * @memberof TaskInput
+     * @memberof List
      */
     description: ?string,
 &nbsp;
     /**
-     * Due date of the new task.
-     * 
-     * __Must be an ISO 8601 date string.__
-     * 
-     * Example: 2018-05-28
-     * 
-     * @see https://en.wikipedia.org/wiki/ISO_8601
-     * @optional
+     * The ID of the list.
      * @type {string}
-     * @memberof TaskInput
+     * @memberof List
      */
-    due: ?string,
-    
+    id: string,
+&nbsp;
     /**
-     * List of tags on the new task item.
-     * @optional
-     * @type {string[]}
-     * @memberof TaskInput
+     * User ID of the owner of this list.
+     *
+     * @type {string}
      */
-    tags: ?string[]
+    owner: string,
+&nbsp;
+    /**
+     * Tags that are used to describe the list.
+     *
+     * @type {?Array&lt;string&gt;}
+     */
+    tags: ?Array&lt;string&gt;,
+&nbsp;
+    /**
+     * The Task items in the list.
+     * @optional
+     * @type {Task[]}
+     * @memberof List
+     */
+    tasks: ?Task[],
+&nbsp;
+    /**
+     * The short title of the list.
+     * @type {string}
+     * @memberof List
+     */
+    title: string,
+&nbsp;
+    /**
+     * Last time this list has been updated.
+     *
+     * @type {Date}
+     */
+    updatedAt: Date
+    
 };
 &nbsp;</pre></td></tr>
 </table></pre>

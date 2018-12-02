@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for borzoo/task-input.model.js</title>
+    <title>Code coverage report for borzoo/task.model.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -16,7 +16,7 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../index.html">All files</a> / <a href="index.html">borzoo</a> task-input.model.js
+      <a href="../index.html">All files</a> / <a href="index.html">borzoo</a> task.model.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
@@ -99,7 +99,25 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,37 +172,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
 /**
- * Input model for creating a new task.
- * @type TaskInput
+ * A task item.
+ * @type Task
  */
-export type TaskInput = {
-    
-    /**
-     * The desired task list name.
-     * Names are case insensitive and valid characters are ASCII 
-     * alphanumeric characters, '_', '.', and '-'.
-     * @type {string}
-     * @memberof TaskInput
-     */
-    id: string,
-    
-    /**
-     * Short title of the new task.
-     * @type {string}
-     * @memberof TaskInput
-     */
-    title: string,
-    
-    /**
-     * Description of the new task.
-     * @optional
-     * @type {string}
-     * @memberof TaskInput
-     */
-    description: ?string,
+export type Task = {
 &nbsp;
     /**
-     * Due date of the new task.
+     * The date the task was created on represented by a DateTimeOffset.
+     *
+     * __Must be an ISO 8601 datetime offset string.__
+     * 
+     * Example: 2018-11-07T22:59:50+00:00
+     * @see https://en.wikipedia.org/wiki/ISO_8601
+     * @type {string}
+     * @memberof Task
+     */
+    createdAt: string,
+&nbsp;
+    /**
+     * Description of this task.
+     * @type {string}
+     * @memberof Task
+     */
+    description: string,
+&nbsp;
+    /**
+     * Due date of this task.
      * 
      * __Must be an ISO 8601 date string.__
      * 
@@ -193,17 +206,31 @@ export type TaskInput = {
      * @see https://en.wikipedia.org/wiki/ISO_8601
      * @optional
      * @type {string}
-     * @memberof TaskInput
+     * @memberof Task
      */
     due: ?string,
-    
+&nbsp;
     /**
-     * List of tags on the new task item.
+     * The task's ID.
+     * @type {string}
+     * @memberof Task
+     */
+    id: string,
+&nbsp;
+    /**
+     * List of tags associated with this task.
      * @optional
      * @type {string[]}
-     * @memberof TaskInput
+     * @memberof Task
      */
-    tags: ?string[]
+    tags: ?string[],
+&nbsp;
+    /**
+     * Short title of this task.
+     * @type {string}
+     * @memberof Task
+     */
+    title: string
 };
 &nbsp;</pre></td></tr>
 </table></pre>

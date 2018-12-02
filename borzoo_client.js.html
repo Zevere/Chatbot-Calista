@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: vivid/user-registrations/user-registration.model.js</title>
+    <title>JSDoc: Source: borzoo/client.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: vivid/user-registrations/user-registration.model.js</h1>
+    <h1 class="page-title">Source: borzoo/client.js</h1>
 
     
 
@@ -27,31 +27,97 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>// @flow
-/**
-```
-  UserRegistration: {
-    description: Contains information of a user and the bot connected to him on a specific chat platform
-    platform:
-      type:        string
-      description: Name of the chat platform
-    botId:
-      type:        string
-      description: Unique identifier of the bot that registered that user
-    chatUserId:
-	  type:        string
-      description: Unique identifier of the user on that chat platform
-}
-```
-*/
-export class UserRegistration {
-    platform: string;
-    botId: string;
-    chatUserId: string;
-    
+
+import { TaskInput } from './task-input.model';
+import { ListInput } from './list-input.model';
+import { LoginInput } from './login-input.model';
+import { List } from './list.model';
+import { GraphQLResponse } from './graphql-response.model';
+import { AxiosInstance, AxiosResponse } from 'axios';
+import { axiosForBorzoo } from '../config/axios';
+
+import Winston from '../logging/app.logger';
+import { prettyJson } from '../logging/format';
+
+
+export class Client {
+    client: AxiosInstance;
+
     constructor() {
-        this.platform = '';
-        this.botId = '';
-        this.chatUserId = '';
+        this.client = axiosForBorzoo();
+    }
+
+
+    async addTask(owner: string, list: string, task: TaskInput): Promise {
+        const mutation = `
+        mutation ZevereMutation($userId: String!, $listId: String!, $task: TaskInput!) { 
+            addTask(owner: $userId, list: $listId, task: $task) { 
+                id title description due tags createdAt
+            }
+        }`;
+        const variables = {
+            owner, list, task
+        };
+        return await this.client.post('', {
+            query: mutation, 
+            variables
+        });
+    }
+
+    async createList(owner: string, list: ListInput): Promise&lt;AxiosResponse&lt;any>> {
+        const mutation = `
+            mutation ZevereMutation($userId: String!, $list: ListInput!) { 
+                createList(owner: $userId, list: $list) { 
+                    id title createdAt
+                }
+            }`;
+
+        const variables = {
+            userId: owner,
+            list: list
+        };
+
+        return await this.client.post('', {
+            query: mutation,
+            variables
+        })
+    }
+
+    /**
+     * Returns the lists that the specified owner has.
+     *
+     * @param {string} owner - The one who you wish to get the lists for.
+     * @returns {Promise&lt;List[]>} A promise containing the owner's lists.
+     * @memberof Client
+     */
+    async getLists(owner: string): Promise&lt;List[]> {
+        const query = `
+            query {
+                user(userId: "${owner}") {
+                    lists {
+                        id, title, description, owner, createdAt, updatedAt
+                    }
+                }
+            }
+        `; 
+        let response = await this.client.post&lt;GraphQLResponse&lt;List[]>>('', {
+            query
+        });
+
+        response.data |> prettyJson |>Winston.debug;
+        return response.data.data;
+    }
+
+    async getTasks(owner: string, listId: string) { // eslint-disable-line no-unused-vars
+        throw Error('Unimplemented');
+    }
+
+    async getTask(owner: string, listId: string, taskId: string) { // eslint-disable-line no-unused-vars
+        throw Error('Unimplemented');
+    }
+
+    login(loginInput: LoginInput) { // eslint-disable-line no-unused-vars
+        throw Error('Unimplemented');
     }
 }
 </code></pre>
