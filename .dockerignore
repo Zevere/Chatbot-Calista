@@ -2,6 +2,11 @@
 lib
 logs
 node_modules
+.nyc_output
+coverage
+.vs
+.staging.env
+dist
 
 # CI/CD scripts
 /scripts/
