@@ -20,6 +20,7 @@
 - [Calista](#calista)
     - [Manage your tasks on Zevere using Slack.](#manage-your-tasks-on-zevere-using-slack)
     - [Table of Contents](#table-of-contents)
+    - [Documentation](#documentation)
     - [Overview](#overview)
     - [Development](#development)
         - [Install Dependencies](#install-dependencies)
@@ -30,6 +31,10 @@
         - [Mandatory Secrets](#mandatory-secrets)
         - [Optional Secrets](#optional-secrets)
     - [Build Docker Image](#build-docker-image)
+
+## Documentation
+- [API Docs](https://zevere.github.io/Chatbot-Calista/)
+- [Test Coverage Report](https://zevere.github.io/Chatbot-Calista/coverage/lcov-report/)
 
 ## Overview
 This app allows users to use Slack as a way to manage their tasks on Zevere. This includes creating tasks
