@@ -7,7 +7,7 @@ import { getUserBySlackId } from '../../authorization/authorization.service';
 
 export async function handleOptionsRequest(req: Request, res: Response, next: NextFunction) {
     const bz = new Client();
-    req.body |> prettyJson |> Winston.debug;
+    req.body |> prettyJson |> Winston.info;
     const opts: Options = req.body;
     try {
         const user = await getUserBySlackId(opts.user.id); 
@@ -17,6 +17,5 @@ export async function handleOptionsRequest(req: Request, res: Response, next: Ne
     } catch (err) {
         err |> prettyJson |> Winston.error;
         res.status(404).send();
-        next(err);
     }
 }
