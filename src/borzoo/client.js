@@ -57,21 +57,30 @@ export class Client {
     }
 
     async createList(owner: string, list: ListInput): Promise<List> {
-        const listStr = JSON.stringify(list);
-        Winston.info(`Injecting into list parameter of mutation: ${listStr}`);
+        Winston.info('Received list input in #createList:');
+        list |> prettyJson |> Winston.info;
         const mutation = `
-            mutation { 
-                createList(owner: ${owner}, list: ${listStr}) { 
+            mutation CreateListMutation($owner: String! $list: ListInput!) { 
+                createList(owner: $owner, list: $list) { 
                     id owner title description collaborators tags createdAt updatedAt
                 }
             }`;
-
-        let response = await this.client.post<GraphQLResponse<List>>('', {
-            query: mutation
-        });
-        Winston.info('Response from #createList:');
-        response |> prettyJson |> Winston.info;
-        return response.data.data;
+        const variables = {
+            owner, list
+        };
+        try {
+            let response = await this.client.post<GraphQLResponse<List>>('', {
+                query: mutation,
+                variables
+            });
+            Winston.info('Response from #createList:');
+            response |> prettyJson |> Winston.info;
+            return response.data.data;
+        } catch (err) {
+            Winston.error('Error caught in #createList:');
+            err |> prettyJson |> Winston.error;
+            throw err;
+        }
     }
 
     /**

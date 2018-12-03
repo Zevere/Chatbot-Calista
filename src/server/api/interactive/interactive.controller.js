@@ -45,7 +45,7 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
             }
             case 'createtask': {
                 Winston.info(`Creating task ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
-                const createdTask = await bz.addTask(user.zevereId, submission.tasklist,)
+                const createdTask = await bz.addTask(user.zevereId, submission.tasklist, submission);
                 Winston.info('List created.');
                 createdTask |> prettyJson |> Winston.info;
                 await messageUser(slack, id, `Your task list, "${submission.title}" has been created!`);
