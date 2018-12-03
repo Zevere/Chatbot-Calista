@@ -36,7 +36,7 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
                 Winston.info(`Creating list ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
                 const createdList = await bz.createList(user.zevereId, {
                     id: submission.title,
-                    submission
+                    ...submission
                 });
                 Winston.info('List created.');
                 createdList |> prettyJson |> Winston.info;

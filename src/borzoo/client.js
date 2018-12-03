@@ -57,9 +57,11 @@ export class Client {
     }
 
     async createList(owner: string, list: ListInput): Promise<List> {
+        const listStr = JSON.stringify(list);
+        Winston.info(`Injecting into list parameter of mutation: ${listStr}`);
         const mutation = `
             mutation { 
-                createList(owner: ${owner}, list: ${JSON.stringify(list)}) { 
+                createList(owner: ${owner}, list: ${listStr}) { 
                     id owner title description collaborators tags createdAt updatedAt
                 }
             }`;
