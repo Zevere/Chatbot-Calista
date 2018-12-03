@@ -12,15 +12,14 @@ export async function validateUser(req: Request, res: Response, next: NextFuncti
     try {
         //res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
         req.body |> prettyJson |> Winston.info;
-        const {
-            user_id
-        } = req.body;
+        
+        const slackId = req.body.user_id;
 
-        if (await userIsRegistered(user_id)) {
+        if (await userIsRegistered(slackId)) {
             next();
         } else {
             next(Error('User not authenticated.'));
-            messageUser(client, user_id, 'Oops! Seems like you are not logged in yet. Try using /login first!');
+            messageUser(client, slackId, 'Oops! Seems like you are not logged in yet. Try using /login first!');
         }
 
 

@@ -15,13 +15,13 @@ import dialogsRouter from './dialogs/dialogs.router';
 function apiRouter(): Router {
     const router = Router({caseSensitive: false});
     router.use('/login', loginRouter);
+    router.use('/interactive', interactiveRouter);
     
     if (process.env.NODE_ENV !== 'development')
         router.use(validateUser);
     
     router.use('/message', messageRouter);
     router.use('/profile', profileRouter);
-    router.use('/interactive', interactiveRouter);
     router.use('/dialogs', dialogsRouter);
     return router;
 }
