@@ -5,7 +5,6 @@ import { ListInput } from './list-input.model';
 import { LoginInput } from './login-input.model';
 import { List } from './list.model';
 import { Task } from './task.model';
-import { GraphQLResponse } from './graphql-response.model';
 import { AxiosInstance } from 'axios';
 import { axiosForBorzoo } from '../config/axios';
 
@@ -46,7 +45,7 @@ export class Client {
         const variables = {
             owner, list, task
         };
-        const response =  await this.client.post<GraphQLResponse<Task>>('', {
+        const response =  await this.client.post('', {
             query: mutation, 
             variables
         });
@@ -69,13 +68,13 @@ export class Client {
             owner, list
         };
         try {
-            let response = await this.client.post<GraphQLResponse<List>>('', {
+            let response = await this.client.post('', {
                 query: mutation,
                 variables
             });
-            Winston.info('Response from #createList:');
-            response |> prettyJson |> Winston.info;
-            return response.data.data;
+            Winston.info('Response data from #createList:');
+            response.data |> prettyJson |> Winston.info;
+            return response.data.data.createList;
         } catch (err) {
             Winston.error('Error caught in #createList:');
             err |> Winston.error;
@@ -100,12 +99,12 @@ export class Client {
                 }
             }
         `; 
-        let response = await this.client.post<GraphQLResponse<List[]>>('', {
+        let response = await this.client.post('', {
             query
         });
-        Winston.info('Response from #getLists:');
+        Winston.info('Response data from #getLists:');
         response.data |> prettyJson |>Winston.info;
-        return response.data.data;
+        return response.data.data.user.lists;
     }
 
     async getTasks(owner: string, listId: string) { // eslint-disable-line no-unused-vars

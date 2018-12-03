@@ -8,7 +8,11 @@ import { inspect as ins } from 'util';
  * @returns {string} A representation of that object in a prettified JSON string.
  */
 export function prettyJson(obj: Object): string {
-    return JSON.stringify(obj, null, 2);
+    try {
+        return JSON.stringify(obj, null, 2);
+    } catch {
+        return inspect(obj);
+    }
 }
 
 

@@ -1,28 +1,78 @@
-/* global describe it */
+/* global describe it should before */
+import 'chai/register-should';
 
 import { Client } from '../../src/borzoo/client';
-import { randomBytes } from 'crypto';
 import { TaskInput } from '../../src/borzoo/task-input.model';
+import { List } from '../../src/borzoo/list.model';
+import { Task } from '../../src/borzoo/task.model';
+import dotenv from 'dotenv';
+import { fail } from 'assert';
+import Axios from 'axios';
+dotenv.load();
 
-describe('Borzoo Client', () => {
+
+function randomNumber(width: number) {
+    let chars = [];
+    for (let i = 0; i < width; ++i) {
+        chars[i] = Math.floor(Math.random() * 10).toString();
+    }
+    return chars.reduce((p, c) => p + c);
+}
+
+
+describe('Borzoo Client', function() {
+    this.timeout('10s');
+    const client = new Client();
+    const rndChars = randomNumber(5);
+    const owner = 'test';
+
+    let testList: List;
+    let testTask: Task;
+
+    before(async () => {
+        Axios.get(process.env.BORZOO_URL);
+    });
 
     it('can instantiate', () => {
         new Client();
     });
 
-    it('can call #addTask', async function() {
-        const client = new Client();
-        const rndChars = randomBytes(5).toString();
+    it('#createList creates a list', async function () {
+        const testInput = {
+            id: `testListId${rndChars}`,
+            title: `testListTitle${rndChars}`,
+            description: `testListDesc${rndChars}`
+        };
+        testList = await client.createList(owner, testInput);
+
+        should.exist(testList);
+        testList.id.should.equal(testInput.id.toLowerCase());
+        testList.title.should.equal(testInput.title);
+        testList.description.should.equal(testInput.description);
+
+    });
+
+    it('#addTask adds a task to a list', async function () {
         const taskInput: TaskInput = {
             id: `testId${rndChars}`,
             title: `testTitle${rndChars}`,
             description: `testDesc${rndChars}`
         };
-        try {
-            await client.addTask(`owner${rndChars}`, `list${rndChars}`, taskInput);
-        } catch (e) {
-            if (e?.response?.status >= 500)
-                throw Error('500 err; most likely an invalid endpoint');
+        testTask = await client.addTask(owner, `${testList.id}`, taskInput);
+        testTask.id.should.equal(taskInput.id.toLowerCase());
+        testTask.title.should.equal(taskInput.title);
+        testTask.description.should.equal(taskInput.description);
+    });
+
+    it('# gives a list of a user\'s lists', async function () {
+        const res = await client.getLists(owner);
+        let pass = false;
+        for (const list of res) {
+            if (list.id === testList.id.toLowerCase() && list.title === testList.title && list.description === testList.description) {
+                pass = true;
+                break;
+            }
         }
+        if (!pass) fail('Could not find the created list in the test user\'s lists.');
     });
 });
