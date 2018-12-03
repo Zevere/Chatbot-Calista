@@ -58,20 +58,14 @@ export class Client {
 
     async createList(owner: string, list: ListInput): Promise<List> {
         const mutation = `
-            mutation ZevereMutation($userId: String!, $list: ListInput!) { 
-                createList(owner: $userId, list: $list) { 
+            mutation { 
+                createList(owner: ${owner}, list: ${JSON.stringify(list)}) { 
                     id owner title description collaborators tags createdAt updatedAt
                 }
             }`;
 
-        const variables = {
-            userId: owner,
-            list: list
-        };
-
         let response = await this.client.post<GraphQLResponse<List>>('', {
-            query: mutation,
-            variables
+            query: mutation
         });
         Winston.info('Response from #createList:');
         response |> prettyJson |> Winston.info;

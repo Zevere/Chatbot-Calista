@@ -12,7 +12,7 @@ import { messageUser } from '../../../slack/messaging';
  * @param {Response} res 
  * @param {NextFunction} next 
  */
-export async function handleInteractiveRequest(req: Request, res: Response, next: NextFunction) {
+export async function handleInteractiveRequest(req: Request, res: Response, next: NextFunction) { // eslint-disable-line no-unused-vars
     try {
         res.status(200).send();
         const slack = new SlackClient();
@@ -55,6 +55,5 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
         }
     } catch (exception) {
         exception |> prettyJson |> Winston.error;
-        next(exception);
     }
 }
