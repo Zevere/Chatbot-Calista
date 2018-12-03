@@ -23,12 +23,18 @@ export async function createTask(web: WebClient, text: string, triggerId: string
                         name: 'description',
                         optional: true,
                     },
+                    {
+                        label: 'List',
+                        name: 'tasklist',
+                        type: 'select',
+                        data_source: 'external',
+                    },
                 ]
             }
         });
     } catch (exception) {
         Winston.error('Exception caught in dialogs#createTask.');
-        exception ?.data ?.response_metadata ?.messages |> Winston.error;
+        exception?.data?.response_metadata?.messages |> Winston.error;
         throw exception;
     }
 }
@@ -78,7 +84,7 @@ export async function createList(web: WebClient, text: string, triggerId: string
         });
     } catch (exception) {
         Winston.error('Exception caught in dialogs#createTask.');
-        exception ?.data ?.response_metadata ?.messages |> Winston.error;
+        exception?.data?.response_metadata?.messages |> Winston.error;
         throw exception;
     }
 }

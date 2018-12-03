@@ -4,6 +4,7 @@ import { TaskInput } from './task-input.model';
 import { ListInput } from './list-input.model';
 import { LoginInput } from './login-input.model';
 import { List } from './list.model';
+import { Task } from './task.model';
 import { GraphQLResponse } from './graphql-response.model';
 import { AxiosInstance } from 'axios';
 import { axiosForBorzoo } from '../config/axios';
@@ -26,7 +27,16 @@ export class Client {
     }
 
 
-    async addTask(owner: string, list: string, task: TaskInput): Promise {
+    /**
+     * Adds a task to a chosen list for a user.
+     *
+     * @param {string} owner - The owner of the task.
+     * @param {string} list - The list ID or name.
+     * @param {TaskInput} task - Information about the task you wish to create.
+     * @returns {Promise<Task>} A promise containing the created task.
+     * @memberof Client
+     */
+    async addTask(owner: string, list: string, task: TaskInput): Promise<Task> {
         const mutation = `
         mutation ZevereMutation($userId: String!, $listId: String!, $task: TaskInput!) { 
             addTask(owner: $userId, list: $listId, task: $task) { 
@@ -36,10 +46,12 @@ export class Client {
         const variables = {
             owner, list, task
         };
-        return await this.client.post('', {
+        const response =  await this.client.post<GraphQLResponse<Task>>('', {
             query: mutation, 
             variables
         });
+
+        return response.data.data;
     }
 
     async createList(owner: string, list: ListInput): Promise<List> {

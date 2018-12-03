@@ -30,14 +30,24 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
 
         switch (callback_id) {
             case 'createlist': {
-                await bz.createList(user.zevereId, {
-                    id: '',
+                Winston.debug(`Creating list ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
+                const createdList = await bz.createList(user.zevereId, {
+                    id: submission.title,
                     ...submission
                 });
+                Winston.debug('List created.');
+                createdList |> prettyJson |> Winston.debug;
                 await messageUser(slack, id, `Your task list, "${submission.title}" has been created!`);
                 break;
             }
-            case 'createtask':
+            case 'createtask': {
+                Winston.debug(`Creating task ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
+                const createdTask = await bz.addTask(user.zevereId, submission.tasklist,)
+                Winston.debug('List created.');
+                createdTask |> prettyJson |> Winston.debug;
+                await messageUser(slack, id, `Your task list, "${submission.title}" has been created!`);
+                break;
+            }
             case 'viewtask':
             case 'viewlist':
             default:

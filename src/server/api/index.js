@@ -6,6 +6,7 @@ import { validateUser } from '../authorization/authorization.middleware';
 import profileRouter from './profile/profile.router';
 import interactiveRouter from './interactive/interactive.router';
 import dialogsRouter from './dialogs/dialogs.router';
+import optionsRouter from './options/options.router';
 
 /**
  * __Router to handle API routes. Has nested routers for
@@ -16,7 +17,7 @@ function apiRouter(): Router {
     const router = Router({caseSensitive: false});
     router.use('/login', loginRouter);
     router.use('/interactive', interactiveRouter);
-    
+    router.use('/options', optionsRouter);    
     if (process.env.NODE_ENV !== 'development')
         router.use(validateUser);
     
