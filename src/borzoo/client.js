@@ -78,7 +78,7 @@ export class Client {
             return response.data.data;
         } catch (err) {
             Winston.error('Error caught in #createList:');
-            err |> prettyJson |> Winston.error;
+            err |> Winston.error;
             throw err;
         }
     }
