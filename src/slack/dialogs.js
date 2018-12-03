@@ -64,21 +64,6 @@ export async function createList(web: WebClient, text: string, triggerId: string
                         hint: 'A description of your list.',
                         optional: true,
                     },
-                    {
-                        label: 'Collaborators',
-                        name: 'collaborators',
-                        type: 'select',
-                        data_source: 'users',
-                        hint: 'If you wish, add a collaborator.',
-                        optional: true
-                    },
-                    {
-                        label: 'Tags',
-                        name: 'tags',
-                        type: 'textarea',
-                        hint: 'Optionally add tags to help you search for this later. Seperate tags by commas.',
-                        optional: true
-                    }
                 ]
             }
         });
