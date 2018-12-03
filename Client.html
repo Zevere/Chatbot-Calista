@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: logging/app.logger.js</title>
+    <title>JSDoc: Class: Client</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,84 +17,296 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: logging/app.logger.js</h1>
+    <h1 class="page-title">Class: Client</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import 'winston-daily-rotate-file';
+        <h2><span class="attribs"><span class="type-signature"></span></span>Client<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+    
+</header>
 
-import path from 'path';
-import winston from 'winston';
-import resolveLogDirectory from './path-resolver';
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    
+    <h4 class="name" id="Client"><span class="type-signature"></span>new Client<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
 
 
-const logDir = resolveLogDirectory('app');
 
-function resolveLogLevel(): string {
-    if (process.env.NODE_ENV === 'development') {
-        return 'silly';
-    }
+<div class="description">
+    <p>A client for the Borzoo GraphQL API.</p>
+</div>
 
-    return 'info';
-}
 
-const consoleLogLevel = resolveLogLevel();
 
-const consoleLog = new winston.transports.Console({
-    format: winston.format.combine(
-        winston.format.simple(),
-        winston.format.colorize()
-    ),
-    level: consoleLogLevel,
-});
 
-const rotatingInfoLog = new winston.transports.DailyRotateFile({
-    datePattern: 'YYYY-MM-DD-HH',
-    dirname: path.join(logDir, 'info'),
-    filename: 'info-%DATE%.log',
-    format: winston.format.json(),
-    level: 'info',
-    maxFiles: '365d',
-    maxSize: '1440m',
-    zippedArchive: false,
-});
 
-const rotatingErrorLog = new winston.transports.DailyRotateFile({
-    datePattern: 'YYYY-MM-DD-HH',
-    dirname: path.join(logDir, 'error'),
-    filename: 'error-%DATE%.log',
-    format: winston.format.json(),
-    level: 'error',
-    maxFiles: '365d',
-    maxSize: '1440m',
-    zippedArchive: false,
-});
 
-const logger = winston.createLogger({
-    transports: [
-        consoleLog,
-        rotatingInfoLog,
-        rotatingErrorLog
-    ]
-});
 
-/** 
- * __A Winston logger which logs to multiple transports based off of the
- * log level. File logs are separated into info and error and logged in a JSON format,
- * whereas console logs depend on the NODE_ENV and provide a simplified view of each log.__
- * 
- * @see https://github.com/winstonjs/winston/blob/master/docs/transports.md
- * @returns {winston.Logger} A Winston logger.
-*/
-export default logger;
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getLists"><span class="type-signature">(async) </span>getLists<span class="signature">(owner)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="global.html#List">List</a>>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns the lists that the specified owner has.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>owner</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The one who you wish to get the lists for.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line66">line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A promise containing the owner's lists.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;<a href="global.html#List">List</a>>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

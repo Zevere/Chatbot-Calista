@@ -33,13 +33,19 @@ import { ListInput } from './list-input.model';
 import { LoginInput } from './login-input.model';
 import { List } from './list.model';
 import { GraphQLResponse } from './graphql-response.model';
-import { AxiosInstance, AxiosResponse } from 'axios';
+import { AxiosInstance } from 'axios';
 import { axiosForBorzoo } from '../config/axios';
 
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
 
 
+/**
+ * A client for the Borzoo GraphQL API.
+ *
+ * @export
+ * @class Client
+ */
 export class Client {
     client: AxiosInstance;
 
@@ -64,11 +70,11 @@ export class Client {
         });
     }
 
-    async createList(owner: string, list: ListInput): Promise&lt;AxiosResponse&lt;any>> {
+    async createList(owner: string, list: ListInput): Promise&lt;List> {
         const mutation = `
             mutation ZevereMutation($userId: String!, $list: ListInput!) { 
                 createList(owner: $userId, list: $list) { 
-                    id title createdAt
+                    id owner title description collaborators tags createdAt updatedAt
                 }
             }`;
 
@@ -77,10 +83,12 @@ export class Client {
             list: list
         };
 
-        return await this.client.post('', {
+        let response = await this.client.post&lt;GraphQLResponse&lt;List>>('', {
             query: mutation,
             variables
-        })
+        });
+
+        return response.data.data;
     }
 
     /**
@@ -95,7 +103,7 @@ export class Client {
             query {
                 user(userId: "${owner}") {
                     lists {
-                        id, title, description, owner, createdAt, updatedAt
+                        id title description owner createdAt updatedAt
                     }
                 }
             }
@@ -130,13 +138,13 @@ export class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Dec 02 2018 04:06:05 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Dec 03 2018 02:47:29 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

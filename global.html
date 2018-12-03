@@ -1485,6 +1485,187 @@ the routes that branch off of it.</strong></p>
     
 
     
+    <h4 class="name" id="handleInteractiveRequest"><span class="type-signature">(async) </span>handleInteractiveRequest<span class="signature">(req, res, next)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>This endpoint is used by Slack when using interactive components.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Response</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>next</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">NextFunction</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="server_api_interactive_interactive.controller.js.html">server/api/interactive/interactive.controller.js</a>, <a href="server_api_interactive_interactive.controller.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="inspect"><span class="type-signature"></span>inspect<span class="signature">(obj)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
@@ -3766,13 +3947,13 @@ If it does not exist, the logs will be placed relative to the dist.</strong></p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Dec 02 2018 04:06:05 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Dec 03 2018 02:47:29 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
