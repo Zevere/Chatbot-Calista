@@ -5,7 +5,7 @@ import { Client } from '../../../borzoo/client';
 import { Options } from './options.model';
 import { getUserBySlackId } from '../../authorization/authorization.service';
 
-export async function handleOptionsRequest(req: Request, res: Response, next: NextFunction) {
+export async function handleOptionsRequest(req: Request, res: Response, next: NextFunction) { // eslint-disable-line no-unused-vars
     const bz = new Client();
     const opts: Options = req.body.payload;
     opts |> prettyJson |> Winston.info;

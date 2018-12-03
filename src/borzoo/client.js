@@ -51,6 +51,8 @@ export class Client {
             variables
         });
 
+        Winston.info('Response from #addTask:');
+        response |> prettyJson |> Winston.info;
         return response.data.data;
     }
 
@@ -71,7 +73,8 @@ export class Client {
             query: mutation,
             variables
         });
-
+        Winston.info('Response from #createList:');
+        response |> prettyJson |> Winston.info;
         return response.data.data;
     }
 
@@ -95,7 +98,7 @@ export class Client {
         let response = await this.client.post<GraphQLResponse<List[]>>('', {
             query
         });
-
+        Winston.info('Response from #getLists:');
         response.data |> prettyJson |>Winston.debug;
         return response.data.data;
     }
