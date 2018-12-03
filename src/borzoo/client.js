@@ -5,13 +5,19 @@ import { ListInput } from './list-input.model';
 import { LoginInput } from './login-input.model';
 import { List } from './list.model';
 import { GraphQLResponse } from './graphql-response.model';
-import { AxiosInstance, AxiosResponse } from 'axios';
+import { AxiosInstance } from 'axios';
 import { axiosForBorzoo } from '../config/axios';
 
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
 
 
+/**
+ * A client for the Borzoo GraphQL API.
+ *
+ * @export
+ * @class Client
+ */
 export class Client {
     client: AxiosInstance;
 
@@ -36,11 +42,11 @@ export class Client {
         });
     }
 
-    async createList(owner: string, list: ListInput): Promise<AxiosResponse<any>> {
+    async createList(owner: string, list: ListInput): Promise<List> {
         const mutation = `
             mutation ZevereMutation($userId: String!, $list: ListInput!) { 
                 createList(owner: $userId, list: $list) { 
-                    id title createdAt
+                    id owner title description collaborators tags createdAt updatedAt
                 }
             }`;
 
@@ -49,10 +55,12 @@ export class Client {
             list: list
         };
 
-        return await this.client.post('', {
+        let response = await this.client.post<GraphQLResponse<List>>('', {
             query: mutation,
             variables
-        })
+        });
+
+        return response.data.data;
     }
 
     /**
@@ -67,7 +75,7 @@ export class Client {
             query {
                 user(userId: "${owner}") {
                     lists {
-                        id, title, description, owner, createdAt, updatedAt
+                        id title description owner createdAt updatedAt
                     }
                 }
             }

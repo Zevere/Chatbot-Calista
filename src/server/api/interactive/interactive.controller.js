@@ -6,11 +6,13 @@ import { Client as BorzooClient } from '../../../borzoo/client';
 import { getUserBySlackId } from '../../authorization/authorization.service';
 import { messageUser } from '../../../slack/messaging';
 
-
+/**
+ * This endpoint is used by Slack when using interactive components.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ */
 export async function handleInteractiveRequest(req: Request, res: Response, next: NextFunction) {
-    // TODO
-    // 1. check the callback_ids
-    // 2. assign to correct borzoo func
     try {
         res.status(200).send();
         const slack = new SlackClient();
@@ -21,7 +23,7 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
             user: {
                 id
             },
-            submission
+            submission // comes from the Slack form
         } = JSON.parse(req.body.payload);
 
         const user = await getUserBySlackId(id);
@@ -35,6 +37,9 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
                 await messageUser(slack, id, `Your task list, "${submission.title}" has been created!`);
                 break;
             }
+            case 'createtask':
+            case 'viewtask':
+            case 'viewlist':
             default:
                 break;
         }
