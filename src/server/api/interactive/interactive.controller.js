@@ -18,14 +18,14 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
         const slack = new SlackClient();
         const bz = new BorzooClient();
         Winston.info('Received an interactive request.');
-        req.body |> JSON.parse |> prettyJson |> Winston.info;
+        req.body |> prettyJson |> Winston.info;
         const {
             callback_id,
             user: {
                 id
             },
             submission // comes from the Slack form
-        } = JSON.parse(req.body.payload);
+        } = req.body.payload;
         Winston.info('Submission:');
         submission |> prettyJson |> Winston.info;
 
