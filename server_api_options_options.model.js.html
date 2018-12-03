@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: vivid/profile/user-profile.model.js</title>
+    <title>JSDoc: Source: server/api/options/options.model.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: vivid/profile/user-profile.model.js</h1>
+    <h1 class="page-title">Source: server/api/options/options.model.js</h1>
 
     
 
@@ -26,39 +26,31 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// @flow
-/**
-``` 
-  UserProfile: {
-    description: Profile of a Zevere user
-    id:
-     type:         string
-     description:  User ID
-    firstName:	
-      type:        string
-      description: User first name
-    lastName:
-      type:        string
-      description: User last name
-    joinedAt:	
-      type:        string($date-time)
-      description: The date account was created in UTC
-  }
-```
+            <pre class="prettyprint source linenums"><code>/**
+ * A type representing the Options object sent from Slack.
+ * 
+ * @see https://api.slack.com/dialogs#dynamic_select_elements_external
  */
-export class UserProfile {
-    id: string;
-    firstName: string;
-    lastName: string;
-    joinedAt: string;
-
-    constructor() {
-        this.id = '';
-        this.firstName = '';
-        this.lastName = '';
-        this.joinedAt = '';
-    }
-}
+export type Options = {
+    type: string,
+    token: string,
+    action_ts: string,
+    team: {
+      id: string,
+      domain: string
+    },
+    user: {
+      id: string,
+      name: string
+    },
+    channel: {
+      id: string,
+      name: string
+    },
+    name: string,
+    value: string,
+    callback_id: string
+};
 </code></pre>
         </article>
     </section>
