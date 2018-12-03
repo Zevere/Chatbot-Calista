@@ -25,7 +25,7 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
                 id
             },
             submission // comes from the Slack form
-        } = req.body.payload;
+        } = JSON.parse(req.body.payload); // the payload is a JSON string inside of the JSON string
         Winston.info('Submission:');
         submission |> prettyJson |> Winston.info;
 
