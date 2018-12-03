@@ -14,13 +14,13 @@ import optionsRouter from './options/options.router';
  * @returns {Router}
  */
 function apiRouter(): Router {
-    const router = Router({caseSensitive: false});
+    const router = Router({ caseSensitive: false });
     router.use('/login', loginRouter);
     router.use('/interactive', interactiveRouter);
-    router.use('/options', optionsRouter);    
+    router.use('/options', optionsRouter);
     if (process.env.NODE_ENV !== 'development')
         router.use(validateUser);
-    
+
     router.use('/message', messageRouter);
     router.use('/profile', profileRouter);
     router.use('/dialogs', dialogsRouter);

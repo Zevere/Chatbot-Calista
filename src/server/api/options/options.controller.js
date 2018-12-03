@@ -16,6 +16,7 @@ export async function handleOptionsRequest(req: Request, res: Response, next: Ne
         res.status(200).send(listOptions);
     } catch (err) {
         err |> prettyJson |> Winston.error;
+        res.status(404).send();
         next(err);
     }
 }

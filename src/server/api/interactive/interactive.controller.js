@@ -17,7 +17,7 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
         res.status(200).send();
         const slack = new SlackClient();
         const bz = new BorzooClient();
-        req.body |> prettyJson |> Winston.debug;
+        req.body |> prettyJson |> Winston.info;
         const {
             callback_id,
             user: {
@@ -30,21 +30,21 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
 
         switch (callback_id) {
             case 'createlist': {
-                Winston.debug(`Creating list ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
+                Winston.info(`Creating list ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
                 const createdList = await bz.createList(user.zevereId, {
                     id: submission.title,
                     ...submission
                 });
-                Winston.debug('List created.');
-                createdList |> prettyJson |> Winston.debug;
+                Winston.info('List created.');
+                createdList |> prettyJson |> Winston.info;
                 await messageUser(slack, id, `Your task list, "${submission.title}" has been created!`);
                 break;
             }
             case 'createtask': {
-                Winston.debug(`Creating task ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
+                Winston.info(`Creating task ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
                 const createdTask = await bz.addTask(user.zevereId, submission.tasklist,)
-                Winston.debug('List created.');
-                createdTask |> prettyJson |> Winston.debug;
+                Winston.info('List created.');
+                createdTask |> prettyJson |> Winston.info;
                 await messageUser(slack, id, `Your task list, "${submission.title}" has been created!`);
                 break;
             }
