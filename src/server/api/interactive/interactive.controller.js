@@ -17,7 +17,8 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
         res.status(200).send();
         const slack = new SlackClient();
         const bz = new BorzooClient();
-        req.body |> prettyJson |> Winston.info;
+        Winston.info('Received an interactive request.');
+        req.body |> JSON.parse |> prettyJson |> Winston.info;
         const {
             callback_id,
             user: {
@@ -25,7 +26,9 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
             },
             submission // comes from the Slack form
         } = JSON.parse(req.body.payload);
-
+        Winston.info('Submission:');
+        submission |> prettyJson |> Winston.info;
+        
         const user = await getUserBySlackId(id);
 
         switch (callback_id) {

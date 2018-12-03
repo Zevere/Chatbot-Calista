@@ -93,7 +93,7 @@ export class Client {
             query
         });
         Winston.info('Response from #getLists:');
-        response.data |> prettyJson |>Winston.debug;
+        response.data |> prettyJson |>Winston.info;
         return response.data.data;
     }
 
