@@ -29,6 +29,9 @@
             <pre class="prettyprint source linenums"><code>import { WebAPICallResult, WebClient } from '@slack/client';
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
+import { Client } from '../borzoo/client';
+import { getUserBySlackId } from '../server/authorization/authorization.service';
+import Axios from 'axios';
 
 /**
  * __Provides a Login button to the user.__
@@ -64,6 +67,51 @@ export async function loginPrompt(web: WebClient, userId: string, url: string): 
         Winston.error('Exception caught in messaging#loginPrompt.');
         throw exception;
     }
+}
+
+export async function showListsForDeletion(web: WebClient, userId: string, channelId: string): Promise&lt;WebAPICallResult> {
+    const bz = new Client();
+    const user = await getUserBySlackId(userId); 
+    const lists = await bz.getLists(user.zevereId);
+    const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
+    Winston.info('channel:' +channelId);
+    return await web.chat.postEphemeral({
+        channel: channelId,
+        as_user: false,
+        user: userId,
+        attachments: [
+            {
+                text: 'Select a list to delete:',
+                color: 'danger',
+                callback_id: 'deletelist',
+                actions: [
+                    {
+                        id: 'lists',
+                        type: 'select',
+                        data_source: 'static',
+                        options: listOptions,
+                        name:'list',
+                        confirm: {
+                            text: 'Are you sure you want to delete the list?',
+                            title: 'Confirm Deletion',
+                            dismiss_text:' Cancel',
+                            ok_text: 'Delete'
+                        }
+                    },
+                ],
+                footer: 'Note: Once it is deleted, it is gone forever!'
+
+            }
+        ]
+    });
+}
+
+export async function confirmListDeletion(web: WebClient, responseUrl: string): Promise&lt;any> {
+    return await Axios.post(responseUrl, {
+        response_type: 'ephemeral',
+        replace_original: true,
+        text: 'Deleted successfully.'
+    });
 }
 
 /**
@@ -112,6 +160,29 @@ export async function messageUser(web: WebClient, userId: string, message: strin
 }
 
 /**
+ *
+ * __Sends an ephemeral message to the user.__
+ * @export
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} userId The Slack ID or Slack username of whom the message should be sent to.
+ * @param {string} message The message you wish to send to the aforementioned user.
+ * @returns {Promise&lt;WebAPICallResult>}
+ */
+export async function messageUserEphemeral(web: WebClient, userId: string, message: string): Promise&lt;WebAPICallResult> {
+    try{
+        return await web.chat.postEphemeral({
+            channel: userId,
+            text: message
+        });
+    }
+    catch (exception) {
+        Winston.error('Exception caught in messaging#messageUserEphemeral.');
+        throw exception;
+    }
+}
+
+
+/**
  * __Tries to message a random user based off of who it can find in the #General channel.__
  * @param {WebClient} web The instance of the Slack Web Client.
  * @param {string} message The message you wish to send.
@@ -147,13 +218,8 @@ export async function messageAppHome(web: WebClient, message: string): Promise&l
     // Use the `apps.permissions.resources.list` method to find the conversation ID for an app home
     try {
         web.apps |> prettyJson |> Winston.debug;
-        const response = await web.apps.permissions.resources.list();
 
-        // Find the app home to use as the conversation to post a message
-        // At this point, there should only be one app home in the whole response since only one user has installed the app
-        response.resources |> prettyJson |> Winston.debug;
-        const appHome = response.resources.find(r => r.type === 'app_home');
-        // Use the `chat.postMessage` method to send a message from this app
+        const appHome = await getAppHome(web);
         appHome |> prettyJson |> Winston.debug;
         const result = await web.chat.postMessage({
             channel: appHome.id,
@@ -170,6 +236,11 @@ export async function messageAppHome(web: WebClient, message: string): Promise&l
     }
 }
 
+async function getAppHome(web: WebClient) {
+    const response = await web.apps.permissions.resources.list();
+    const appHome = response.resources.find(r => r.type === 'app_home');
+    return appHome;
+}
 </code></pre>
         </article>
     </section>
@@ -180,13 +251,13 @@ export async function messageAppHome(web: WebClient, message: string): Promise&l
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageAppHome">messageAppHome</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageRandomUser">messageRandomUser</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Dec 03 2018 22:26:10 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Dec 04 2018 23:56:55 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
