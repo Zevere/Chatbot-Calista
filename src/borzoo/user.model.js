@@ -45,7 +45,7 @@ export type User = {
      * @type {string}
      * @memberof User
      */
-    lastName: ?string,
+    lastName?: string,
 
     /**
      * The task lists that this user has access to.
@@ -53,7 +53,7 @@ export type User = {
      * @type {List[]}
      * @memberof User
      */
-    lists: ?List[],
+    lists?: List[],
     
     /**
      * Authentication token.
@@ -61,5 +61,5 @@ export type User = {
      * @type {string}
      * @memberof User
      */
-    token: ?string
+    token?: string
 };

@@ -1,6 +1,7 @@
 import {
     messageGeneralChat,
-    messageSelf
+    messageSelf,
+    deleteList
 } from './message.controller';
 
 import { Router } from 'express';
@@ -14,6 +15,8 @@ function messageRouter() {
     router.route('/self')
         .all(messageSelf);
 
+    router.route('/deletelist')
+        .post(deleteList);
     return router;
 }
 

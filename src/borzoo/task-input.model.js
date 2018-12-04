@@ -41,7 +41,7 @@ export type TaskInput = {
      * @type {string}
      * @memberof TaskInput
      */
-    due: ?string,
+    due?: string,
     
     /**
      * List of tags on the new task item.
@@ -49,5 +49,5 @@ export type TaskInput = {
      * @type {string[]}
      * @memberof TaskInput
      */
-    tags: ?string[]
+    tags?: string[]
 };

@@ -29,7 +29,7 @@ export type UserInput = {
      * @type {string}
      * @memberof UserInput
      */
-    lastName: ?string,
+    lastName?: string,
 
     /**
      *
@@ -40,5 +40,5 @@ export type UserInput = {
      * @type {string[]}
      * @memberof UserInput
      */
-    members: ?string[];
+    members?: string[];
 };

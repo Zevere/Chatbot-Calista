@@ -36,7 +36,7 @@ export type Task = {
      * @type {string}
      * @memberof Task
      */
-    due: ?string,
+    due?: string,
 
     /**
      * The task's ID.
@@ -51,7 +51,7 @@ export type Task = {
      * @type {string[]}
      * @memberof Task
      */
-    tags: ?string[],
+    tags?: string[],
 
     /**
      * Short title of this task.

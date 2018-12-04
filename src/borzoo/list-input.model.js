@@ -21,7 +21,7 @@ export type ListInput = {
      * @type {string}
      * @memberof ListInput
      */
-    description: ?string,
+    description?: string,
     
     /**
      * Collaborators of the list.
@@ -30,7 +30,7 @@ export type ListInput = {
      * @type {string[]}
      * @memberof ListInput
      */
-    collaborators: ?string[],
+    collaborators?: string[],
 
     /**
      * The List's tags.
@@ -40,5 +40,5 @@ export type ListInput = {
      * @memberof ListInput
      */
 
-    tags: ?string[]
+    tags?: string[]
 };

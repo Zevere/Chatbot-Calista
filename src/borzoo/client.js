@@ -25,7 +25,6 @@ export class Client {
         this.client = axiosForBorzoo();
     }
 
-
     /**
      * Adds a task to a chosen list for a user.
      *
@@ -55,6 +54,14 @@ export class Client {
         return response.data.data;
     }
 
+    /**
+     * 
+     *
+     * @param {string} owner
+     * @param {ListInput} list
+     * @returns {Promise<List>}
+     * @memberof Client
+     */
     async createList(owner: string, list: ListInput): Promise<List> {
         Winston.info('Received list input in #createList:');
         list |> prettyJson |> Winston.info;
@@ -91,20 +98,50 @@ export class Client {
      */
     async getLists(owner: string): Promise<List[]> {
         const query = `
-            query {
-                user(userId: "${owner}") {
+            query GetListsQuery($owner: String!){
+                user(userId: $owner) {
                     lists {
                         id title description owner createdAt updatedAt
                     }
                 }
             }
-        `; 
+        `;
+        const variables = {
+            owner
+        };
         let response = await this.client.post('', {
-            query
+            query,
+            variables
         });
         Winston.info('Response data from #getLists:');
         response.data |> prettyJson |>Winston.info;
         return response.data.data.user.lists;
+    }
+
+
+    /**
+     * Delete's an owner's list by ID.
+     *
+     * @param {string} owner - The person who owns the list you wish to delete.
+     * @param {string} listId - The ID of the list that will be deleted.
+     * @returns {Promise<boolean>} A promise containing true if deleted, false if not.
+     * @memberof Client
+     */
+    async deleteList(owner: string, listId: string): Promise<boolean> {
+        const mutation = `
+            mutation DeleteListMutation($owner: String!, $listId: String!) {
+              deleteList(owner: $owner, list: $listId)
+            }`;
+        const variables = {
+            owner, listId
+        };
+
+        const res = await this.client.post('', {
+            query: mutation,
+            variables
+        });
+
+        return res;
     }
 
     async getTasks(owner: string, listId: string) { // eslint-disable-line no-unused-vars

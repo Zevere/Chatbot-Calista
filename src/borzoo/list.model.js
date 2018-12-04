@@ -52,7 +52,7 @@ export type List = {
      *
      * @type {?Array<string>}
      */
-    tags: ?Array<string>,
+    tags?: Array<string>,
 
     /**
      * The Task items in the list.
@@ -60,7 +60,7 @@ export type List = {
      * @type {Task[]}
      * @memberof List
      */
-    tasks: ?Task[],
+    tasks?: Task[],
 
     /**
      * The short title of the list.

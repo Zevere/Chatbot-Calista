@@ -7,13 +7,15 @@ import { getUserBySlackId } from '../../authorization/authorization.service';
 
 export async function handleOptionsRequest(req: Request, res: Response, next: NextFunction) { // eslint-disable-line no-unused-vars
     const bz = new Client();
-    const opts: Options = req.body.payload;
+    const opts: Options = req.body.payload |> JSON.parse;
     opts |> prettyJson |> Winston.info;
     try {
         const user = await getUserBySlackId(opts.user.id); 
         const lists = await bz.getLists(user.zevereId);
         const listOptions = lists.map(list => { return { label: list.title, value: list.id }; });
-        res.status(200).send(listOptions);
+        res.status(200).send({
+            options: listOptions
+        });
     } catch (err) {
         err |> prettyJson |> Winston.error;
         res.status(404).send();

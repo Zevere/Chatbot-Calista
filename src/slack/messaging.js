@@ -1,6 +1,9 @@
 import { WebAPICallResult, WebClient } from '@slack/client';
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
+import { Client } from '../borzoo/client';
+import { getUserBySlackId } from '../server/authorization/authorization.service';
+import Axios from 'axios';
 
 /**
  * __Provides a Login button to the user.__
@@ -36,6 +39,51 @@ export async function loginPrompt(web: WebClient, userId: string, url: string): 
         Winston.error('Exception caught in messaging#loginPrompt.');
         throw exception;
     }
+}
+
+export async function showListsForDeletion(web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
+    const bz = new Client();
+    const user = await getUserBySlackId(userId); 
+    const lists = await bz.getLists(user.zevereId);
+    const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
+    Winston.info('channel:' +channelId);
+    return await web.chat.postEphemeral({
+        channel: channelId,
+        as_user: false,
+        user: userId,
+        attachments: [
+            {
+                text: 'Select a list to delete:',
+                color: 'danger',
+                callback_id: 'deletelist',
+                actions: [
+                    {
+                        id: 'lists',
+                        type: 'select',
+                        data_source: 'static',
+                        options: listOptions,
+                        name:'list',
+                        confirm: {
+                            text: 'Are you sure you want to delete the list?',
+                            title: 'Confirm Deletion',
+                            dismiss_text:' Cancel',
+                            ok_text: 'Delete'
+                        }
+                    },
+                ],
+                footer: 'Note: Once it is deleted, it is gone forever!'
+
+            }
+        ]
+    });
+}
+
+export async function confirmListDeletion(web: WebClient, responseUrl: string): Promise<any> {
+    return await Axios.post(responseUrl, {
+        response_type: 'ephemeral',
+        replace_original: true,
+        text: 'Deleted successfully.'
+    });
 }
 
 /**
@@ -84,6 +132,29 @@ export async function messageUser(web: WebClient, userId: string, message: strin
 }
 
 /**
+ *
+ * __Sends an ephemeral message to the user.__
+ * @export
+ * @param {WebClient} web The instance of the Slack Web Client.
+ * @param {string} userId The Slack ID or Slack username of whom the message should be sent to.
+ * @param {string} message The message you wish to send to the aforementioned user.
+ * @returns {Promise<WebAPICallResult>}
+ */
+export async function messageUserEphemeral(web: WebClient, userId: string, message: string): Promise<WebAPICallResult> {
+    try{
+        return await web.chat.postEphemeral({
+            channel: userId,
+            text: message
+        });
+    }
+    catch (exception) {
+        Winston.error('Exception caught in messaging#messageUserEphemeral.');
+        throw exception;
+    }
+}
+
+
+/**
  * __Tries to message a random user based off of who it can find in the #General channel.__
  * @param {WebClient} web The instance of the Slack Web Client.
  * @param {string} message The message you wish to send.
@@ -119,13 +190,8 @@ export async function messageAppHome(web: WebClient, message: string): Promise<W
     // Use the `apps.permissions.resources.list` method to find the conversation ID for an app home
     try {
         web.apps |> prettyJson |> Winston.debug;
-        const response = await web.apps.permissions.resources.list();
 
-        // Find the app home to use as the conversation to post a message
-        // At this point, there should only be one app home in the whole response since only one user has installed the app
-        response.resources |> prettyJson |> Winston.debug;
-        const appHome = response.resources.find(r => r.type === 'app_home');
-        // Use the `chat.postMessage` method to send a message from this app
+        const appHome = await getAppHome(web);
         appHome |> prettyJson |> Winston.debug;
         const result = await web.chat.postMessage({
             channel: appHome.id,
@@ -142,3 +208,8 @@ export async function messageAppHome(web: WebClient, message: string): Promise<W
     }
 }
 
+async function getAppHome(web: WebClient) {
+    const response = await web.apps.permissions.resources.list();
+    const appHome = response.resources.find(r => r.type === 'app_home');
+    return appHome;
+}
