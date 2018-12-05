@@ -5,6 +5,7 @@ import { Client } from '../borzoo/client';
 import { getUserBySlackId } from '../server/authorization/authorization.service';
 import Axios from 'axios';
 
+
 /**
  * __Provides a Login button to the user.__
  * @param {WebClient} web The instance of the Slack WebClient.
@@ -12,13 +13,12 @@ import Axios from 'axios';
  * @param {string} url The URL that you wish to redirect a user to after logging in.
  * @returns {Promise<WebAPICallResult>}
  */
-export async function loginPrompt(web: WebClient, userId: string, url: string): Promise<WebAPICallResult> {
+export async function loginPrompt(web: WebClient, userId: string, channelId: string, url: string): Promise<WebAPICallResult> {
     try {
         let webAppUrl = process.env.ZEVERE_WEB_APP_URL + '/login';
         let redirectUrl = `${url}?id=${userId}`;
         webAppUrl = `${webAppUrl}?redirect_uri=${encodeURIComponent(redirectUrl)}`;
-        //url = url |> encodeURIComponent;
-        return await web.chat.postMessage({
+        return await web.chat.postEphemeral({
             attachments: [
                 {
                     actions: [
@@ -29,10 +29,11 @@ export async function loginPrompt(web: WebClient, userId: string, url: string): 
                         }
                     ],
                     fallback: `Click here to login: ${webAppUrl}`,
-                    text:'Click here to login:',
+                    text: 'Click here to login:',
                 }
             ],
-            channel: userId,
+            channel: channelId,
+            user: userId,
             text: 'Please login to Zevere.',
         });
     } catch (exception) {
@@ -41,12 +42,112 @@ export async function loginPrompt(web: WebClient, userId: string, url: string): 
     }
 }
 
-export async function showListsForDeletion(web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
+
+/**
+ * Shows the list details to a user.
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} userId
+ * @param {string} channelId
+ * @param {string} listId
+ * @returns
+ */
+export async function showList(web: WebClient, userId: string, channelId: string, listId: string) {
     const bz = new Client();
-    const user = await getUserBySlackId(userId); 
+    const user = await getUserBySlackId(userId);
+    const lists = await bz.getLists(user.zevereId);
+    const list = lists.filter(l => l.id === listId)[0];
+    try {
+        const fields = [];
+        if (list.updatedAt)
+            fields.push({ title: 'Last Updated', value: list.updatedAt, short: true });
+        if (list.tags && list.tags.length > 0)
+            fields.push({ title: 'Tags', value: list.tags.reduce((p, c) => `${p} ${c}`), short: true });
+        if (list.createdAt)
+            fields.push({ title: 'Created On', value: list.createdAt, short: true });
+        return await web.chat.postMessage({
+            channel: channelId,
+            user: userId,
+            attachments: [
+                {
+                    fallback: `${list.title}: ${list.description}`,
+                    pretext: 'Here is your task list!',
+                    color: 'good',
+                    title: list.title,
+                    text: list.description,
+                    fields,
+                    callback_id: 'clearlist',
+                    actions: [
+                        {
+                            id: 'rmlist',
+                            type: 'button',
+                            text: 'Clear',
+                            name: 'rmlist',
+                        },
+                    ],
+                }
+            ]
+        });
+    } catch (err) {
+        Winston.info(err);
+        throw err;
+    }
+}
+
+
+/**
+ *
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} userId
+ * @param {string} channelId
+ * @returns {Promise<WebAPICallResult>}
+ */
+export async function showListsForSelection(web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
+    const bz = new Client();
+    const user = await getUserBySlackId(userId);
     const lists = await bz.getLists(user.zevereId);
     const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
-    Winston.info('channel:' +channelId);
+    return await web.chat.postEphemeral({
+        channel: channelId,
+        as_user: false,
+        user: userId,
+        attachments: [
+            {
+                text: 'Select a list to view:',
+                color: 'good',
+                callback_id: 'viewlist',
+                actions: [
+                    {
+                        id: 'lists',
+                        type: 'select',
+                        data_source: 'static',
+                        options: listOptions,
+                        name: 'list',
+                    },
+                ],
+            }
+        ]
+    });
+}
+
+
+/**
+ *
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} userId
+ * @param {string} channelId
+ * @returns {Promise<WebAPICallResult>}
+ */
+export async function showListsForDeletion(web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
+    const bz = new Client();
+    const user = await getUserBySlackId(userId);
+    const lists = await bz.getLists(user.zevereId);
+    const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
     return await web.chat.postEphemeral({
         channel: channelId,
         as_user: false,
@@ -62,22 +163,30 @@ export async function showListsForDeletion(web: WebClient, userId: string, chann
                         type: 'select',
                         data_source: 'static',
                         options: listOptions,
-                        name:'list',
+                        name: 'list',
                         confirm: {
                             text: 'Are you sure you want to delete the list?',
                             title: 'Confirm Deletion',
-                            dismiss_text:' Cancel',
+                            dismiss_text: ' Cancel',
                             ok_text: 'Delete'
                         }
                     },
                 ],
                 footer: 'Note: Once it is deleted, it is gone forever!'
-
             }
         ]
     });
 }
 
+
+/**
+ *
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} responseUrl
+ * @returns {Promise<any>}
+ */
 export async function confirmListDeletion(web: WebClient, responseUrl: string): Promise<any> {
     return await Axios.post(responseUrl, {
         response_type: 'ephemeral',
@@ -85,6 +194,25 @@ export async function confirmListDeletion(web: WebClient, responseUrl: string): 
         text: 'Deleted successfully.'
     });
 }
+
+
+/**
+ * Deletes a message using the response url.
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} responseUrl
+ * @returns {Promise<any>}
+ */
+export async function deleteMessage(web: WebClient, responseUrl: string): Promise<any> {
+    return await Axios.post(responseUrl, {
+        response_type: 'ephemeral',
+        text: '',
+        replace_original: true,
+        delete_original: true,
+    });
+}
+
 
 /**
  * __Sends the supplied message to the #General channel.__
@@ -111,6 +239,7 @@ export async function messageGeneralChat(web: WebClient, message: string): Promi
     }
 }
 
+
 /**
  * __Sends a direct message to a user.__ 
  * @param {WebClient} web The instance of the Slack Web Client.
@@ -119,10 +248,10 @@ export async function messageGeneralChat(web: WebClient, message: string): Promi
  * @returns {Promise<WebAPICallResult>}
  */
 export async function messageUser(web: WebClient, userId: string, message: string): Promise<WebAPICallResult> {
-    try{
+    try {
         return await web.chat.postMessage({
             channel: userId,
-            text: message 
+            text: message
         });
     }
     catch (exception) {
@@ -130,6 +259,7 @@ export async function messageUser(web: WebClient, userId: string, message: strin
         throw exception;
     }
 }
+
 
 /**
  *
@@ -140,10 +270,11 @@ export async function messageUser(web: WebClient, userId: string, message: strin
  * @param {string} message The message you wish to send to the aforementioned user.
  * @returns {Promise<WebAPICallResult>}
  */
-export async function messageUserEphemeral(web: WebClient, userId: string, message: string): Promise<WebAPICallResult> {
-    try{
+export async function messageUserEphemeral(web: WebClient, userId: string, channelId: string, message: string): Promise<WebAPICallResult> {
+    try {
         return await web.chat.postEphemeral({
-            channel: userId,
+            channel: channelId,
+            user: userId,
             text: message
         });
     }
@@ -151,65 +282,4 @@ export async function messageUserEphemeral(web: WebClient, userId: string, messa
         Winston.error('Exception caught in messaging#messageUserEphemeral.');
         throw exception;
     }
-}
-
-
-/**
- * __Tries to message a random user based off of who it can find in the #General channel.__
- * @param {WebClient} web The instance of the Slack Web Client.
- * @param {string} message The message you wish to send.
- * @returns {Promise<WebAPICallResult>}
- */
-export async function messageRandomUser(web: WebClient, message: string): Promise<WebAPICallResult> {
-    try {
-        const channelsResponse = await web.channels.list();
-        const general = channelsResponse.channels.find(c => c.name === 'general');
-        general.members |> Winston.debug;
-        const randomUser = general.members[(Math.random() * general.members.length) |> Math.floor];
-        'Random User ID: ' + randomUser |> Winston.info;
-        return await web.chat.postMessage({
-            channel: randomUser,
-            text: message || 'Hello random user'
-        });
-    }
-    catch (exception) {
-        Winston.error('Exception caught in messaging#messageRandomUser.');
-        throw exception;
-    }
-}
-
-
-/**
- * __EXPERIMENTAL FEATURE: Messages App Home.__
- * @see https://api.slack.com/changelog/2018-05-app-home-events-for-workspace-apps
- * @param {WebClient} web The instance of the Slack Web Client.
- * @param {string} message The message you wish to send.
- * @returns {Promise<WebAPICallResult>}
- */
-export async function messageAppHome(web: WebClient, message: string): Promise<WebAPICallResult> {
-    // Use the `apps.permissions.resources.list` method to find the conversation ID for an app home
-    try {
-        web.apps |> prettyJson |> Winston.debug;
-
-        const appHome = await getAppHome(web);
-        appHome |> prettyJson |> Winston.debug;
-        const result = await web.chat.postMessage({
-            channel: appHome.id,
-            text: message || 'Hello World'
-        });
-        'Message posted!' |> Winston.debug;
-        result |> prettyJson |> Winston.debug;
-
-        return result;
-    }
-    catch (exception) {
-        Winston.error('Exception caught in messaging#messageAppHome.');
-        throw exception;
-    }
-}
-
-async function getAppHome(web: WebClient) {
-    const response = await web.apps.permissions.resources.list();
-    const appHome = response.resources.find(r => r.type === 'app_home');
-    return appHome;
 }

@@ -114,7 +114,7 @@ export class Client {
             variables
         });
         Winston.info('Response data from #getLists:');
-        response.data |> prettyJson |>Winston.info;
+        response.data |> prettyJson |> Winston.info;
         return response.data.data.user.lists;
     }
 
