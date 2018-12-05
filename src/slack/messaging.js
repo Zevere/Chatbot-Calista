@@ -66,7 +66,7 @@ export async function showList(web: WebClient, userId: string, channelId: string
             fields.push({ title: 'Tags', value: list.tags.reduce((p, c) => `${p} ${c}`), short: true });
         if (list.createdAt)
             fields.push({ title: 'Created On', value: list.createdAt, short: true });
-        return await web.chat.postMessage({
+        return await web.chat.postEphemeral({
             channel: channelId,
             user: userId,
             attachments: [
