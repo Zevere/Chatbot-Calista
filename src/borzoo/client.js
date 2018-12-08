@@ -48,7 +48,7 @@ export class Client {
 
         Winston.debug('Response from #createTask:');
         response |> prettyJson |> Winston.debug;
-        return response.data.data;
+        return response.data.data.createTask;
     }
 
     /**

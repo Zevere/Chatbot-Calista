@@ -47,7 +47,6 @@ describe('Borzoo Client', function() {
         testList = await client.createList(owner, testInput);
 
         should.exist(testList);
-        testList.id.should.equal(testInput.id.toLowerCase());
         testList.title.should.equal(testInput.title);
         testList.description.should.equal(testInput.description);
 
@@ -59,8 +58,7 @@ describe('Borzoo Client', function() {
             title: `testTitle${rndChars}`,
             description: `testDesc${rndChars}`
         };
-        testTask = await client.createTask(owner, `${testList.id}`, taskInput);
-
+        testTask = await client.createTask(owner, testList.id, taskInput);
         testTask.title.should.equal(taskInput.title);
         testTask.description.should.equal(taskInput.description);
     });
