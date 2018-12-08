@@ -53,18 +53,16 @@ describe('Borzoo Client', function() {
 
     });
 
-    it('#addTask adds a task to a list', async function () {
+    it('#createTask adds a task to a list', async function () {
         const taskInput: TaskInput = {
             id: `testId${rndChars}`,
             title: `testTitle${rndChars}`,
             description: `testDesc${rndChars}`
         };
-        testTask = await client.addTask(owner, `${testList.id}`, taskInput);
+        testTask = await client.createTask(owner, `${testList.id}`, taskInput);
 
-        // TODO: Uncomment this when add task is ready
-        // testTask.id.should.equal(taskInput.id.toLowerCase());
-        // testTask.title.should.equal(taskInput.title);
-        // testTask.description.should.equal(taskInput.description);
+        testTask.title.should.equal(taskInput.title);
+        testTask.description.should.equal(taskInput.description);
     });
 
     it('# gives a list of a user\'s lists', async function () {
