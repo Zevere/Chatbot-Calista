@@ -28,25 +28,22 @@ export class Client {
     /**
      * Adds a task to a chosen list for a user.
      *
-     * @param {string} owner - The owner of the task.
+     * @param {string} userId - The owner of the task.
      * @param {string} list - The list ID or name.
      * @param {TaskInput} task - Information about the task you wish to create.
      * @returns {Promise<Task>} A promise containing the created task.
      * @memberof Client
      */
-    async createTask(owner: string, list: string, task: TaskInput): Promise<Task> {
+    async createTask(userId: string, listId: string, task: TaskInput): Promise<Task> {
         const mutation = `
         mutation ZevereMutation($userId: String!, $listId: String!, $task: TaskInput!) { 
-            createTask(owner: $userId, list: $listId, task: $task) { 
+            createTask(ownerId: $userId, listId: $listId, task: $task) { 
                 id title description due tags createdAt
             }
         }`;
-        const variables = {
-            owner, list, task
-        };
         const response = await this.client.post('', {
             query: mutation,
-            variables
+            variables: { userId, listId, task }
         });
 
         Winston.debug('Response from #createTask:');
