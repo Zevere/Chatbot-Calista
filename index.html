@@ -43,7 +43,9 @@
 
 
     <section>
-        <article><h1>Calista</h1><h2>Manage your tasks on Zevere using Slack.</h2><p><a href="package.json"><img src="https://img.shields.io/david/zevere/chatbot-calista.svg" alt="Dependencies"></a>
+        <article><h1>Calista</h1><h2>Manage your tasks on Zevere using Slack.</h2><p>This app allows users to use Slack as a way to manage their tasks on Zevere by harnassing the power of slash commands and dialogs. 
+This includes creating, reading, and deleting both tasks and task lists.</p>
+<p><a href="package.json"><img src="https://img.shields.io/david/zevere/chatbot-calista.svg" alt="Dependencies"></a>
 <a href="https://hub.docker.com/r/zevere/chatbot-calista"><img src="https://img.shields.io/docker/pulls/zevere/chatbot-calista.svg" alt="Docker Badge"></a>
 <a href="LICENSE"><img src="https://img.shields.io/github/license/zevere/chatbot-calista.svg" alt="License"></a></p>
 <table>
@@ -82,121 +84,11 @@
 </tr>
 </tbody>
 </table>
-<h2>Table of Contents</h2><ul>
-<li><a href="#calista">Calista</a><ul>
-<li><a href="#manage-your-tasks-on-zevere-using-slack">Manage your tasks on Zevere using Slack.</a></li>
-<li><a href="#table-of-contents">Table of Contents</a></li>
-<li><a href="#documentation">Documentation</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#development">Development</a><ul>
-<li><a href="#install-dependencies">Install Dependencies</a></li>
-<li><a href="#running-in-development">Running in Development</a></li>
-<li><a href="#exposing-the-application">Exposing the Application</a></li>
-</ul>
-</li>
-<li><a href="#secrets">Secrets</a><ul>
-<li><a href="#secret-descriptions">Secret Descriptions</a></li>
-<li><a href="#mandatory-secrets">Mandatory Secrets</a></li>
-<li><a href="#optional-secrets">Optional Secrets</a></li>
-</ul>
-</li>
-<li><a href="#build-docker-image">Build Docker Image</a></li>
-</ul>
-</li>
-</ul>
 <h2>Documentation</h2><ul>
 <li><a href="https://zevere.github.io/Chatbot-Calista/">API Docs</a></li>
 <li><a href="https://zevere.github.io/Chatbot-Calista/coverage/lcov-report/">Test Coverage Report</a></li>
-</ul>
-<h2>Overview</h2><p>This app allows users to use Slack as a way to manage their tasks on Zevere. This includes creating tasks
-and viewing their task lists. Users will be able to ask the Zevere bot in plain English and get back a
-response related to what they want through the usage of <a href="https://github.com/Zevere/NLP-Python">NLP</a>.</p>
-<h2>Development</h2><p>This project makes use of experimental Node.js features. It is recommended you use an IDE or editor that supports linting with the .eslintrc provided. Visual Studio Code is recommended.</p>
-<h3>Install Dependencies</h3><p>Run</p>
-<pre class="prettyprint source"><code>npm i</code></pre><p>or </p>
-<pre class="prettyprint source"><code>make install</code></pre><h3>Running in Development</h3><p>To run this app in development, it is best to use the Webpack Dev Server with the nodemon plugin. You may
-use it by running <code>npm run watch</code>.</p>
-<h3>Exposing the Application</h3><p>To expose the server hosted locally, it is best if you use <a href="https://github.com/localtunnel/localtunnel">LocalTunnel</a>. Opening ports on your computer, router, and port forwarding
-is not worth the effort. </p>
-<p>Install LocalTunnel with npm:</p>
-<pre class="prettyprint source"><code>npm i -g localtunnel</code></pre><p>Run localtunnel like this:</p>
-<pre class="prettyprint source"><code>lt --port 8080 --subdomain delicious-velociraptor-88</code></pre><h2>Secrets</h2><p>This app contains a swathe of secrets that must be used. They may be loaded through a .env file, or added 
-directly to an OS's environment, as well has hosted environments such as Heroku or Travis. Wherever they are
-placed, make sure they are accessible at runtime.</p>
-<h3>Secret Descriptions</h3><p>Note: <em>The CLIENT_ID, CLIENT_SECRET, and SIGNING_SECRET can all be found on: https://api.slack.com/apps/APP_NAME/general (once again replace APP_NAME with the actual app name).</em></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>ZEVERE_SLACK_TOKEN</strong></td>
-<td><em>This is your OAuth Access token. To get your OAuth Access token for your slack app, check https://api.slack.com/apps/APP_NAME/oauth? where APP_NAME is the name of your app.</em></td>
-</tr>
-<tr>
-<td><strong>CLIENT_ID</strong></td>
-<td><em>An identifier for your Slack API client.</em></td>
-</tr>
-<tr>
-<td><strong>CLIENT_SECRET</strong></td>
-<td><em>A secret used for OAuth.</em></td>
-</tr>
-<tr>
-<td><strong>SIGNING_SECRET</strong></td>
-<td><em>An HMAC-256 signed secret for verifying that a message came from Slack.</em></td>
-</tr>
-<tr>
-<td><strong>DB_CONNECTION_STRING</strong></td>
-<td><em>A MongoDB connection string to store data for this app.</em></td>
-</tr>
-<tr>
-<td><strong>VIVID_URL</strong></td>
-<td><em>The URL to the <a href="https://github.com/Zevere/BotOps-Vivid">BotOps-Vivid</a> server.</em></td>
-</tr>
-<tr>
-<td><strong>VIVID_USERNAME</strong></td>
-<td><em>The username used for the Basic Auth on Vivid.</em></td>
-</tr>
-<tr>
-<td><strong>VIVID_PASSWORD</strong></td>
-<td><em>The password used for the Basic Auth on Vivid.</em></td>
-</tr>
-<tr>
-<td><strong>ZEVERE_WEB_APP_URL</strong></td>
-<td><em>The URL for which the <a href="https://github.com/Zevere/WebApp-Coherent">Web App</a> resides.</em></td>
-</tr>
-<tr>
-<td><strong>BORZOO_URL</strong></td>
-<td><em>The URL for which the <a href="https://github.com/Zevere/WebAPI-Borzoo">Borzoo GraphQL API</a> resides.</em></td>
-</tr>
-<tr>
-<td><strong>APP_LOGS</strong></td>
-<td><em>A directory where <a href="https://github.com/winstonjs/winston">Winston</a> and <a href="https://github.com/expressjs/morgan">Morgan</a> will place their logs.</em></td>
-</tr>
-<tr>
-<td><strong>NODE_ENV</strong></td>
-<td><em>The environment for Node. It is mainly used to remove verbose output when it is not set to <code>'development'</code>.</em></td>
-</tr>
-</tbody>
-</table>
-<h3>Mandatory Secrets</h3><p>Below are the mandatory secrets and how they should look in your env.</p>
-<pre class="prettyprint source"><code>ZEVERE_SLACK_TOKEN='xoxa-some-really-long-token'
-CLIENT_ID='abunchofrandom.numbers'
-CLIENT_SECRET='abunchofrandomlettersandnumbers'
-SIGNING_SECRET='evenMoreRandomLetters'
-DB_CONNECTION_STRING='mongodb://johncena:Cant533th1spa55w0rd@www.yourhost.com:12345/db-name'
-VIVID_URL='https://zv-s-botops-vivid.herokuapp.com'
-VIVID_USERNAME='foobar'
-VIVID_PASSWORD='str0ngpa55w0rd'
-ZEVERE_WEB_APP_URL='https://zv-s-webapp-coherent.herokuapp.com'
-BORZOO_URL='https://zv-s-webapi-borzoo.herokuapp.com'</code></pre><h3>Optional Secrets</h3><p>You may optionally include these other environment variables:</p>
-<pre class="prettyprint source"><code>APP_LOGS='/logs/calista'
-NODE_ENV='development'</code></pre><h2>Build Docker Image</h2><p>To build the docker image, run </p>
-<pre class="prettyprint source"><code>make build</code></pre><p>or </p>
-<pre class="prettyprint source"><code>touch .env && docker build -t zevere/calista .</code></pre></article>
+<li><a href="DEVELOPMENT.md">Development Guide</a></li>
+</ul></article>
     </section>
 
 
@@ -213,7 +105,7 @@ NODE_ENV='development'</code></pre><h2>Build Docker Image</h2><p>To build the do
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Dec 08 2018 19:30:19 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Dec 08 2018 21:57:57 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
