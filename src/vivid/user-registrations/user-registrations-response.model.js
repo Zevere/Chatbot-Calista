@@ -17,12 +17,7 @@ UserRegistrationsResponse: {
 }
 ```
 */
-export class UserRegistrationsResponse {
-    username: string;
-    registrations: UserRegistration[];
-
-    constructor() {
-        this.username = '';
-        this.registrations = [];
-    }
-}
+export type UserRegistrationsResponse = {
+    username: string,
+    registrations: UserRegistration[],
+};

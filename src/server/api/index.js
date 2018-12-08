@@ -1,12 +1,14 @@
 import { Router } from 'express';
+import { validateUser } from '../authorization/authorization.middleware';
 
 import loginRouter from './login/login.router';
 import messageRouter from './message/message.router';
-import { validateUser } from '../authorization/authorization.middleware';
 import profileRouter from './profile/profile.router';
 import interactiveRouter from './interactive/interactive.router';
 import dialogsRouter from './dialogs/dialogs.router';
 import optionsRouter from './options/options.router';
+import disconnectRouter from './disconnect/disconnect.router';
+
 
 /**
  * __Router to handle API routes. Has nested routers for
@@ -24,6 +26,7 @@ function apiRouter(): Router {
     router.use('/message', messageRouter);
     router.use('/profile', profileRouter);
     router.use('/dialogs', dialogsRouter);
+    router.use('/disconnect', disconnectRouter);
     return router;
 }
 

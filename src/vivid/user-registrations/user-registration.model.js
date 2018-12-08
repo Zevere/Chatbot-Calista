@@ -15,14 +15,8 @@
 }
 ```
 */
-export class UserRegistration {
-    platform: string;
-    botId: string;
-    chatUserId: string;
-    
-    constructor() {
-        this.platform = '';
-        this.botId = '';
-        this.chatUserId = '';
-    }
-}
+export type UserRegistration = {
+    platform: string,
+    botId: string,
+    chatUserId: string,
+};

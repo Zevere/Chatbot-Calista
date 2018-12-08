@@ -15,13 +15,8 @@ Error: {
 }
 ```
 */
-export class VividError {
-    code: string;
-    message: string;
-    hint: string;
-    constructor() {
-        this.code = '';
-        this.message = '';
-        this.hint = '';
-    }
-}
+export type VividError = {
+    code: string,
+    message: string,
+    hint: string,
+};

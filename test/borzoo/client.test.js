@@ -6,7 +6,6 @@ import { TaskInput } from '../../src/borzoo/task-input.model';
 import { List } from '../../src/borzoo/list.model';
 import { Task } from '../../src/borzoo/task.model';
 import dotenv from 'dotenv';
-import { fail } from 'assert';
 import Axios from 'axios';
 dotenv.load();
 

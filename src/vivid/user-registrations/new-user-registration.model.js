@@ -18,11 +18,7 @@ Example:
 }
 ```
 */
-export class NewUserRegistration {
-    username: string;
-    chatUserId: string;
-    constructor() {
-        this.username = '';
-        this.chatUserId = '';
-    }
-}
+export type NewUserRegistration = {
+    username: string,
+    chatUserId: string,
+};

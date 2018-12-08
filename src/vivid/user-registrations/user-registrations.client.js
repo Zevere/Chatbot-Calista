@@ -39,7 +39,7 @@ export async function getUserRegistrationsByUsername(username: string): Promise<
  * 
  * @param username The username of the Zevere User
 */
-export async function unregisterUserByUsername(username: string): Promise<void> {
+export async function unregisterUserByUsername(username: string): Promise<boolean> {
     const axios = axiosForVivid();
     const url = `${basePath}/${username}`;
     const response: AxiosResponse<?VividError> = await axios.delete(url);
@@ -47,8 +47,9 @@ export async function unregisterUserByUsername(username: string): Promise<void> 
         const err = response.data;
         Winston.error('Could not unregister user: ' + username);
         err |> prettyJson |> Winston.error;
-        throw Error(err);
+        return false;
     }
+    return true;
 }
 
 /** 
@@ -64,9 +65,10 @@ export async function unregisterUserByUsername(username: string): Promise<void> 
 export async function registerUser(zevereUsername: string, slackId: string): Promise<UserRegistration> {
     Winston.info(`Attempting to register user on Vivid. Slack ID: '${slackId}', Zevere ID: '${zevereUsername}'`);
     const axios = axiosForVivid();
-    const newUserRegistration = new NewUserRegistration();
-    newUserRegistration.username = zevereUsername;
-    newUserRegistration.chatUserId = slackId;
+    const newUserRegistration: NewUserRegistration = {
+        username: zevereUsername,
+        chatUserId: slackId,
+    };
     try {
         const response = await axios.post(basePath, newUserRegistration);
     
