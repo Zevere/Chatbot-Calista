@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: vivid/profile/user-profile.model.js</title>
+    <title>JSDoc: Source: slack/dialogs.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: vivid/profile/user-profile.model.js</h1>
+    <h1 class="page-title">Source: slack/dialogs.js</h1>
 
     
 
@@ -26,38 +26,118 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// @flow
-/**
-``` 
-  UserProfile: {
-    description: Profile of a Zevere user
-    id:
-     type:         string
-     description:  User ID
-    firstName:	
-      type:        string
-      description: User first name
-    lastName:
-      type:        string
-      description: User last name
-    joinedAt:	
-      type:        string($date-time)
-      description: The date account was created in UTC
-  }
-```
- */
-export class UserProfile {
-    id: string;
-    firstName: string;
-    lastName: string;
-    joinedAt: string;
+            <pre class="prettyprint source linenums"><code>import { WebAPICallResult, WebClient } from '@slack/client';
+import Winston from '../logging/app.logger';
+import { Dialog } from '@slack/client/dist/methods';
 
-    constructor() {
-        this.id = '';
-        this.firstName = '';
-        this.lastName = '';
-        this.joinedAt = '';
-    }
+
+function dialogOf(dialog: Dialog) {
+    return async (web: WebClient, text: string, triggerId: string) => {
+        try {
+            return await web.dialog.open({
+                token: process.env.ZEVERE_SLACK_TOKEN,
+                trigger_id: triggerId,
+                dialog
+            });
+        } catch (error) {
+            Winston.error('Exception caught in dialog creation.');
+            error |> Winston.error;
+            throw error;
+        }
+    };
+}
+
+/**
+ * Shows a Dialog for task creation.
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} text
+ * @param {string} triggerId
+ * @returns {Promise&lt;WebAPICallResult>}
+ */
+export async function createTask(web: WebClient, text: string, triggerId: string): Promise&lt;WebAPICallResult> {
+    const dialog: Dialog = {
+        callback_id: 'createtask',
+        title: 'Create a Task on Zevere',
+        elements: [
+            {
+                label: 'Title',
+                name: 'title',
+                type: 'text',
+                hint: 'The title of your new task.',
+                value: text || 'New Task'
+            },
+            {
+                label: 'Description',
+                type: 'textarea',
+                name: 'description',
+                optional: true,
+            },
+            {
+                label: 'List',
+                name: 'tasklist',
+                type: 'select',
+                data_source: 'external',
+            },
+        ]
+    };
+
+    return await ((dialog |> dialogOf)(web, text, triggerId));
+}
+
+
+/**
+ * 
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} text
+ * @param {string} triggerId
+ * @returns {Promise&lt;WebAPICallResult>}
+ */
+export async function createList(web: WebClient, text: string, triggerId: string): Promise&lt;WebAPICallResult> {
+    const dialog: Dialog = {
+        callback_id: 'createlist',
+        title: 'Create a List on Zevere',
+        submit_label: 'Create',
+        elements: [
+            {
+                label: 'Title',
+                name: 'title',
+                type: 'text',
+                hint: 'The title of your new list.',
+                value: text || '',
+                optional: false
+            },
+            {
+                label: 'Description',
+                type: 'textarea',
+                name: 'description',
+                hint: 'A description of your list.',
+                optional: true,
+            },
+        ]
+    };
+    return await ((dialog |> dialogOf)(web, text, triggerId));
+}
+
+
+export async function deleteList(web: WebClient, text: string, triggerId: string): Promise&lt;WebAPICallResult> {
+    const dialog: Dialog = {
+        callback_id: 'deletelist',
+        title: 'Delete a List on Zevere',
+        submit_label: 'Delete',
+        elements: [
+            {
+                label: 'Lists',
+                type: 'select',
+                name: 'list',
+                data_source: 'external'
+            }
+        ]
+    };
+    return await ((dialog |> dialogOf)(web, text, triggerId));
 }
 </code></pre>
         </article>

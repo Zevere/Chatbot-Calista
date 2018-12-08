@@ -56,34 +56,31 @@ export class Client {
     /**
      * Adds a task to a chosen list for a user.
      *
-     * @param {string} owner - The owner of the task.
+     * @param {string} userId - The owner of the task.
      * @param {string} list - The list ID or name.
      * @param {TaskInput} task - Information about the task you wish to create.
      * @returns {Promise&lt;Task>} A promise containing the created task.
      * @memberof Client
      */
-    async addTask(owner: string, list: string, task: TaskInput): Promise&lt;Task> {
+    async createTask(userId: string, listId: string, task: TaskInput): Promise&lt;Task> {
         const mutation = `
         mutation ZevereMutation($userId: String!, $listId: String!, $task: TaskInput!) { 
-            addTask(owner: $userId, list: $listId, task: $task) { 
+            createTask(ownerId: $userId, listId: $listId, task: $task) { 
                 id title description due tags createdAt
             }
         }`;
-        const variables = {
-            owner, list, task
-        };
-        const response =  await this.client.post('', {
-            query: mutation, 
-            variables
+        const response = await this.client.post('', {
+            query: mutation,
+            variables: { userId, listId, task }
         });
 
-        Winston.info('Response from #addTask:');
-        response |> prettyJson |> Winston.info;
-        return response.data.data;
+        Winston.debug('Response from #createTask:');
+        response |> prettyJson |> Winston.debug;
+        return response.data.data.createTask;
     }
 
     /**
-     * 
+     * Creates a list on Zevere and returns the created list if successful.
      *
      * @param {string} owner
      * @param {ListInput} list
@@ -91,8 +88,8 @@ export class Client {
      * @memberof Client
      */
     async createList(owner: string, list: ListInput): Promise&lt;List> {
-        Winston.info('Received list input in #createList:');
-        list |> prettyJson |> Winston.info;
+        Winston.debug('Received list input in #createList:');
+        list |> prettyJson |> Winston.debug;
         const mutation = `
             mutation CreateListMutation($owner: String! $list: ListInput!) { 
                 createList(owner: $owner, list: $list) { 
@@ -103,18 +100,47 @@ export class Client {
             owner, list
         };
         try {
-            let response = await this.client.post('', {
+            const response = await this.client.post('', {
                 query: mutation,
                 variables
             });
-            Winston.info('Response data from #createList:');
-            response.data |> prettyJson |> Winston.info;
+            Winston.debug('Response data from #createList:');
+            response.data |> prettyJson |> Winston.debug;
             return response.data.data.createList;
         } catch (err) {
             Winston.error('Error caught in #createList:');
             err |> Winston.error;
             throw err;
         }
+    }
+
+    /**
+     * Retrieves a list from Zevere.
+     *
+     * @param {string} owner
+     * @param {string} listId
+     * @returns {Promise&lt;List>}
+     * @memberof Client
+     */
+    async getList(owner: string, listId: string): Promise&lt;List> {
+        const query = `
+            query GetListQuery($owner: String!, $listId: String!){
+                user(userId: $owner) {
+                    list(listId: $listId) {
+                        id title description owner createdAt updatedAt tasks {
+                            id title description
+                        }
+                    }
+                }
+            }
+        `;
+        const response = await this.client.post('', {
+            query,
+            variables: { owner, listId }
+        });
+        Winston.debug('Response data from #getLists:');
+        response.data |> prettyJson |> Winston.debug;
+        return response.data.data.user.list;
     }
 
     /**
@@ -134,15 +160,12 @@ export class Client {
                 }
             }
         `;
-        const variables = {
-            owner
-        };
-        let response = await this.client.post('', {
+        const response = await this.client.post('', {
             query,
-            variables
+            variables: { owner }
         });
-        Winston.info('Response data from #getLists:');
-        response.data |> prettyJson |> Winston.info;
+        Winston.debug('Response data from #getLists:');
+        response.data |> prettyJson |> Winston.debug;
         return response.data.data.user.lists;
     }
 
@@ -172,12 +195,46 @@ export class Client {
         return res;
     }
 
-    async getTasks(owner: string, listId: string) { // eslint-disable-line no-unused-vars
-        throw Error('Unimplemented');
+    /**
+     * Gets all of the tasks for a specified list.
+     *
+     * @param {string} owner
+     * @param {string} listId
+     * @returns {Promise&lt;Task[]>}
+     * @memberof Client
+     */
+    async getTasks(owner: string, listId: string): Promise&lt;Task[]> {
+        const query = `
+            query GetTasksQuery($owner: String!, $listId: String!){
+                user(userId: $owner) {
+                    list(listId: $listId) {
+                        tasks { id title description createdAt }
+                    }
+                }
+            }
+        `;
+        const response = await this.client.post('', {
+            query,
+            variables: { owner, listId }
+        });
+        Winston.debug('Response data from #getTasks:');
+        response.data |> prettyJson |> Winston.debug;
+        return response.data.data.user.list.tasks;
     }
 
+    /**
+     * Gets the specified task in the specified list.
+     *
+     * @param {string} owner
+     * @param {string} listId
+     * @param {string} taskId
+     * @returns
+     * @memberof Client
+     */
     async getTask(owner: string, listId: string, taskId: string) { // eslint-disable-line no-unused-vars
-        throw Error('Unimplemented');
+        const tasks = await this.getTasks(owner, listId);
+        Winston.info(`Tasks: ${JSON.stringify(tasks)}`);
+        return tasks.find(t => t.id === taskId);
     }
 
     login(loginInput: LoginInput) { // eslint-disable-line no-unused-vars
@@ -194,13 +251,13 @@ export class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Dec 05 2018 04:47:32 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Dec 08 2018 15:54:29 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
