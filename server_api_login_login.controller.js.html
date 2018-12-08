@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: borzoo/login-input.model.js</title>
+    <title>JSDoc: Source: server/api/login/login.controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: borzoo/login-input.model.js</h1>
+    <h1 class="page-title">Source: server/api/login/login.controller.js</h1>
 
     
 
@@ -26,27 +26,45 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// @flow
+            <pre class="prettyprint source linenums"><code>import { loginPrompt, messageUserEphemeral } from '../../../slack/messaging';
+import { NextFunction, Request, Response } from 'express';
+import Winston from '../../../logging/app.logger';
+import { prettyJson } from '../../../logging/format';
+import { SlackClient } from '../../../slack';
+import { userIsRegistered } from '../../authorization/authorization.service';
+
+
 /**
- * Input for user login.
- * @type LoginInput
+ * Prompts the user with a message to login to Zevere if they have not connected
+ * their account yet.
+ * @export
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @returns
  */
-export type LoginInput = {
+export async function promptLogin(req: Request, res: Response, next: NextFunction) {
+    const client = new SlackClient();
+    try {
+        res.status(200).send('Got it!'); // basic receipt: https://api.slack.com/slash-commands?#responding_basic_receipt
+        req.body |> prettyJson |> Winston.debug;
+        const {
+            user_id,
+            channel_id
+        } = req.body; 
+        if(await userIsRegistered(user_id)) {
+            return await messageUserEphemeral(client, user_id, channel_id, 'You are already connected to Zevere.');
+        }
 
-    /**
-     * User ID.
-     * @type {string}
-     * @memberof LoginInput
-     */
-    username: string,
-
-    /**
-     * Passphrase in clear text.
-     * @type {string}
-     * @memberof LoginInput
-     */
-    passphrase: string,
-};
+        const url = `https://${req.get('host')}`;
+        await loginPrompt(client, user_id, channel_id, url);
+    }
+    catch (exception) {
+        Winston.error('Exception in #promptLogin');
+        exception |> prettyJson |> Winston.error;
+        next(exception);
+    }
+}
 </code></pre>
         </article>
     </section>

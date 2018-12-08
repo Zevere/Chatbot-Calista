@@ -570,6 +570,82 @@ daily log rotation.</p>
 
         
             
+<h4 class="name" id="NewUserRegistration"><span class="type-signature">(constant) </span>NewUserRegistration<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <pre class="prettyprint source"><code>NewUserRegistration: {
+  description:   Contains arguments for associating a Zevere user to his account on a chat platform
+  username:
+    type:        string
+    description: ID of the Zevere user account
+  chatUserId:    
+    type:        string
+    description: Unique identifier of the user on the chat platform
+  }
+
+Example:
+{
+  &quot;username&quot;: &quot;string&quot;,
+  &quot;chatUserId&quot;: &quot;string&quot;
+}</code></pre>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vivid_user-registrations_new-user-registration.model.js.html">vivid/user-registrations/new-user-registration.model.js</a>, <a href="vivid_user-registrations_new-user-registration.model.js.html#line2">line 2</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="Options"><span class="type-signature">(constant) </span>Options<span class="type-signature"></span></h4>
 
 
@@ -916,6 +992,225 @@ daily log rotation.</p>
 
 
         
+            
+<h4 class="name" id="UserRegistration"><span class="type-signature">(constant) </span>UserRegistration<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <pre class="prettyprint source"><code>  UserRegistration: {
+    description: Contains information of a user and the bot connected to him on a specific chat platform
+    platform:
+      type:        string
+      description: Name of the chat platform
+    botId:
+      type:        string
+      description: Unique identifier of the bot that registered that user
+    chatUserId:
+      type:        string
+      description: Unique identifier of the user on that chat platform
+}</code></pre>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vivid_user-registrations_user-registration.model.js.html">vivid/user-registrations/user-registration.model.js</a>, <a href="vivid_user-registrations_user-registration.model.js.html#line2">line 2</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="UserRegistrationsResponse"><span class="type-signature">(constant) </span>UserRegistrationsResponse<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <pre class="prettyprint source"><code>UserRegistrationsResponse: {
+    description: Contains a list of associations of a Zevere account with chat platforms
+    username:
+      type:        string
+      description: ID of the Zevere user account
+    registrations: [
+      type:        UserRegistration
+      description: List of user registrations
+      minLength:   1
+      uniqueItems: false
+    ]
+}</code></pre>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vivid_user-registrations_user-registrations-response.model.js.html">vivid/user-registrations/user-registrations-response.model.js</a>, <a href="vivid_user-registrations_user-registrations-response.model.js.html#line4">line 4</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="VividError"><span class="type-signature">(constant) </span>VividError<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <pre class="prettyprint source"><code>Error: {
+  description:   Represents an operation error
+  code:
+    type:        string
+    description: Machine-readable error code
+  message:
+    type:        string
+    description: Human-readable error message
+  hint:
+    type:        string
+    description: A hint to the user for correcting the error
+}</code></pre>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vivid_vivid-error.model.js.html">vivid/vivid-error.model.js</a>, <a href="vivid_vivid-error.model.js.html#line2">line 2</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
     
 
     
@@ -980,7 +1275,7 @@ the routes that branch off of it.</strong></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api_index.js.html">server/api/index.js</a>, <a href="server_api_index.js.html#line11">line 11</a>
+        <a href="server_api_index.js.html">server/api/index.js</a>, <a href="server_api_index.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -3578,6 +3873,194 @@ the routes that branch off of it.</strong></p>
     
 
     
+    <h4 class="name" id="promptLogin"><span class="type-signature">(async) </span>promptLogin<span class="signature">(req, res, next)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Prompts the user with a message to login to Zevere if they have not connected
+their account yet.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Response</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>next</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">NextFunction</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="server_api_login_login.controller.js.html">server/api/login/login.controller.js</a>, <a href="server_api_login_login.controller.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="registerUser"><span class="type-signature">(async) </span>registerUser<span class="signature">(zevereId, slackId)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
     
 
@@ -3874,7 +4357,7 @@ the routes that branch off of it.</strong></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vivid_user-registrations_user-registrations.client.js.html">vivid/user-registrations/user-registrations.client.js</a>, <a href="vivid_user-registrations_user-registrations.client.js.html#line54">line 54</a>
+        <a href="vivid_user-registrations_user-registrations.client.js.html">vivid/user-registrations/user-registrations.client.js</a>, <a href="vivid_user-registrations_user-registrations.client.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -5475,13 +5958,13 @@ choose to delete one.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="NewUserRegistration.html">NewUserRegistration</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li><li><a href="UserRegistration.html">UserRegistration</a></li><li><a href="UserRegistrationsResponse.html">UserRegistrationsResponse</a></li><li><a href="VividError.html">VividError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#validateSlack">validateSlack</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Dec 08 2018 18:15:21 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Dec 08 2018 19:30:19 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
