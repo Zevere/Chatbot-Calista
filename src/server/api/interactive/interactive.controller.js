@@ -4,10 +4,11 @@ import { prettyJson } from '../../../logging/format';
 import { SlackClient } from '../../../slack';
 import { Client as BorzooClient } from '../../../borzoo/client';
 import { getUserBySlackId } from '../../authorization/authorization.service';
-import { confirmListDeletion, deleteMessage, showList, messageUserEphemeral } from '../../../slack/messaging';
+import { confirmListDeletion, deleteMessage, showList, messageUserEphemeral, showTask } from '../../../slack/messaging';
 
 /**
  * This endpoint is used by Slack when using interactive components.
+ * @see https://api.slack.com/interactive-messages
  * @param {Request} req 
  * @param {Response} res 
  * @param {NextFunction} next 
@@ -35,10 +36,10 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
         switch (callback_id) {
             case 'createtask': {
                 Winston.info(`Creating task ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
-                const createdTask = await bz.addTask(user.zevereId, submission.tasklist, submission);
+                const createdTask = await bz.createTask(user.zevereId, submission.tasklist, submission);
                 Winston.info('List created.');
                 createdTask |> prettyJson |> Winston.info;
-                await messageUserEphemeral(slack, user.slackId, channel.id,`Your task list, "${submission.title}" has been created!`);
+                await messageUserEphemeral(slack, user.slackId, channel.id,`Your task, "${submission.title}" has been created!`);
                 break;
             }
 
@@ -78,8 +79,16 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
                 await showList(slack, user.slackId, channel.id, listId);
                 break;
             }
+            
+            case 'viewtask': {
+                const ids = JSON.parse(actions[0].value);
+                ids |> prettyJson |> Winston.debug;
+                await deleteMessage(slack, response_url);
+                await showTask(slack, user, channel.id, ids.listId, ids.taskId);
+                break;
+            }
+
             case 'deletetask':
-            case 'viewtask':
             default:
                 break;
         }

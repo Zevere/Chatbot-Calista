@@ -34,28 +34,28 @@ export class Client {
      * @returns {Promise<Task>} A promise containing the created task.
      * @memberof Client
      */
-    async addTask(owner: string, list: string, task: TaskInput): Promise<Task> {
+    async createTask(owner: string, list: string, task: TaskInput): Promise<Task> {
         const mutation = `
         mutation ZevereMutation($userId: String!, $listId: String!, $task: TaskInput!) { 
-            addTask(owner: $userId, list: $listId, task: $task) { 
+            createTask(owner: $userId, list: $listId, task: $task) { 
                 id title description due tags createdAt
             }
         }`;
         const variables = {
             owner, list, task
         };
-        const response =  await this.client.post('', {
-            query: mutation, 
+        const response = await this.client.post('', {
+            query: mutation,
             variables
         });
 
-        Winston.info('Response from #addTask:');
-        response |> prettyJson |> Winston.info;
+        Winston.debug('Response from #createTask:');
+        response |> prettyJson |> Winston.debug;
         return response.data.data;
     }
 
     /**
-     * 
+     * Creates a list on Zevere and returns the created list if successful.
      *
      * @param {string} owner
      * @param {ListInput} list
@@ -63,8 +63,8 @@ export class Client {
      * @memberof Client
      */
     async createList(owner: string, list: ListInput): Promise<List> {
-        Winston.info('Received list input in #createList:');
-        list |> prettyJson |> Winston.info;
+        Winston.debug('Received list input in #createList:');
+        list |> prettyJson |> Winston.debug;
         const mutation = `
             mutation CreateListMutation($owner: String! $list: ListInput!) { 
                 createList(owner: $owner, list: $list) { 
@@ -75,18 +75,47 @@ export class Client {
             owner, list
         };
         try {
-            let response = await this.client.post('', {
+            const response = await this.client.post('', {
                 query: mutation,
                 variables
             });
-            Winston.info('Response data from #createList:');
-            response.data |> prettyJson |> Winston.info;
+            Winston.debug('Response data from #createList:');
+            response.data |> prettyJson |> Winston.debug;
             return response.data.data.createList;
         } catch (err) {
             Winston.error('Error caught in #createList:');
             err |> Winston.error;
             throw err;
         }
+    }
+
+    /**
+     * Retrieves a list from Zevere.
+     *
+     * @param {string} owner
+     * @param {string} listId
+     * @returns {Promise<List>}
+     * @memberof Client
+     */
+    async getList(owner: string, listId: string): Promise<List> {
+        const query = `
+            query GetListQuery($owner: String!, $listId: String!){
+                user(userId: $owner) {
+                    list(listId: $listId) {
+                        id title description owner createdAt updatedAt tasks {
+                            id title description
+                        }
+                    }
+                }
+            }
+        `;
+        const response = await this.client.post('', {
+            query,
+            variables: { owner, listId }
+        });
+        Winston.debug('Response data from #getLists:');
+        response.data |> prettyJson |> Winston.debug;
+        return response.data.data.user.list;
     }
 
     /**
@@ -106,15 +135,12 @@ export class Client {
                 }
             }
         `;
-        const variables = {
-            owner
-        };
-        let response = await this.client.post('', {
+        const response = await this.client.post('', {
             query,
-            variables
+            variables: { owner }
         });
-        Winston.info('Response data from #getLists:');
-        response.data |> prettyJson |> Winston.info;
+        Winston.debug('Response data from #getLists:');
+        response.data |> prettyJson |> Winston.debug;
         return response.data.data.user.lists;
     }
 
@@ -144,12 +170,46 @@ export class Client {
         return res;
     }
 
-    async getTasks(owner: string, listId: string) { // eslint-disable-line no-unused-vars
-        throw Error('Unimplemented');
+    /**
+     * Gets all of the tasks for a specified list.
+     *
+     * @param {string} owner
+     * @param {string} listId
+     * @returns {Promise<Task[]>}
+     * @memberof Client
+     */
+    async getTasks(owner: string, listId: string): Promise<Task[]> {
+        const query = `
+            query GetTasksQuery($owner: String!, $listId: String!){
+                user(userId: $owner) {
+                    list(listId: $listId) {
+                        tasks { id title description createdAt }
+                    }
+                }
+            }
+        `;
+        const response = await this.client.post('', {
+            query,
+            variables: { owner, listId }
+        });
+        Winston.debug('Response data from #getTasks:');
+        response.data |> prettyJson |> Winston.debug;
+        return response.data.data.user.list.tasks;
     }
 
+    /**
+     * Gets the specified task in the specified list.
+     *
+     * @param {string} owner
+     * @param {string} listId
+     * @param {string} taskId
+     * @returns
+     * @memberof Client
+     */
     async getTask(owner: string, listId: string, taskId: string) { // eslint-disable-line no-unused-vars
-        throw Error('Unimplemented');
+        const tasks = await this.getTasks(owner, listId);
+        Winston.info(`Tasks: ${JSON.stringify(tasks)}`);
+        return tasks.find(t => t.id === taskId);
     }
 
     login(loginInput: LoginInput) { // eslint-disable-line no-unused-vars

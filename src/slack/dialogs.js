@@ -19,7 +19,15 @@ function dialogOf(dialog: Dialog) {
     };
 }
 
-
+/**
+ * Shows a Dialog for task creation.
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} text
+ * @param {string} triggerId
+ * @returns {Promise<WebAPICallResult>}
+ */
 export async function createTask(web: WebClient, text: string, triggerId: string): Promise<WebAPICallResult> {
     const dialog: Dialog = {
         callback_id: 'createtask',
@@ -51,6 +59,15 @@ export async function createTask(web: WebClient, text: string, triggerId: string
 }
 
 
+/**
+ * 
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} text
+ * @param {string} triggerId
+ * @returns {Promise<WebAPICallResult>}
+ */
 export async function createList(web: WebClient, text: string, triggerId: string): Promise<WebAPICallResult> {
     const dialog: Dialog = {
         callback_id: 'createlist',

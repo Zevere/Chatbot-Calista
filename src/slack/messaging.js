@@ -4,6 +4,7 @@ import { prettyJson } from '../logging/format';
 import { Client } from '../borzoo/client';
 import { getUserBySlackId } from '../server/authorization/authorization.service';
 import Axios from 'axios';
+import { User } from '../data/schema/user';
 
 
 /**
@@ -30,6 +31,7 @@ export async function loginPrompt(web: WebClient, userId: string, channelId: str
                     ],
                     fallback: `Click here to login: ${webAppUrl}`,
                     text: 'Click here to login:',
+                    thumb_url: 'https://avatars3.githubusercontent.com/u/33139090?s=200&v=4',
                 }
             ],
             channel: channelId,
@@ -41,6 +43,62 @@ export async function loginPrompt(web: WebClient, userId: string, channelId: str
         throw exception;
     }
 }
+
+
+//#region Tasks
+
+
+/**
+ *
+ *
+ * @export
+ * @param {WebClient} web
+ * @param {string} userId
+ * @param {string} channelId
+ * @param {string} listId
+ * @param {string} taskId
+ * @returns {Promise}
+ */
+export async function showTask(web: WebClient, user: User, channelId: string, listId: string, taskId: string): Promise {
+    try {
+        const bz = new Client();
+        const task = await bz.getTask(user.zevereId, listId, taskId);
+        const taskUrl = `${process.env.ZEVERE_WEB_APP_URL}/users/${encodeURIComponent(user.zevereId)}/lists/${encodeURIComponent(listId)}/tasks/${encodeURIComponent(taskId)}`;
+        const fields = [];
+        if (task.due)
+            fields.push( { title: 'Due on:', value: task.due, short: false });
+        if (task.tags && task.tags.length > 0)
+            fields.push({ title: 'Tags', value: task.tags.reduce((p, c) => `${p} ${c}`, ''), short: true });
+        if (task.createdAt)
+            fields.push({ title: 'Created On', value: task.createdAt, short: true });
+
+        const attachments = [
+            {
+                fallback: taskUrl,
+                pretext: 'Here is your task!',
+                color: 'good',
+                title: task.title,
+                title_link: taskUrl,
+                text: task.description,
+                fields,
+                callback_id: 'viewtask',
+            }
+        ];
+
+        return await web.chat.postEphemeral({
+            channel: channelId,
+            user: user.slackId,
+            attachments
+        });
+    } catch (err) {
+        Winston.info(err);
+        throw err;
+    }
+}
+
+
+//#endregion Tasks
+//#region Lists
 
 
 /**
@@ -56,38 +114,44 @@ export async function loginPrompt(web: WebClient, userId: string, channelId: str
 export async function showList(web: WebClient, userId: string, channelId: string, listId: string) {
     const bz = new Client();
     const user = await getUserBySlackId(userId);
-    const lists = await bz.getLists(user.zevereId);
-    const list = lists.filter(l => l.id === listId)[0];
+    const list = await bz.getList(user.zevereId, listId);
+    const listUrl = `${process.env.ZEVERE_WEB_APP_URL}/users/${encodeURIComponent(user.zevereId)}/lists/${encodeURIComponent(list.id)}`;
     try {
         const fields = [];
         if (list.updatedAt)
             fields.push({ title: 'Last Updated', value: list.updatedAt, short: true });
         if (list.tags && list.tags.length > 0)
-            fields.push({ title: 'Tags', value: list.tags.reduce((p, c) => `${p} ${c}`), short: true });
+            fields.push({ title: 'Tags', value: list.tags.reduce((p, c) => `${p} ${c}`, ''), short: true });
         if (list.createdAt)
             fields.push({ title: 'Created On', value: list.createdAt, short: true });
+
+        const attachments = [
+            {
+                fallback: listUrl,
+                pretext: 'Here is your task list!',
+                color: 'good',
+                title: list.title,
+                title_link: listUrl,
+                text: list.description,
+                fields,
+                callback_id: 'viewtask',
+                actions: list.tasks && list.tasks.length > 0 ?
+                    list.tasks.map(t => {
+                        return {
+                            type: 'button',
+                            name: 'task',
+                            text: t.title,
+                            value: JSON.stringify({ listId: listId, taskId: t.id })
+                        };
+                    }) : [],
+            }
+        ];
+
         return await web.chat.postEphemeral({
+            as_user: false,
             channel: channelId,
             user: userId,
-            attachments: [
-                {
-                    fallback: `${list.title}: ${list.description}`,
-                    pretext: 'Here is your task list!',
-                    color: 'good',
-                    title: list.title,
-                    text: list.description,
-                    fields,
-                    callback_id: 'clearlist',
-                    actions: [
-                        {
-                            id: 'rmlist',
-                            type: 'button',
-                            text: 'Clear',
-                            name: 'rmlist',
-                        },
-                    ],
-                }
-            ]
+            attachments
         });
     } catch (err) {
         Winston.info(err);
@@ -97,7 +161,7 @@ export async function showList(web: WebClient, userId: string, channelId: string
 
 
 /**
- *
+ * Displays a select menu of the user's lists so they may view one.
  *
  * @export
  * @param {WebClient} web
@@ -135,8 +199,8 @@ export async function showListsForSelection(web: WebClient, userId: string, chan
 
 
 /**
- *
- *
+ * Displays a select menu of the user's lists so that the user may
+ * choose to delete one.
  * @export
  * @param {WebClient} web
  * @param {string} userId
@@ -180,7 +244,7 @@ export async function showListsForDeletion(web: WebClient, userId: string, chann
 
 
 /**
- *
+ * Sends a message to confirm that a list has been deleted.
  *
  * @export
  * @param {WebClient} web
@@ -195,6 +259,9 @@ export async function confirmListDeletion(web: WebClient, responseUrl: string): 
     });
 }
 
+
+//#endregion Lists
+//#region General
 
 /**
  * Deletes a message using the response url.
@@ -283,3 +350,6 @@ export async function messageUserEphemeral(web: WebClient, userId: string, chann
         throw exception;
     }
 }
+
+
+//#endregion General
