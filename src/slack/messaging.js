@@ -59,14 +59,14 @@ export async function loginPrompt(web: WebClient, userId: string, channelId: str
  * @param {string} taskId
  * @returns {Promise}
  */
-export async function showTask(web: WebClient, user: User, channelId: string, listId: string, taskId: string): Promise {
+export async function showTask(web: WebClient, user: User, channelId: string, listId: string, taskId: string) {
     try {
         const bz = new Client();
         const task = await bz.getTask(user.zevereId, listId, taskId);
         const taskUrl = `${process.env.ZEVERE_WEB_APP_URL}/users/${encodeURIComponent(user.zevereId)}/lists/${encodeURIComponent(listId)}/tasks/${encodeURIComponent(taskId)}`;
         const fields = [];
         if (task.due)
-            fields.push( { title: 'Due on:', value: task.due, short: false });
+            fields.push({ title: 'Due on:', value: task.due, short: false });
         if (task.tags && task.tags.length > 0)
             fields.push({ title: 'Tags', value: task.tags.reduce((p, c) => `${p} ${c}`, ''), short: true });
         if (task.createdAt)
@@ -81,7 +81,27 @@ export async function showTask(web: WebClient, user: User, channelId: string, li
                 title_link: taskUrl,
                 text: task.description,
                 fields,
-                callback_id: 'viewtask',
+                callback_id: 'deletetask',
+                actions: [
+                    {
+                        type: 'button',
+                        text: 'Hide',
+                        name: 'taskAction',
+                        value: 'hide'
+                    },
+                    {
+                        type: 'button',
+                        text: 'Delete',
+                        name: 'taskAction',
+                        value: JSON.stringify({ user, listId, taskId }),
+                        confirm: {
+                            dismiss_text: 'Cancel',
+                            ok_text: 'Delete',
+                            title: 'Delete Task',
+                            text: 'Once it is deleted, it is gone forever!'
+                        }
+                    }
+                ]
             }
         ];
 
@@ -109,9 +129,9 @@ export async function showTask(web: WebClient, user: User, channelId: string, li
  * @param {string} userId
  * @param {string} channelId
  * @param {string} listId
- * @returns
+ * @returns {Promise} Awaitable.
  */
-export async function showList(web: WebClient, userId: string, channelId: string, listId: string) {
+export async function showList(web: WebClient, userId: string, channelId: string, listId: string): Promise {
     const bz = new Client();
     const user = await getUserBySlackId(userId);
     const list = await bz.getList(user.zevereId, listId);
@@ -160,6 +180,52 @@ export async function showList(web: WebClient, userId: string, channelId: string
 }
 
 
+type ListOptions = {
+    callbackId: string,
+    text: string,
+    color?: string,
+    footer?: string,
+    confirm?: {
+        text: string,
+        title: string,
+        dismiss_text: string,
+        ok_text: string
+    }
+}
+
+function showListsWith(opts: ListOptions) {
+    return async function (web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
+        const bz = new Client();
+        const user = await getUserBySlackId(userId);
+        const lists = await bz.getLists(user.zevereId);
+        const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
+        return await web.chat.postEphemeral({
+            channel: channelId,
+            as_user: false,
+            user: userId,
+            attachments: [
+                {
+                    text: opts.text,
+                    color: opts.color || '#777777',
+                    callback_id: opts.callbackId,
+                    actions: [
+                        {
+                            id: 'lists',
+                            type: 'select',
+                            data_source: 'static',
+                            options: listOptions,
+                            name: 'list',
+                            confirm: opts.confirm || undefined
+                        },
+                    ],
+                    footer: opts.footer || undefined
+                }
+            ]
+        });
+    }
+}
+
+
 /**
  * Displays a select menu of the user's lists so they may view one.
  *
@@ -170,31 +236,11 @@ export async function showList(web: WebClient, userId: string, channelId: string
  * @returns {Promise<WebAPICallResult>}
  */
 export async function showListsForSelection(web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
-    const bz = new Client();
-    const user = await getUserBySlackId(userId);
-    const lists = await bz.getLists(user.zevereId);
-    const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
-    return await web.chat.postEphemeral({
-        channel: channelId,
-        as_user: false,
-        user: userId,
-        attachments: [
-            {
-                text: 'Select a list to view:',
-                color: 'good',
-                callback_id: 'viewlist',
-                actions: [
-                    {
-                        id: 'lists',
-                        type: 'select',
-                        data_source: 'static',
-                        options: listOptions,
-                        name: 'list',
-                    },
-                ],
-            }
-        ]
-    });
+    return await showListsWith({
+        text: 'Select a list to view:',
+        color: 'good',
+        callbackId: 'viewlist'
+    })(web, userId, channelId);
 }
 
 
@@ -208,38 +254,18 @@ export async function showListsForSelection(web: WebClient, userId: string, chan
  * @returns {Promise<WebAPICallResult>}
  */
 export async function showListsForDeletion(web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
-    const bz = new Client();
-    const user = await getUserBySlackId(userId);
-    const lists = await bz.getLists(user.zevereId);
-    const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
-    return await web.chat.postEphemeral({
-        channel: channelId,
-        as_user: false,
-        user: userId,
-        attachments: [
-            {
-                text: 'Select a list to delete:',
-                color: 'danger',
-                callback_id: 'deletelist',
-                actions: [
-                    {
-                        id: 'lists',
-                        type: 'select',
-                        data_source: 'static',
-                        options: listOptions,
-                        name: 'list',
-                        confirm: {
-                            text: 'Are you sure you want to delete the list?',
-                            title: 'Confirm Deletion',
-                            dismiss_text: ' Cancel',
-                            ok_text: 'Delete'
-                        }
-                    },
-                ],
-                footer: 'Note: Once it is deleted, it is gone forever!'
-            }
-        ]
-    });
+    return await showListsWith({
+        text: 'Select a list to delete:',
+        color: 'danger',
+        callbackId: 'deletelist',
+        footer: 'Note: Once it is deleted, it is gone forever!',
+        confirm: {
+            text: 'Are you sure you want to delete the list?',
+            title: 'Confirm Deletion',
+            dismiss_text: ' Cancel',
+            ok_text: 'Delete'
+        }
+    })(web, userId, channelId);
 }
 
 
@@ -342,7 +368,7 @@ export async function messageUserEphemeral(web: WebClient, userId: string, chann
         return await web.chat.postEphemeral({
             channel: channelId,
             user: userId,
-            text: message
+            text: message,
         });
     }
     catch (exception) {

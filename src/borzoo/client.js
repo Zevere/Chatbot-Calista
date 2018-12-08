@@ -51,6 +51,22 @@ export class Client {
         return response.data.data.createTask;
     }
 
+
+    async deleteTask(userId: string, listId: string, taskId: string): Promise<boolean> {
+        const mutation = `
+        mutation ZevereMutation($userId: String!, $listId: String!, $taskId: String!) { 
+            deleteTask(ownerId: $userId, listId: $listId, taskId: $taskId)
+        }`;
+        const response = await this.client.post('', {
+            query: mutation,
+            variables: { userId, listId, taskId }
+        });
+
+        Winston.debug('Response from #deleteTask:');
+        response |> prettyJson |> Winston.debug;
+        return response.data.data.deleteTask;
+    }
+
     /**
      * Creates a list on Zevere and returns the created list if successful.
      *

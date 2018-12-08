@@ -63,7 +63,7 @@ describe('Borzoo Client', function() {
         testTask.description.should.equal(taskInput.description);
     });
 
-    it('# gives a list of a user\'s lists', async function () {
+    it('#getLists gives a list of a user\'s lists', async function () {
         const res = await client.getLists(owner);
         let pass = false;
         for (const list of res) {
@@ -72,6 +72,11 @@ describe('Borzoo Client', function() {
                 break;
             }
         }
-        if (!pass) fail('Could not find the created list in the test user\'s lists.');
+        pass.should.be.true;
+    });
+
+    it('#deleteTask successfully deletes a task', async function () {
+        const res = await client.deleteTask(owner, testList.id, testTask.id);
+        res.should.be.true;
     });
 });

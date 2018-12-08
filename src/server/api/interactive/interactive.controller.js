@@ -18,8 +18,8 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
         res.status(200).send();
         const slack = new SlackClient();
         const bz = new BorzooClient();
-        Winston.info('Received an interactive request.');
-        req.body.payload |> JSON.parse |> prettyJson |> Winston.info;
+        Winston.debug('Received an interactive request.');
+        req.body.payload |> JSON.parse |> prettyJson |> Winston.debug;
         const {
             actions,
             callback_id,
@@ -35,26 +35,26 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
 
         switch (callback_id) {
             case 'createtask': {
-                Winston.info(`Creating task ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
+                Winston.debug(`Creating task ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
                 const createdTask = await bz.createTask(user.zevereId, submission.tasklist, {
                     id: submission.title, 
                     title: submission.title, 
                     description: submission.description
                 });
-                Winston.info('List created.');
-                createdTask |> prettyJson |> Winston.info;
+                Winston.debug('List created.');
+                createdTask |> prettyJson |> Winston.debug;
                 await messageUserEphemeral(slack, user.slackId, channel.id,`Your task, "${submission.title}" has been created!`);
                 break;
             }
 
             case 'createlist': {
-                Winston.info(`Creating list ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
+                Winston.debug(`Creating list ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
                 const createdList = await bz.createList(user.zevereId, {
                     id: submission.title,
                     ...submission
                 });
-                Winston.info('List created.');
-                createdList |> prettyJson |> Winston.info;
+                Winston.debug('List created.');
+                createdList |> prettyJson |> Winston.debug;
                 await messageUserEphemeral(slack, user.slackId, channel.id, `Your task list, "${submission.title}" has been created!`);
                 break;
             }
@@ -66,12 +66,12 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
 
             case 'deletelist': {
                 const listId = actions[0].selected_options[0].value;
-                Winston.info(`Deleting task ${listId} for ${user.zevereId} / ${user.slackId}.`);
+                Winston.debug(`Deleting task ${listId} for ${user.zevereId} / ${user.slackId}.`);
                 if(await bz.deleteList(user.zevereId, listId)) {
-                    Winston.info('Deleted list: ' + listId);
+                    Winston.debug('Deleted list: ' + listId);
                     await confirmListDeletion(slack, response_url);
                 } else {
-                    Winston.info('Could not delete list: ' + listId);
+                    Winston.debug('Could not delete list: ' + listId);
                     await messageUserEphemeral(slack, user.slackId, channel.id,`Could not delete ${submission.list}.`);
                 }
                 break;
@@ -92,7 +92,25 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
                 break;
             }
 
-            case 'deletetask':
+            case 'deletetask': {
+                if(actions[0].value === 'hide')
+                    return await deleteMessage(slack, response_url);
+
+                const { user, listId, taskId } = JSON.parse(actions[0].value);
+                const isDeleted = await bz.deleteTask(user.zevereId, listId, taskId);
+                if(isDeleted) {
+                    await deleteMessage(slack, response_url);
+                    await messageUserEphemeral(slack, user.slackId, channel.id, 'Successfully deleted task.');
+                } else {
+                    await messageUserEphemeral(
+                        slack, 
+                        user.slackId,
+                        channel.id,
+                        `Oops, we could not delete the task. If the problem persists, <${process.env.ZEVERE_WEB_APP_URL}|try directly on the website.>`
+                    );
+                }
+                break;
+            }
             default:
                 break;
         }
