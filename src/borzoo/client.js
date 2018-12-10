@@ -159,7 +159,7 @@ export class Client {
 
 
     /**
-     * Delete's an owner's list by ID.
+     * Deletes an owner's list by ID.
      *
      * @param {string} owner - The person who owns the list you wish to delete.
      * @param {string} listId - The ID of the list that will be deleted.
