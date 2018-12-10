@@ -21,7 +21,7 @@ export function prettyJson(obj: Object): string {
  * 
  * Handles circular dependencies.
  * 
- * _Note: This should __only__ be used for debuggin._
+ * _Note: This should __only__ be used for debugging._
  * @param {Object} obj Any object.
  * @returns {string} A representation of that object in a prettified string.
  */
