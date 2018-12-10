@@ -27,14 +27,6 @@ function buildServer(): Express {
 }
 
 function errorHandler(err, req, res, next) { //eslint-disable-line no-unused-vars
-    // if (!(err instanceof Error) && typeof(err) !== 'string') {
-    //     Winston.debug(err);
-    //     Winston.debug(req);
-    //     Winston.debug(res);
-    //     res = req;
-    //     req = err;
-    //     err = 'Invalid endpoint';
-    // }
     Winston.error('Error caught in final error handler.');
     Winston.error(err);
     //err |> prettyJson |> Winston.error;
