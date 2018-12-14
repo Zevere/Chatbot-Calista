@@ -359,6 +359,16 @@ function showListsWith(opts: ListOptions) {
         const bz = new Client();
         const user = await getUserBySlackId(userId);
         const lists = await bz.getLists(user.zevereId);
+
+        if (lists.length < 1) {
+            return await web.chat.postEphemeral({
+                channel: channelId,
+                as_user: false,
+                user: userId,
+                text: 'You currently do not have any lists to choose from.'
+            });
+        }
+
         const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
         return await web.chat.postEphemeral({
             channel: channelId,
