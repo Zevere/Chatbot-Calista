@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: data/schema/user.js</title>
+    <title>JSDoc: Source: vivid/profile/profile.client.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: data/schema/user.js</h1>
+    <h1 class="page-title">Source: vivid/profile/profile.client.js</h1>
 
     
 
@@ -26,31 +26,38 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Schema } from 'mongoose';
+            <pre class="prettyprint source linenums"><code>// @flow
+import { AxiosResponse } from 'axios';
+import { axiosForVivid } from '../../config/axios';
+import { UserProfile } from './user-profile.model';
+import Winston from '../../logging/app.logger';
+import { prettyJson } from '../../logging/format';
+import { VividError } from '../vivid-error.model';
+
+const basePath = '/api/v1/operations/getUserProfile';
 
 /**
- * __Represents a link between a Slack Account and a Zevere
- * account.__
+ * Gets a User's profile based off of their Zevere Username.
+ * Helpful for retrieving their name and the date they joined.
  * @export
- * @class User
+ * @param {string} zevereUsername The User's Zevere username.
+ * @returns {Promise&lt;UserProfile>} A promise containing the User's profile.
  */
-export class User {
-    constructor() {
-        this.slackId = '';
-        this.zevereId = '';
+export async function getUserProfileByUsername(zevereUsername: string): Promise&lt;UserProfile> {
+    const axios = axiosForVivid();
+    const url = `${basePath}?username=${zevereUsername}`;
+    const response: AxiosResponse&lt;UserProfile | VividError> = await axios.get(url);
+    if (response.status !== 200) {
+        const err = response.data;
+        Winston.error(`Could not get User Profile. Zevere Username: '${zevereUsername}'`);
+        err |> prettyJson |> Winston.error;
+        throw Error(err);
     }
+    return response.data;
 }
 
-const UserSchema = new Schema(new User(), {
-    collection: 'users'
-});
 
-/** 
- * __A Schema of the User class.__
- * @see {User}
- * @returns {Schema}
-*/
-export default UserSchema;
+
 </code></pre>
         </article>
     </section>

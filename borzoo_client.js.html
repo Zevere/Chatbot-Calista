@@ -31,14 +31,26 @@
 import { TaskInput } from './task-input.model';
 import { ListInput } from './list-input.model';
 import { LoginInput } from './login-input.model';
+import { GraphQLResponse, GraphQLError } from './graphql-response.model';
 import { List } from './list.model';
 import { Task } from './task.model';
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosResponse } from 'axios';
 import { axiosForBorzoo } from '../config/axios';
 
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
 
+
+function throwIfGraphqlErrorPresent(axiosResponse: AxiosResponse) {
+    if (axiosResponse.data.errors) {
+        const errs: GraphQLError[] = axiosResponse.data.errors;
+        let msg = '';
+        errs.forEach(e => {
+            msg += `Message: ${e.message}\nPath: ${e.path.reduce((p, c) => p + c, '')}`;
+        });
+        throw new Error(msg);
+    }
+}
 
 /**
  * A client for the Borzoo GraphQL API.
@@ -74,8 +86,11 @@ export class Client {
             variables: { userId, listId, task }
         });
 
+
         Winston.debug('Response from #createTask:');
         response |> prettyJson |> Winston.debug;
+
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.createTask;
     }
 
@@ -92,6 +107,7 @@ export class Client {
 
         Winston.debug('Response from #deleteTask:');
         response |> prettyJson |> Winston.debug;
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.deleteTask;
     }
 
@@ -122,6 +138,7 @@ export class Client {
             });
             Winston.debug('Response data from #createList:');
             response.data |> prettyJson |> Winston.debug;
+            throwIfGraphqlErrorPresent(response);
             return response.data.data.createList;
         } catch (err) {
             Winston.error('Error caught in #createList:');
@@ -156,6 +173,7 @@ export class Client {
         });
         Winston.debug('Response data from #getLists:');
         response.data |> prettyJson |> Winston.debug;
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.user.list;
     }
 
@@ -182,6 +200,7 @@ export class Client {
         });
         Winston.debug('Response data from #getLists:');
         response.data |> prettyJson |> Winston.debug;
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.user.lists;
     }
 
@@ -207,7 +226,7 @@ export class Client {
             query: mutation,
             variables
         });
-
+        throwIfGraphqlErrorPresent(res);
         return res;
     }
 
@@ -235,6 +254,7 @@ export class Client {
         });
         Winston.debug('Response data from #getTasks:');
         response.data |> prettyJson |> Winston.debug;
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.user.list.tasks;
     }
 
@@ -267,13 +287,13 @@ export class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserProfileByUsername">getUserProfileByUsername</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Dec 10 2018 16:04:52 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Dec 14 2018 21:07:21 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

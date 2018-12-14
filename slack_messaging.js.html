@@ -33,6 +33,7 @@ import { Client } from '../borzoo/client';
 import { getUserBySlackId } from '../server/authorization/authorization.service';
 import Axios from 'axios';
 import { User } from '../data/schema/user';
+import { privateDecrypt } from 'crypto';
 
 
 /**
@@ -77,14 +78,14 @@ export async function loginPrompt(web: WebClient, userId: string, channelId: str
 
 
 /**
- *
+ * Displays a message of a User's task, as well as the functionality to delete it.
  *
  * @export
- * @param {WebClient} web
- * @param {string} userId
- * @param {string} channelId
- * @param {string} listId
- * @param {string} taskId
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} userId The Slack ID or Slack username of whom to send the message to.
+ * @param {string} channelId The ID of the channel you wish to send the message to.
+ * @param {string} listId The ID of the List that the task belongs to.
+ * @param {string} taskId The ID of the task that you wish to display.
  * @returns {Promise}
  */
 export async function showTask(web: WebClient, user: User, channelId: string, listId: string, taskId: string) {
@@ -155,7 +156,7 @@ export async function showTask(web: WebClient, user: User, channelId: string, li
  * @export
  * @param {WebClient} web
  * @param {string} userId
- * @param {string} channelId
+ * @param {string} channelId The ID of the channel you wish to send the message to.
  * @param {string} listId
  * @returns {Promise} Awaitable.
  */
@@ -208,50 +209,7 @@ export async function showList(web: WebClient, userId: string, channelId: string
 }
 
 
-type ListOptions = {
-    callbackId: string,
-    text: string,
-    color?: string,
-    footer?: string,
-    confirm?: {
-        text: string,
-        title: string,
-        dismiss_text: string,
-        ok_text: string
-    }
-}
 
-function showListsWith(opts: ListOptions) {
-    return async function (web: WebClient, userId: string, channelId: string): Promise&lt;WebAPICallResult> {
-        const bz = new Client();
-        const user = await getUserBySlackId(userId);
-        const lists = await bz.getLists(user.zevereId);
-        const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
-        return await web.chat.postEphemeral({
-            channel: channelId,
-            as_user: false,
-            user: userId,
-            attachments: [
-                {
-                    text: opts.text,
-                    color: opts.color || '#777777',
-                    callback_id: opts.callbackId,
-                    actions: [
-                        {
-                            id: 'lists',
-                            type: 'select',
-                            data_source: 'static',
-                            options: listOptions,
-                            name: 'list',
-                            confirm: opts.confirm || undefined
-                        },
-                    ],
-                    footer: opts.footer || undefined
-                }
-            ]
-        });
-    }
-}
 
 
 /**
@@ -260,7 +218,7 @@ function showListsWith(opts: ListOptions) {
  * @export
  * @param {WebClient} web
  * @param {string} userId
- * @param {string} channelId
+ * @param {string} channelId The ID of the channel you wish to send the message to.
  * @returns {Promise&lt;WebAPICallResult>}
  */
 export async function showListsForSelection(web: WebClient, userId: string, channelId: string): Promise&lt;WebAPICallResult> {
@@ -278,7 +236,7 @@ export async function showListsForSelection(web: WebClient, userId: string, chan
  * @export
  * @param {WebClient} web
  * @param {string} userId
- * @param {string} channelId
+ * @param {string} channelId The ID of the channel you wish to send the message to.
  * @returns {Promise&lt;WebAPICallResult>}
  */
 export async function showListsForDeletion(web: WebClient, userId: string, channelId: string): Promise&lt;WebAPICallResult> {
@@ -388,6 +346,7 @@ export async function messageUser(web: WebClient, userId: string, message: strin
  * @export
  * @param {WebClient} web The instance of the Slack Web Client.
  * @param {string} userId The Slack ID or Slack username of whom the message should be sent to.
+ * @param {string} channelId The ID of the channel you wish to send the message to.
  * @param {string} message The message you wish to send to the aforementioned user.
  * @returns {Promise&lt;WebAPICallResult>}
  */
@@ -407,6 +366,55 @@ export async function messageUserEphemeral(web: WebClient, userId: string, chann
 
 
 //#endregion General
+//#region Private
+
+
+type ListOptions = {
+    callbackId: string,
+    text: string,
+    color?: string,
+    footer?: string,
+    confirm?: {
+        text: string,
+        title: string,
+        dismiss_text: string,
+        ok_text: string
+    }
+}
+
+function showListsWith(opts: ListOptions) {
+    return async function (web: WebClient, userId: string, channelId: string): Promise&lt;WebAPICallResult> {
+        const bz = new Client();
+        const user = await getUserBySlackId(userId);
+        const lists = await bz.getLists(user.zevereId);
+        const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
+        return await web.chat.postEphemeral({
+            channel: channelId,
+            as_user: false,
+            user: userId,
+            attachments: [
+                {
+                    text: opts.text,
+                    color: opts.color || '#777777',
+                    callback_id: opts.callbackId,
+                    actions: [
+                        {
+                            id: 'lists',
+                            type: 'select',
+                            data_source: 'static',
+                            options: listOptions,
+                            name: 'list',
+                            confirm: opts.confirm || undefined
+                        },
+                    ],
+                    footer: opts.footer || undefined
+                }
+            ]
+        });
+    }
+}
+
+//#endregion Private
 </code></pre>
         </article>
     </section>
@@ -417,13 +425,13 @@ export async function messageUserEphemeral(web: WebClient, userId: string, chann
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li><li><a href="UserProfile.html">UserProfile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserProfileByUsername">getUserProfileByUsername</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Dec 10 2018 16:04:52 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Dec 14 2018 21:07:21 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
