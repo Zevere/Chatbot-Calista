@@ -5,6 +5,7 @@ import { Client } from '../borzoo/client';
 import { getUserBySlackId } from '../server/authorization/authorization.service';
 import Axios from 'axios';
 import { User } from '../data/schema/user';
+import { privateDecrypt } from 'crypto';
 
 
 /**
@@ -49,14 +50,14 @@ export async function loginPrompt(web: WebClient, userId: string, channelId: str
 
 
 /**
- *
+ * Displays a message of a User's task, as well as the functionality to delete it.
  *
  * @export
- * @param {WebClient} web
- * @param {string} userId
- * @param {string} channelId
- * @param {string} listId
- * @param {string} taskId
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} userId The Slack ID or Slack username of whom to send the message to.
+ * @param {string} channelId The ID of the channel you wish to send the message to.
+ * @param {string} listId The ID of the List that the task belongs to.
+ * @param {string} taskId The ID of the task that you wish to display.
  * @returns {Promise}
  */
 export async function showTask(web: WebClient, user: User, channelId: string, listId: string, taskId: string) {
@@ -127,7 +128,7 @@ export async function showTask(web: WebClient, user: User, channelId: string, li
  * @export
  * @param {WebClient} web
  * @param {string} userId
- * @param {string} channelId
+ * @param {string} channelId The ID of the channel you wish to send the message to.
  * @param {string} listId
  * @returns {Promise} Awaitable.
  */
@@ -180,50 +181,7 @@ export async function showList(web: WebClient, userId: string, channelId: string
 }
 
 
-type ListOptions = {
-    callbackId: string,
-    text: string,
-    color?: string,
-    footer?: string,
-    confirm?: {
-        text: string,
-        title: string,
-        dismiss_text: string,
-        ok_text: string
-    }
-}
 
-function showListsWith(opts: ListOptions) {
-    return async function (web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
-        const bz = new Client();
-        const user = await getUserBySlackId(userId);
-        const lists = await bz.getLists(user.zevereId);
-        const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
-        return await web.chat.postEphemeral({
-            channel: channelId,
-            as_user: false,
-            user: userId,
-            attachments: [
-                {
-                    text: opts.text,
-                    color: opts.color || '#777777',
-                    callback_id: opts.callbackId,
-                    actions: [
-                        {
-                            id: 'lists',
-                            type: 'select',
-                            data_source: 'static',
-                            options: listOptions,
-                            name: 'list',
-                            confirm: opts.confirm || undefined
-                        },
-                    ],
-                    footer: opts.footer || undefined
-                }
-            ]
-        });
-    }
-}
 
 
 /**
@@ -232,7 +190,7 @@ function showListsWith(opts: ListOptions) {
  * @export
  * @param {WebClient} web
  * @param {string} userId
- * @param {string} channelId
+ * @param {string} channelId The ID of the channel you wish to send the message to.
  * @returns {Promise<WebAPICallResult>}
  */
 export async function showListsForSelection(web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
@@ -250,7 +208,7 @@ export async function showListsForSelection(web: WebClient, userId: string, chan
  * @export
  * @param {WebClient} web
  * @param {string} userId
- * @param {string} channelId
+ * @param {string} channelId The ID of the channel you wish to send the message to.
  * @returns {Promise<WebAPICallResult>}
  */
 export async function showListsForDeletion(web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
@@ -360,6 +318,7 @@ export async function messageUser(web: WebClient, userId: string, message: strin
  * @export
  * @param {WebClient} web The instance of the Slack Web Client.
  * @param {string} userId The Slack ID or Slack username of whom the message should be sent to.
+ * @param {string} channelId The ID of the channel you wish to send the message to.
  * @param {string} message The message you wish to send to the aforementioned user.
  * @returns {Promise<WebAPICallResult>}
  */
@@ -379,3 +338,52 @@ export async function messageUserEphemeral(web: WebClient, userId: string, chann
 
 
 //#endregion General
+//#region Private
+
+
+type ListOptions = {
+    callbackId: string,
+    text: string,
+    color?: string,
+    footer?: string,
+    confirm?: {
+        text: string,
+        title: string,
+        dismiss_text: string,
+        ok_text: string
+    }
+}
+
+function showListsWith(opts: ListOptions) {
+    return async function (web: WebClient, userId: string, channelId: string): Promise<WebAPICallResult> {
+        const bz = new Client();
+        const user = await getUserBySlackId(userId);
+        const lists = await bz.getLists(user.zevereId);
+        const listOptions = lists.map(list => { return { text: list.title, value: list.id }; });
+        return await web.chat.postEphemeral({
+            channel: channelId,
+            as_user: false,
+            user: userId,
+            attachments: [
+                {
+                    text: opts.text,
+                    color: opts.color || '#777777',
+                    callback_id: opts.callbackId,
+                    actions: [
+                        {
+                            id: 'lists',
+                            type: 'select',
+                            data_source: 'static',
+                            options: listOptions,
+                            name: 'list',
+                            confirm: opts.confirm || undefined
+                        },
+                    ],
+                    footer: opts.footer || undefined
+                }
+            ]
+        });
+    }
+}
+
+//#endregion Private

@@ -3,14 +3,26 @@
 import { TaskInput } from './task-input.model';
 import { ListInput } from './list-input.model';
 import { LoginInput } from './login-input.model';
+import { GraphQLResponse, GraphQLError } from './graphql-response.model';
 import { List } from './list.model';
 import { Task } from './task.model';
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosResponse } from 'axios';
 import { axiosForBorzoo } from '../config/axios';
 
 import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
 
+
+function throwIfGraphqlErrorPresent(axiosResponse: AxiosResponse) {
+    if (axiosResponse.data.errors) {
+        const errs: GraphQLError[] = axiosResponse.data.errors;
+        let msg = '';
+        errs.forEach(e => {
+            msg += `Message: ${e.message}\nPath: ${e.path.reduce((p, c) => p + c, '')}`;
+        });
+        throw new Error(msg);
+    }
+}
 
 /**
  * A client for the Borzoo GraphQL API.
@@ -46,8 +58,11 @@ export class Client {
             variables: { userId, listId, task }
         });
 
+
         Winston.debug('Response from #createTask:');
         response |> prettyJson |> Winston.debug;
+
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.createTask;
     }
 
@@ -64,6 +79,7 @@ export class Client {
 
         Winston.debug('Response from #deleteTask:');
         response |> prettyJson |> Winston.debug;
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.deleteTask;
     }
 
@@ -94,6 +110,7 @@ export class Client {
             });
             Winston.debug('Response data from #createList:');
             response.data |> prettyJson |> Winston.debug;
+            throwIfGraphqlErrorPresent(response);
             return response.data.data.createList;
         } catch (err) {
             Winston.error('Error caught in #createList:');
@@ -128,6 +145,7 @@ export class Client {
         });
         Winston.debug('Response data from #getLists:');
         response.data |> prettyJson |> Winston.debug;
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.user.list;
     }
 
@@ -154,6 +172,7 @@ export class Client {
         });
         Winston.debug('Response data from #getLists:');
         response.data |> prettyJson |> Winston.debug;
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.user.lists;
     }
 
@@ -179,7 +198,7 @@ export class Client {
             query: mutation,
             variables
         });
-
+        throwIfGraphqlErrorPresent(res);
         return res;
     }
 
@@ -207,6 +226,7 @@ export class Client {
         });
         Winston.debug('Response data from #getTasks:');
         response.data |> prettyJson |> Winston.debug;
+        throwIfGraphqlErrorPresent(response);
         return response.data.data.user.list.tasks;
     }
 

@@ -18,16 +18,9 @@
   }
 ```
  */
-export class UserProfile {
-    id: string;
-    firstName: string;
-    lastName: string;
-    joinedAt: string;
-
-    constructor() {
-        this.id = '';
-        this.firstName = '';
-        this.lastName = '';
-        this.joinedAt = '';
-    }
-}
+export type UserProfile = {
+    id: string,
+    firstName: string,
+    lastName: string,
+    joinedAt: string,
+};

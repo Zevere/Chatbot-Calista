@@ -3,6 +3,9 @@
     "eslint.enable": true,
     "eslint.alwaysShowStatus": true,
     "cSpell.words": [
-        "borzoo"
+        "borzoo",
+        "zevere",
+        "calista",
+        "codecov"
     ]
 }

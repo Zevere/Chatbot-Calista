@@ -37,11 +37,10 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
             case 'createtask': {
                 Winston.debug(`Creating task ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
                 const createdTask = await bz.createTask(user.zevereId, submission.tasklist, {
-                    id: submission.title, 
                     title: submission.title, 
                     description: submission.description
                 });
-                Winston.debug('List created.');
+                Winston.debug('Task created.');
                 createdTask |> prettyJson |> Winston.debug;
                 await messageUserEphemeral(slack, user.slackId, channel.id,`Your task, "${submission.title}" has been created!`);
                 break;
@@ -50,7 +49,6 @@ export async function handleInteractiveRequest(req: Request, res: Response, next
             case 'createlist': {
                 Winston.debug(`Creating list ${submission.title} for ${user.zevereId} / ${user.slackId}.`);
                 const createdList = await bz.createList(user.zevereId, {
-                    id: submission.title,
                     ...submission
                 });
                 Winston.debug('List created.');
