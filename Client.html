@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line27">line 27</a>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -207,7 +207,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The to-be owner of the list.</p></td>
         </tr>
 
     
@@ -230,7 +230,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>An object containing the fields you wish to populate for your new list.</p></td>
         </tr>
 
     
@@ -271,7 +271,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line86">line 86</a>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -297,6 +297,10 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>A promise of containing the new list you've created.</p>
+</div>
+
 
 
 <dl>
@@ -470,7 +474,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line40">line 40</a>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -650,7 +654,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line180">line 180</a>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -678,6 +682,212 @@
         
 <div class="param-desc">
     <p>A promise containing true if deleted, false if not.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;boolean></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteTask"><span class="type-signature">(async) </span>deleteTask<span class="signature">(userId, listId, taskId)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Deletes a task for a Zevere user.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The owner of the task.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The ID of the list that contains the task.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>taskId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The ID of the task you wish to delete.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>A promise containing a boolean to denote whether the 
+operation passed or failed.</li>
+</ul>
 </div>
 
 
@@ -766,7 +976,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The owner of the list.</p></td>
         </tr>
 
     
@@ -789,7 +999,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The ID of the list you wish to retrieve.</p></td>
         </tr>
 
     
@@ -830,7 +1040,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line122">line 122</a>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -856,6 +1066,12 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <ul>
+<li>A promise containing the list you are asking for.</li>
+</ul>
+</div>
+
 
 
 <dl>
@@ -983,7 +1199,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line152">line 152</a>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -1099,7 +1315,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The owner of the task.</p></td>
         </tr>
 
     
@@ -1122,7 +1338,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The ID of the list that the task belongs to.</p></td>
         </tr>
 
     
@@ -1145,7 +1361,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The ID of the task.</p></td>
         </tr>
 
     
@@ -1186,7 +1402,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line233">line 233</a>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line250">line 250</a>
     </li></ul></dd>
     
 
@@ -1286,7 +1502,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The owner of the list and tasks.</p></td>
         </tr>
 
     
@@ -1309,7 +1525,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The ID of the list that contains the tasks you want.</p></td>
         </tr>
 
     
@@ -1350,7 +1566,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line205">line 205</a>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line222">line 222</a>
     </li></ul></dd>
     
 
@@ -1376,6 +1592,10 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>A promise containing all of the tasks for the specified list.</p>
+</div>
+
 
 
 <dl>
@@ -1412,13 +1632,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserProfileByUsername">getUserProfileByUsername</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserProfileByUsername">getUserProfileByUsername</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#throwIfGraphqlErrorPresent">throwIfGraphqlErrorPresent</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Dec 14 2018 22:05:43 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Dec 17 2018 02:28:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

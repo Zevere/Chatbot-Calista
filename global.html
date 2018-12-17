@@ -1567,7 +1567,7 @@ the routes that branch off of it.</strong></p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The instance of the Slack WebClient.</p></td>
         </tr>
 
     
@@ -1590,7 +1590,8 @@ the routes that branch off of it.</strong></p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>A response URL given from Slack which you may use to reply back to within
+5 to 30 minutes.</p></td>
         </tr>
 
     
@@ -1637,6 +1638,13 @@ the routes that branch off of it.</strong></p>
 
     
 
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://api.slack.com/interactive-messages">https://api.slack.com/interactive-messages</a></li>
+        </ul>
+    </dd>
     
 
     
@@ -2411,7 +2419,7 @@ the routes that branch off of it.</strong></p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The instance of the Slack WebClient.</p></td>
         </tr>
 
     
@@ -2434,7 +2442,8 @@ the routes that branch off of it.</strong></p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>A response URL given from Slack which you may use to reply back to within
+5 to 30 minutes.</p></td>
         </tr>
 
     
@@ -2475,7 +2484,7 @@ the routes that branch off of it.</strong></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="slack_messaging.js.html">slack/messaging.js</a>, <a href="slack_messaging.js.html#line250">line 250</a>
+        <a href="slack_messaging.js.html">slack/messaging.js</a>, <a href="slack_messaging.js.html#line252">line 252</a>
     </li></ul></dd>
     
 
@@ -3499,7 +3508,7 @@ Helpful for retrieving their name and the date they joined.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="slack_messaging.js.html">slack/messaging.js</a>, <a href="slack_messaging.js.html#line268">line 268</a>
+        <a href="slack_messaging.js.html">slack/messaging.js</a>, <a href="slack_messaging.js.html#line271">line 271</a>
     </li></ul></dd>
     
 
@@ -3698,7 +3707,7 @@ Helpful for retrieving their name and the date they joined.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="slack_messaging.js.html">slack/messaging.js</a>, <a href="slack_messaging.js.html#line294">line 294</a>
+        <a href="slack_messaging.js.html">slack/messaging.js</a>, <a href="slack_messaging.js.html#line297">line 297</a>
     </li></ul></dd>
     
 
@@ -3920,7 +3929,7 @@ Helpful for retrieving their name and the date they joined.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="slack_messaging.js.html">slack/messaging.js</a>, <a href="slack_messaging.js.html#line315">line 315</a>
+        <a href="slack_messaging.js.html">slack/messaging.js</a>, <a href="slack_messaging.js.html#line318">line 318</a>
     </li></ul></dd>
     
 
@@ -4867,7 +4876,7 @@ If it does not exist, the logs will be placed relative to the dist.</strong></p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The instance of the Slack WebClient.</p></td>
         </tr>
 
     
@@ -4890,7 +4899,7 @@ If it does not exist, the logs will be placed relative to the dist.</strong></p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The Slack ID or Slack username of whom to send the message to.</p></td>
         </tr>
 
     
@@ -4936,7 +4945,7 @@ If it does not exist, the logs will be placed relative to the dist.</strong></p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The ID of the List that the task belongs to.</p></td>
         </tr>
 
     
@@ -5094,7 +5103,7 @@ choose to delete one.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The instance of the Slack WebClient.</p></td>
         </tr>
 
     
@@ -5117,7 +5126,7 @@ choose to delete one.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The Slack ID or Slack username of whom to send the message to.</p></td>
         </tr>
 
     
@@ -5293,7 +5302,7 @@ choose to delete one.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The instance of the Slack WebClient.</p></td>
         </tr>
 
     
@@ -5316,7 +5325,7 @@ choose to delete one.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The Slack ID or Slack username of whom to send the message to.</p></td>
         </tr>
 
     
@@ -5666,6 +5675,142 @@ choose to delete one.</p>
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="throwIfGraphqlErrorPresent"><span class="type-signature"></span>throwIfGraphqlErrorPresent<span class="signature">(axiosResponse)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>This function checks an AxiosResponse for an Errors array
+provided by GraphQL. If found, this function will throw.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>axiosResponse</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">AxiosResponse</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="borzoo_client.js.html">borzoo/client.js</a>, <a href="borzoo_client.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6219,13 +6364,13 @@ choose to delete one.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserProfileByUsername">getUserProfileByUsername</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="global.html#SlackClient">SlackClient</a></li><li><a href="global.html#User">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_default">_default</a></li><li><a href="global.html#apiRouter">apiRouter</a></li><li><a href="global.html#buildServer">buildServer</a></li><li><a href="global.html#confirmListDeletion">confirmListDeletion</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#dbconnection">dbconnection</a></li><li><a href="global.html#deleteMessage">deleteMessage</a></li><li><a href="global.html#fsReqLogger">fsReqLogger</a></li><li><a href="global.html#getUserProfileByUsername">getUserProfileByUsername</a></li><li><a href="global.html#getUserRegistrationsByUsername">getUserRegistrationsByUsername</a></li><li><a href="global.html#handleInteractiveRequest">handleInteractiveRequest</a></li><li><a href="global.html#inspect">inspect</a></li><li><a href="global.html#List">List</a></li><li><a href="global.html#LoginInput">LoginInput</a></li><li><a href="global.html#loginPrompt">loginPrompt</a></li><li><a href="global.html#messageGeneralChat">messageGeneralChat</a></li><li><a href="global.html#messageUser">messageUser</a></li><li><a href="global.html#messageUserEphemeral">messageUserEphemeral</a></li><li><a href="global.html#NewUserRegistration">NewUserRegistration</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prettyJson">prettyJson</a></li><li><a href="global.html#promptLogin">promptLogin</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resolveLogDirectory">resolveLogDirectory</a></li><li><a href="global.html#showList">showList</a></li><li><a href="global.html#showListsForDeletion">showListsForDeletion</a></li><li><a href="global.html#showListsForSelection">showListsForSelection</a></li><li><a href="global.html#showTask">showTask</a></li><li><a href="global.html#Task">Task</a></li><li><a href="global.html#TaskInput">TaskInput</a></li><li><a href="global.html#throwIfGraphqlErrorPresent">throwIfGraphqlErrorPresent</a></li><li><a href="global.html#unregisterUser">unregisterUser</a></li><li><a href="global.html#unregisterUserByUsername">unregisterUserByUsername</a></li><li><a href="global.html#userIsRegistered">userIsRegistered</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#UserRegistrationsResponse">UserRegistrationsResponse</a></li><li><a href="global.html#validateSlack">validateSlack</a></li><li><a href="global.html#VividError">VividError</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Dec 14 2018 22:05:43 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Dec 17 2018 02:28:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
