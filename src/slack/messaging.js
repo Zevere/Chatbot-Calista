@@ -126,10 +126,10 @@ export async function showTask(web: WebClient, user: User, channelId: string, li
  * Shows the list details to a user.
  *
  * @export
- * @param {WebClient} web
- * @param {string} userId
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} userId The Slack ID or Slack username of whom to send the message to.
  * @param {string} channelId The ID of the channel you wish to send the message to.
- * @param {string} listId
+ * @param {string} listId The ID of the List that the task belongs to.
  * @returns {Promise} Awaitable.
  */
 export async function showList(web: WebClient, userId: string, channelId: string, listId: string): Promise {
@@ -188,8 +188,8 @@ export async function showList(web: WebClient, userId: string, channelId: string
  * Displays a select menu of the user's lists so they may view one.
  *
  * @export
- * @param {WebClient} web
- * @param {string} userId
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} userId The Slack ID or Slack username of whom to send the message to.
  * @param {string} channelId The ID of the channel you wish to send the message to.
  * @returns {Promise<WebAPICallResult>}
  */
@@ -206,8 +206,8 @@ export async function showListsForSelection(web: WebClient, userId: string, chan
  * Displays a select menu of the user's lists so that the user may
  * choose to delete one.
  * @export
- * @param {WebClient} web
- * @param {string} userId
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} userId The Slack ID or Slack username of whom to send the message to.
  * @param {string} channelId The ID of the channel you wish to send the message to.
  * @returns {Promise<WebAPICallResult>}
  */
@@ -220,7 +220,7 @@ export async function showListsForDeletion(web: WebClient, userId: string, chann
         confirm: {
             text: 'Are you sure you want to delete the list?',
             title: 'Confirm Deletion',
-            dismiss_text: ' Cancel',
+            dismiss_text: 'Cancel',
             ok_text: 'Delete'
         }
     })(web, userId, channelId);
@@ -231,8 +231,10 @@ export async function showListsForDeletion(web: WebClient, userId: string, chann
  * Sends a message to confirm that a list has been deleted.
  *
  * @export
- * @param {WebClient} web
- * @param {string} responseUrl
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} responseUrl A response URL given from Slack which you may use to reply back to within
+ * 5 to 30 minutes.
+ * @see https://api.slack.com/interactive-messages
  * @returns {Promise<any>}
  */
 export async function confirmListDeletion(web: WebClient, responseUrl: string): Promise<any> {
@@ -251,8 +253,9 @@ export async function confirmListDeletion(web: WebClient, responseUrl: string): 
  * Deletes a message using the response url.
  *
  * @export
- * @param {WebClient} web
- * @param {string} responseUrl
+ * @param {WebClient} web The instance of the Slack WebClient.
+ * @param {string} responseUrl A response URL given from Slack which you may use to reply back to within
+ * 5 to 30 minutes.
  * @returns {Promise<any>}
  */
 export async function deleteMessage(web: WebClient, responseUrl: string): Promise<any> {

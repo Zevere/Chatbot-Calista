@@ -4,16 +4,7 @@
  * @type TaskInput
  */
 export type TaskInput = {
-    
-    /**
-     * The desired task list name.
-     * Names are case insensitive and valid characters are ASCII 
-     * alphanumeric characters, '_', '.', and '-'.
-     * @type {string}
-     * @memberof TaskInput
-     */
-    id: string,
-    
+        
     /**
      * Short title of the new task.
      * @type {string}

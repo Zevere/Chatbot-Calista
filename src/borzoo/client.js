@@ -3,7 +3,7 @@
 import { TaskInput } from './task-input.model';
 import { ListInput } from './list-input.model';
 import { LoginInput } from './login-input.model';
-import { GraphQLResponse, GraphQLError } from './graphql-response.model';
+import { GraphQLError } from './graphql-response.model';
 import { List } from './list.model';
 import { Task } from './task.model';
 import { AxiosInstance, AxiosResponse } from 'axios';
@@ -13,6 +13,12 @@ import Winston from '../logging/app.logger';
 import { prettyJson } from '../logging/format';
 
 
+/**
+ * This function checks an AxiosResponse for an Errors array
+ * provided by GraphQL. If found, this function will throw.
+ *
+ * @param {AxiosResponse} axiosResponse
+ */
 function throwIfGraphqlErrorPresent(axiosResponse: AxiosResponse) {
     if (axiosResponse.data.errors) {
         const errs: GraphQLError[] = axiosResponse.data.errors;
@@ -23,6 +29,7 @@ function throwIfGraphqlErrorPresent(axiosResponse: AxiosResponse) {
         throw new Error(msg);
     }
 }
+
 
 /**
  * A client for the Borzoo GraphQL API.
@@ -67,6 +74,16 @@ export class Client {
     }
 
 
+    /**
+     * Deletes a task for a Zevere user.
+     *
+     * @param {string} userId - The owner of the task.
+     * @param {string} listId - The ID of the list that contains the task.
+     * @param {string} taskId - The ID of the task you wish to delete.
+     * @returns {Promise<boolean>} - A promise containing a boolean to denote whether the 
+     * operation passed or failed.
+     * @memberof Client
+     */
     async deleteTask(userId: string, listId: string, taskId: string): Promise<boolean> {
         const mutation = `
         mutation ZevereMutation($userId: String!, $listId: String!, $taskId: String!) { 
@@ -86,9 +103,9 @@ export class Client {
     /**
      * Creates a list on Zevere and returns the created list if successful.
      *
-     * @param {string} owner
-     * @param {ListInput} list
-     * @returns {Promise<List>}
+     * @param {string} owner - The to-be owner of the list.
+     * @param {ListInput} list - An object containing the fields you wish to populate for your new list.
+     * @returns {Promise<List>} A promise of containing the new list you've created.
      * @memberof Client
      */
     async createList(owner: string, list: ListInput): Promise<List> {
@@ -122,9 +139,9 @@ export class Client {
     /**
      * Retrieves a list from Zevere.
      *
-     * @param {string} owner
-     * @param {string} listId
-     * @returns {Promise<List>}
+     * @param {string} owner - The owner of the list.
+     * @param {string} listId - The ID of the list you wish to retrieve.
+     * @returns {Promise<List>} - A promise containing the list you are asking for.
      * @memberof Client
      */
     async getList(owner: string, listId: string): Promise<List> {
@@ -205,9 +222,9 @@ export class Client {
     /**
      * Gets all of the tasks for a specified list.
      *
-     * @param {string} owner
-     * @param {string} listId
-     * @returns {Promise<Task[]>}
+     * @param {string} owner - The owner of the list and tasks.
+     * @param {string} listId - The ID of the list that contains the tasks you want.
+     * @returns {Promise<Task[]>} A promise containing all of the tasks for the specified list.
      * @memberof Client
      */
     async getTasks(owner: string, listId: string): Promise<Task[]> {
@@ -233,9 +250,9 @@ export class Client {
     /**
      * Gets the specified task in the specified list.
      *
-     * @param {string} owner
-     * @param {string} listId
-     * @param {string} taskId
+     * @param {string} owner - The owner of the task.
+     * @param {string} listId - The ID of the list that the task belongs to.
+     * @param {string} taskId - The ID of the task.
      * @returns
      * @memberof Client
      */
@@ -243,9 +260,5 @@ export class Client {
         const tasks = await this.getTasks(owner, listId);
         Winston.info(`Tasks: ${JSON.stringify(tasks)}`);
         return tasks.find(t => t.id === taskId);
-    }
-
-    login(loginInput: LoginInput) { // eslint-disable-line no-unused-vars
-        throw Error('Unimplemented');
     }
 }

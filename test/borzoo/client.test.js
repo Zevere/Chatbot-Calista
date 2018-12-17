@@ -53,7 +53,6 @@ describe('Borzoo Client', function() {
 
     it('#createTask adds a task to a list', async function () {
         const taskInput: TaskInput = {
-            id: `testId${rndChars}`,
             title: `testTitle${rndChars}`,
             description: `testDesc${rndChars}`
         };
